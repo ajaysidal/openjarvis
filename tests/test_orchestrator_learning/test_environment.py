@@ -4,13 +4,13 @@ from __future__ import annotations
 
 import pytest
 
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.core.types import ToolResult
-from openjarvis.learning.intelligence.orchestrator.environment import (
+from silas.core.events import EventBus, EventType
+from silas.core.types import ToolResult
+from silas.learning.intelligence.orchestrator.environment import (
     OrchestratorEnvironment,
 )
-from openjarvis.learning.intelligence.orchestrator.types import OrchestratorAction
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.learning.intelligence.orchestrator.types import OrchestratorAction
+from silas.tools._stubs import BaseTool, ToolSpec
 
 # -- Mock tool ---------------------------------------------------------------
 

@@ -9,11 +9,11 @@ from datetime import datetime
 from typing import TYPE_CHECKING, Any
 from zoneinfo import ZoneInfo
 
-from openjarvis.core.events import EventType
+from silas.core.events import EventType
 
 if TYPE_CHECKING:
-    from openjarvis.agents.executor import AgentExecutor
-    from openjarvis.agents.manager import AgentManager
+    from silas.agents.executor import AgentExecutor
+    from silas.agents.manager import AgentManager
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ def _next_cron_fire(
         from croniter import croniter
     except ImportError as exc:
         raise RuntimeError(
-            "croniter is required for cron schedules; reinstall OpenJarvis"
+            "croniter is required for cron schedules; reinstall Silas"
         ) from exc
 
     base = time.time() if now is None else now

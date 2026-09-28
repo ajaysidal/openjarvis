@@ -7,11 +7,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from openjarvis.agents._stubs import AgentResult
-from openjarvis.agents.deep_research import DeepResearchAgent
-from openjarvis.connectors.store import KnowledgeStore
-from openjarvis.core.registry import AgentRegistry
-from openjarvis.tools.knowledge_search import KnowledgeSearchTool
+from silas.agents._stubs import AgentResult
+from silas.agents.deep_research import DeepResearchAgent
+from silas.connectors.store import KnowledgeStore
+from silas.core.registry import AgentRegistry
+from silas.tools.knowledge_search import KnowledgeSearchTool
 
 # ---------------------------------------------------------------------------
 # Fixtures

@@ -13,10 +13,10 @@ from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional
 
-from openjarvis.core.config import load_config
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.core.types import Conversation, Message, Role, ToolResult
-from openjarvis.engine._stubs import InferenceEngine
+from silas.core.config import load_config
+from silas.core.events import EventBus, EventType
+from silas.core.types import Conversation, Message, Role, ToolResult
+from silas.engine._stubs import InferenceEngine
 
 _ALLOWED_ENGINE_OPTION_KEYS = frozenset({"num_ctx", "num_gpu"})
 
@@ -152,7 +152,7 @@ class BaseAgent(ABC):
         operation: str,
     ) -> ToolResult:
         """Authorize a non-BaseTool operation using this runtime identity."""
-        from openjarvis.security.runtime import authorize_secured_operation
+        from silas.security.runtime import authorize_secured_operation
 
         return authorize_secured_operation(
             operation,
@@ -239,7 +239,7 @@ class BaseAgent(ABC):
         # removed too, otherwise they can leave a second system entry behind.
         identity_already_applied = any(
             message.role == Role.SYSTEM
-            and message.metadata.get("openjarvis_identity_prompt")
+            and message.metadata.get("silas_identity_prompt")
             for message in context_messages
         )
         system_parts = []
@@ -349,7 +349,7 @@ class BaseAgent(ABC):
             if finish_reason != "length":
                 break
             # Append what we have so far and ask the model to continue
-            from openjarvis.core.types import Message, Role
+            from silas.core.types import Message, Role
 
             messages.append(Message(role=Role.ASSISTANT, content=content))
             messages.append(
@@ -433,7 +433,7 @@ class ToolUsingAgent(BaseAgent):
             rate_limiter=rate_limiter,
             agent_id=agent_id,
         )
-        from openjarvis.tools._stubs import ToolExecutor
+        from silas.tools._stubs import ToolExecutor
 
         self._tools = tools or []
         # Plan 2B I3: store optimized few-shot examples for agents to inject
@@ -462,7 +462,7 @@ class ToolUsingAgent(BaseAgent):
         # Loop guard
         self._loop_guard = None
         try:
-            from openjarvis.agents.loop_guard import LoopGuard, LoopGuardConfig
+            from silas.agents.loop_guard import LoopGuard, LoopGuardConfig
 
             if loop_guard_config is None:
                 loop_guard_config = LoopGuardConfig()

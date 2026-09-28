@@ -18,13 +18,13 @@ from fastapi import FastAPI  # noqa: E402
 from starlette.testclient import TestClient  # noqa: E402
 from starlette.websockets import WebSocketDisconnect  # noqa: E402
 
-from openjarvis.core.events import EventBus, EventType  # noqa: E402
-from openjarvis.server.api_routes import include_all_routes  # noqa: E402
-from openjarvis.server.auth_middleware import websocket_authorized  # noqa: E402
-from openjarvis.server.ws_bridge import create_ws_router  # noqa: E402
+from silas.core.events import EventBus, EventType  # noqa: E402
+from silas.server.api_routes import include_all_routes  # noqa: E402
+from silas.server.auth_middleware import websocket_authorized  # noqa: E402
+from silas.server.ws_bridge import create_ws_router  # noqa: E402
 
-AUTH_PROTOCOL = "openjarvis.auth.v1"
-KEY_PROTOCOL_PREFIX = "openjarvis.key.b64url."
+AUTH_PROTOCOL = "silas.auth.v1"
+KEY_PROTOCOL_PREFIX = "silas.key.b64url."
 
 
 def _auth_subprotocols(api_key: str) -> list[str]:
@@ -51,9 +51,9 @@ class TestWebsocketAuthorizedHelper:
     @pytest.mark.parametrize(
         "api_key,credential_protocol",
         [
-            ("secret+/=", "openjarvis.key.b64url.c2VjcmV0Ky89"),
-            ("bearer", "openjarvis.key.b64url.YmVhcmVy"),
-            ("sëcret🔑", "openjarvis.key.b64url.c8OrY3JldPCflJE"),
+            ("secret+/=", "silas.key.b64url.c2VjcmV0Ky89"),
+            ("bearer", "silas.key.b64url.YmVhcmVy"),
+            ("sëcret🔑", "silas.key.b64url.c8OrY3JldPCflJE"),
         ],
     )
     def test_token_via_subprotocol(self, api_key, credential_protocol):

@@ -8,7 +8,7 @@ The worker swallows every per-job error (including ``BrokenPipeError`` when a
 client disconnects mid-extraction), so a flaky extraction model can never take
 down the host process.
 
-The service is started and stopped as part of the OpenJarvis lifecycle (see
+The service is started and stopped as part of the Silas lifecycle (see
 ``cli/serve.py`` and ``cli/chat_cmd.py``) and is configured through the
 ``[memory]`` section of ``config.toml``.
 """
@@ -20,9 +20,9 @@ import queue
 import threading
 from typing import Any, List, Optional
 
-from openjarvis.core.events import Event, EventBus, EventType
-from openjarvis.memory.extractor import FactExtractor
-from openjarvis.memory.store import (
+from silas.core.events import Event, EventBus, EventType
+from silas.memory.extractor import FactExtractor
+from silas.memory.store import (
     TRUST_AUTO,
     TRUST_UNTRUSTED,
     Fact,
@@ -298,7 +298,7 @@ def _build_scanner() -> Any:
     """Construct an injection scanner, or ``None`` if unavailable. Never raises —
     memory must work even if the security module can't load."""
     try:
-        from openjarvis.security.injection_scanner import InjectionScanner
+        from silas.security.injection_scanner import InjectionScanner
 
         return InjectionScanner()
     except Exception:  # noqa: BLE001 — scanner is an optional defence layer

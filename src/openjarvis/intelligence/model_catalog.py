@@ -4,15 +4,15 @@ from __future__ import annotations
 
 from typing import List
 
-from openjarvis.core.registry import ModelRegistry
-from openjarvis.core.types import ModelSpec, Quantization
+from silas.core.registry import ModelRegistry
+from silas.core.types import ModelSpec, Quantization
 
 BUILTIN_MODELS: List[ModelSpec] = [
     # -----------------------------------------------------------------------
     # Local models — Dense
     # -----------------------------------------------------------------------
     ModelSpec(
-        model_id="qwen3:0.6b",
+        model_id="qwen3:8b",
         name="Qwen3 0.6B",
         parameter_count_b=0.6,
         context_length=40960,

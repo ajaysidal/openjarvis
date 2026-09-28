@@ -6,13 +6,13 @@ import json
 
 import pytest
 
-from openjarvis.evals.core.runner import (
+from silas.evals.core.runner import (
     EvalRunner,
     _metric_stats,
     _metric_stats_to_dict,
 )
-from openjarvis.evals.core.types import EvalRecord, MetricStats, RunConfig
-from openjarvis.evals.tests.conftest import MockBackend, MockDataset, MockScorer
+from silas.evals.core.types import EvalRecord, MetricStats, RunConfig
+from silas.evals.tests.conftest import MockBackend, MockDataset, MockScorer
 
 
 class TestEvalRunner:

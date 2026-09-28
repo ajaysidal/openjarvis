@@ -6,9 +6,9 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 from typing import Any, Dict, List, Tuple
 
-from openjarvis.core.config import JarvisConfig
-from openjarvis.core.registry import EngineRegistry
-from openjarvis.engine._base import InferenceEngine
+from silas.core.config import JarvisConfig
+from silas.core.registry import EngineRegistry
+from silas.engine._base import InferenceEngine
 
 logger = logging.getLogger(__name__)
 
@@ -81,8 +81,8 @@ def _maybe_register_mining_sidecar_engine() -> None:
     sidecars don't include ``vllm_endpoint``.
     """
     try:
-        from openjarvis.mining import Sidecar
-        from openjarvis.mining._constants import SIDECAR_PATH
+        from silas.mining import Sidecar
+        from silas.mining._constants import SIDECAR_PATH
     except ImportError:
         return
 
@@ -98,7 +98,7 @@ def _maybe_register_mining_sidecar_engine() -> None:
     if not endpoint or not model:
         return  # data-driven gate: no vllm_endpoint → don't register
 
-    from openjarvis.engine._openai_compat import _OpenAICompatibleEngine
+    from silas.engine._openai_compat import _OpenAICompatibleEngine
 
     # Strip a trailing "/v1" path segment so _default_host is the bare
     # base URL and _api_prefix="/v1" combines correctly in request paths.

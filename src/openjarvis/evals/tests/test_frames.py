@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from openjarvis.evals.core.types import EvalRecord
-from openjarvis.evals.scorers.frames_judge import _GRADER_TEMPLATE, FRAMESScorer
-from openjarvis.evals.tests.conftest import MockBackend
+from silas.evals.core.types import EvalRecord
+from silas.evals.scorers.frames_judge import _GRADER_TEMPLATE, FRAMESScorer
+from silas.evals.tests.conftest import MockBackend
 
 
 class TestGraderTemplate:

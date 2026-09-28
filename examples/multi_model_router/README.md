@@ -1,12 +1,12 @@
 # Multi-Model Router
 
-Route queries to the cheapest capable model using OpenJarvis's learning/routing
+Route queries to the cheapest capable model using Silas's learning/routing
 system. Simple queries go to small fast models; complex code or math queries go
 to larger models.
 
 ## Requirements
 
-- OpenJarvis installed (`git clone https://github.com/open-jarvis/OpenJarvis.git && cd OpenJarvis && uv sync` or `uv sync --extra dev`)
+- Silas installed (`git clone https://github.com/open-jarvis/Silas.git && cd Silas && uv sync` or `uv sync --extra dev`)
 - An inference engine running with multiple models available
 
 ## Usage
@@ -28,7 +28,7 @@ python examples/multi_model_router/multi_model_router.py \
 # Specify available models explicitly
 python examples/multi_model_router/multi_model_router.py \
     --query "Summarize this paper" \
-    --models "qwen3:0.6b,qwen3:8b,qwen3:32b"
+    --models "qwen3:8b,qwen3:8b,qwen3:32b"
 
 # Use bandit (Thompson Sampling) strategy
 python examples/multi_model_router/multi_model_router.py \
@@ -37,7 +37,7 @@ python examples/multi_model_router/multi_model_router.py \
 
 ## How It Works
 
-The script uses OpenJarvis's routing infrastructure from the learning pillar:
+The script uses Silas's routing infrastructure from the learning pillar:
 
 - **HeuristicRouter** (default) -- rule-based routing that analyzes the query
   for code patterns, math keywords, length, and complexity to pick the right

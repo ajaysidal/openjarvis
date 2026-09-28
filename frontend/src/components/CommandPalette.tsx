@@ -316,7 +316,7 @@ export function CommandPalette() {
             style={{ borderBottom: '1px solid var(--color-border)' }}
           >
             <Search size={18} style={{ color: 'var(--color-text-tertiary)' }} />
-            <input
+            <input id="commandpalette-input-1" name="commandpalette-input-1"
               ref={inputRef}
               type="text"
               value={query}
@@ -444,7 +444,7 @@ export function CommandPalette() {
               <div className="px-4 py-3 mt-1" style={{ borderTop: '1px solid var(--color-border)' }}>
                 <div className="text-[11px] mb-2" style={{ color: 'var(--color-text-tertiary)' }}>Or enter any Ollama model name:</div>
                 <div className="flex gap-2">
-                  <input
+                  <input id="commandpalette-input-2" name="commandpalette-input-2"
                     type="text" value={customModel}
                     onChange={(e) => setCustomModel(e.target.value)}
                     onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); handleCustomPull(); } }}
@@ -494,7 +494,7 @@ export function CommandPalette() {
                     <div className="flex gap-1.5 mb-2">
                       <div className="flex-1 flex items-center rounded-lg" style={{ background: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)' }}>
                         <Key size={12} className="ml-2.5 shrink-0" style={{ color: 'var(--color-text-tertiary)' }} />
-                        <input
+                        <input id="commandpalette-input-3" name="commandpalette-input-3"
                           type={isVisible ? 'text' : 'password'}
                           value={key}
                           onChange={(e) => setApiKeys((prev) => ({ ...prev, [provider.envKey]: e.target.value }))}
@@ -577,7 +577,7 @@ export function CommandPalette() {
           ) : tab === 'catalogue' ? (
             <span>Models are downloaded from the Ollama registry</span>
           ) : (
-            <span>API keys are stored locally and never sent to OpenJarvis servers</span>
+            <span>API keys are stored locally and never sent to Silas servers</span>
           )}
         </div>
       </div>

@@ -12,20 +12,20 @@ from click.testing import CliRunner
 from rich.console import Console
 from rich.text import Text
 
-from openjarvis.agents._stubs import (
+from silas.agents._stubs import (
     AgentContext,
     AgentResult,
     BaseAgent,
     ToolUsingAgent,
 )
-from openjarvis.cli._voice_chat import VOICE_EXIT, VoiceSession, record_voice, speak
-from openjarvis.cli.chat_cmd import _read_input, chat
-from openjarvis.core.config import JarvisConfig
-from openjarvis.core.events import Event, EventBus, EventType
-from openjarvis.core.registry import AgentRegistry, ToolRegistry
-from openjarvis.core.types import Role, ToolCall, ToolResult
-from openjarvis.memory.store import LocalFactStore
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.cli._voice_chat import VOICE_EXIT, VoiceSession, record_voice, speak
+from silas.cli.chat_cmd import _read_input, chat
+from silas.core.config import JarvisConfig
+from silas.core.events import Event, EventBus, EventType
+from silas.core.registry import AgentRegistry, ToolRegistry
+from silas.core.types import Role, ToolCall, ToolResult
+from silas.memory.store import LocalFactStore
+from silas.tools._stubs import BaseTool, ToolSpec
 
 
 class _SimpleChatAgent(BaseAgent):
@@ -97,10 +97,10 @@ class TestChatCommand:
         config.intelligence.default_model = "test-model"
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
-            patch("openjarvis.cli._voice_chat.record_voice") as record_voice,
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
+            patch("silas.cli._voice_chat.record_voice") as record_voice,
         ):
             result = CliRunner().invoke(
                 chat,
@@ -120,15 +120,15 @@ class TestChatCommand:
         config.intelligence.default_model = "test-model"
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
             patch(
-                "openjarvis.speech._discovery.get_speech_backend",
+                "silas.speech._discovery.get_speech_backend",
                 return_value=backend,
             ),
             patch(
-                "openjarvis.speech.voice_io.record_until_silence",
+                "silas.speech.voice_io.record_until_silence",
                 side_effect=KeyboardInterrupt,
             ),
         ):
@@ -164,15 +164,15 @@ class TestVoiceInput:
         console = MagicMock()
         with (
             patch(
-                "openjarvis.speech._discovery.get_speech_backend",
+                "silas.speech._discovery.get_speech_backend",
                 return_value=None,
             ),
-            patch("openjarvis.speech.voice_io.record_until_silence") as record,
+            patch("silas.speech.voice_io.record_until_silence") as record,
         ):
             assert record_voice(console) is VOICE_EXIT
 
         record.assert_not_called()
-        assert "OpenJarvis[speech]" in str(console.print.call_args)
+        assert "Silas[speech]" in str(console.print.call_args)
 
     def test_stt_backend_is_cached_for_the_chat_session(self) -> None:
         backend = MagicMock()
@@ -185,11 +185,11 @@ class TestVoiceInput:
 
         with (
             patch(
-                "openjarvis.speech._discovery.get_speech_backend",
+                "silas.speech._discovery.get_speech_backend",
                 return_value=backend,
             ) as discover,
             patch(
-                "openjarvis.speech.voice_io.record_until_silence",
+                "silas.speech.voice_io.record_until_silence",
                 return_value=b"wav",
             ),
         ):
@@ -210,11 +210,11 @@ class TestVoiceInput:
 
         with (
             patch(
-                "openjarvis.speech._discovery.get_speech_backend",
+                "silas.speech._discovery.get_speech_backend",
                 return_value=backend,
             ),
             patch(
-                "openjarvis.speech.voice_io.record_until_silence",
+                "silas.speech.voice_io.record_until_silence",
                 return_value=b"wav",
             ),
         ):
@@ -237,11 +237,11 @@ class TestVoiceInput:
 
         with (
             patch(
-                "openjarvis.speech._discovery.get_speech_backend",
+                "silas.speech._discovery.get_speech_backend",
                 return_value=backend,
             ),
             patch(
-                "openjarvis.speech.voice_io.record_until_silence",
+                "silas.speech.voice_io.record_until_silence",
                 side_effect=error,
             ),
         ):
@@ -260,11 +260,11 @@ class TestVoiceInput:
 
         with (
             patch(
-                "openjarvis.speech._discovery.get_speech_backend",
+                "silas.speech._discovery.get_speech_backend",
                 return_value=backend,
             ),
             patch(
-                "openjarvis.speech.voice_io.record_until_silence",
+                "silas.speech.voice_io.record_until_silence",
                 side_effect=KeyboardInterrupt,
             ),
         ):
@@ -276,11 +276,11 @@ class TestVoiceInput:
 
         with (
             patch(
-                "openjarvis.speech._discovery.get_speech_backend",
+                "silas.speech._discovery.get_speech_backend",
                 return_value=backend,
             ),
             patch(
-                "openjarvis.speech.voice_io.record_until_silence",
+                "silas.speech.voice_io.record_until_silence",
                 side_effect=SystemExit(),
             ),
             pytest.raises(SystemExit),
@@ -288,7 +288,7 @@ class TestVoiceInput:
             record_voice(MagicMock(), session)
 
     def test_tts_backend_is_cached_for_the_chat_session(self) -> None:
-        from openjarvis.core.registry import TTSRegistry
+        from silas.core.registry import TTSRegistry
 
         backend = MagicMock()
         backend.health.return_value = True
@@ -302,7 +302,7 @@ class TestVoiceInput:
         with (
             patch.object(TTSRegistry, "contains", return_value=True),
             patch.object(TTSRegistry, "get", return_value=factory),
-            patch("openjarvis.speech.voice_io.play_wav") as play,
+            patch("silas.speech.voice_io.play_wav") as play,
         ):
             speak("first", MagicMock(), session)
             speak("second", MagicMock(), session)
@@ -332,11 +332,11 @@ class TestChatAgents:
         config.agent.context_from_memory = True
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
-            patch("openjarvis.memory.build_memory_service", return_value=None),
-            patch("openjarvis.cli.ask._get_memory_backend", return_value=None),
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
+            patch("silas.memory.build_memory_service", return_value=None),
+            patch("silas.cli.ask._get_memory_backend", return_value=None),
         ):
             result = CliRunner().invoke(
                 chat,
@@ -366,11 +366,11 @@ class TestChatAgents:
         config.agent.context_from_memory = True
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
-            patch("openjarvis.memory.build_memory_service", return_value=None),
-            patch("openjarvis.cli.ask._get_memory_backend", return_value=None),
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
+            patch("silas.memory.build_memory_service", return_value=None),
+            patch("silas.cli.ask._get_memory_backend", return_value=None),
         ):
             result = CliRunner().invoke(
                 chat,
@@ -405,14 +405,14 @@ class TestChatAgents:
         config.agent.context_from_memory = True
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
             patch(
-                "openjarvis.memory.build_memory_service",
+                "silas.memory.build_memory_service",
                 return_value=_FailingMemoryService(),
             ),
-            patch("openjarvis.cli.ask._get_memory_backend", return_value=None),
+            patch("silas.cli.ask._get_memory_backend", return_value=None),
         ):
             result = CliRunner().invoke(
                 chat,
@@ -434,15 +434,15 @@ class TestChatAgents:
         AgentRegistry.register_value("simple_chat_agent", _SimpleChatAgent)
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
             patch(
-                "openjarvis.cli._model_switch.tty_wants_model_picker",
+                "silas.cli._model_switch.tty_wants_model_picker",
                 return_value=False,
             ),
             patch(
-                "openjarvis.cli._runtime_panel.tty_wants_runtime_panel",
+                "silas.cli._runtime_panel.tty_wants_runtime_panel",
                 return_value=False,
             ),
         ):
@@ -476,9 +476,9 @@ class TestChatAgents:
         AgentRegistry.register_value("capturing_chat_agent", _CapturingAgent)
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
         ):
             result = CliRunner().invoke(
                 chat,
@@ -529,11 +529,11 @@ class TestChatAgents:
         )
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
-            patch("openjarvis.memory.build_memory_service", return_value=None),
-            patch("openjarvis.cli.ask._get_memory_backend", return_value=None),
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
+            patch("silas.memory.build_memory_service", return_value=None),
+            patch("silas.cli.ask._get_memory_backend", return_value=None),
         ):
             result = CliRunner().invoke(
                 chat,
@@ -607,11 +607,11 @@ class TestChatAgents:
         AgentRegistry.register_value("simple_chat_agent", _SimpleChatAgent)
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
             patch(
-                "openjarvis.memory.build_memory_service",
+                "silas.memory.build_memory_service",
                 side_effect=_build_memory_service,
             ),
         ):
@@ -639,15 +639,15 @@ class TestChatAgents:
         ToolRegistry.register_value("dangerous_chat", _DangerousChatTool)
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
             patch(
-                "openjarvis.cli._model_switch.tty_wants_model_picker",
+                "silas.cli._model_switch.tty_wants_model_picker",
                 return_value=False,
             ),
             patch(
-                "openjarvis.cli._runtime_panel.tty_wants_runtime_panel",
+                "silas.cli._runtime_panel.tty_wants_runtime_panel",
                 return_value=False,
             ),
         ):
@@ -662,8 +662,8 @@ class TestChatAgents:
         assert "chat executed!" in result.output
 
     def test_tool_agent_uses_configured_policy_rate_and_identity(self) -> None:
-        from openjarvis.security import SecurityContext
-        from openjarvis.security.capabilities import CapabilityPolicy
+        from silas.security import SecurityContext
+        from silas.security.capabilities import CapabilityPolicy
 
         class _RecordingLimiter:
             def __init__(self) -> None:
@@ -687,11 +687,11 @@ class TestChatAgents:
         ToolRegistry.register_value("dangerous_chat", _DangerousChatTool)
 
         with (
-            patch("openjarvis.cli.chat_cmd.load_config", return_value=config),
-            patch("openjarvis.engine.get_engine", return_value=("mock", engine)),
-            patch("openjarvis.intelligence.register_builtin_models"),
+            patch("silas.cli.chat_cmd.load_config", return_value=config),
+            patch("silas.engine.get_engine", return_value=("mock", engine)),
+            patch("silas.intelligence.register_builtin_models"),
             patch(
-                "openjarvis.security.setup_security",
+                "silas.security.setup_security",
                 return_value=SecurityContext(
                     engine=engine,
                     capability_policy=policy,
@@ -699,11 +699,11 @@ class TestChatAgents:
                 ),
             ),
             patch(
-                "openjarvis.cli._model_switch.tty_wants_model_picker",
+                "silas.cli._model_switch.tty_wants_model_picker",
                 return_value=False,
             ),
             patch(
-                "openjarvis.cli._runtime_panel.tty_wants_runtime_panel",
+                "silas.cli._runtime_panel.tty_wants_runtime_panel",
                 return_value=False,
             ),
         ):

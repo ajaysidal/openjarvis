@@ -30,7 +30,7 @@ Scheduling
 The agent self-registers a 5am daily cron task when ``register_cron`` is
 called from your app startup:
 
-    from openjarvis.agents.proactive_agent import register_cron
+    from silas.agents.proactive_agent import register_cron
     register_cron(scheduler, notification_channel_id="your-channel-id")
 """
 
@@ -42,12 +42,12 @@ from datetime import datetime
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set
 
-from openjarvis.agents._stubs import AgentContext, AgentResult, ToolUsingAgent
-from openjarvis.core.config import load_config
-from openjarvis.core.paths import get_config_dir
-from openjarvis.core.registry import AgentRegistry
-from openjarvis.core.types import Message, Role, ToolCall
-from openjarvis.tools.approval_store import (
+from silas.agents._stubs import AgentContext, AgentResult, ToolUsingAgent
+from silas.core.config import load_config
+from silas.core.paths import get_config_dir
+from silas.core.registry import AgentRegistry
+from silas.core.types import Message, Role, ToolCall
+from silas.tools.approval_store import (
     DECISION_ALWAYS_APPROVE,
     DECISION_ALWAYS_DENY,
     STATUS_APPROVED,
@@ -55,7 +55,7 @@ from openjarvis.tools.approval_store import (
     TIER_TRIVIAL,
     ApprovalStore,
 )
-from openjarvis.tools.proactive_tools import get_store
+from silas.tools.proactive_tools import get_store
 
 logger = logging.getLogger(__name__)
 
@@ -64,7 +64,7 @@ _PROACTIVE_CRON_PROMPT = (
     "notify pending approvals."
 )
 _PROACTIVE_TASK_KEY = "proactive-daily"
-_PROACTIVE_TASK_KEY_FIELD = "openjarvis_task_key"
+_PROACTIVE_TASK_KEY_FIELD = "silas_task_key"
 
 _SYSTEM_PROMPT = """You are a proactive personal assistant agent. You have already collected
 data from the user's connected sources (email, messages, calendar). Your job is to:
@@ -220,7 +220,7 @@ def _build_notification_channel(channel_spec: str) -> Optional[Any]:
 
     # iMessage: wrap send_imessage() in a minimal BaseChannel-compatible shim
     if channel_type == "imessage":
-        from openjarvis.channels._stubs import (
+        from silas.channels._stubs import (
             BaseChannel,
             ChannelStatus,
         )
@@ -240,7 +240,7 @@ def _build_notification_channel(channel_spec: str) -> Optional[Any]:
             def send(
                 self, channel: str, content: str, *, conversation_id: str = ""
             ) -> bool:
-                from openjarvis.channels.imessage_daemon import send_imessage
+                from silas.channels.imessage_daemon import send_imessage
 
                 return send_imessage(self._handle, content)
 
@@ -257,16 +257,16 @@ def _build_notification_channel(channel_spec: str) -> Optional[Any]:
 
     # All other channel types: look up in ChannelRegistry
     try:
-        import openjarvis.channels  # noqa: F401  trigger registration
-        from openjarvis.core.registry import ChannelRegistry
+        import silas.channels  # noqa: F401  trigger registration
+        from silas.core.registry import ChannelRegistry
 
         if ChannelRegistry.contains(channel_type):
             channel_cls = ChannelRegistry.get(channel_type)
             # Load credentials from config so the channel uses bot_token from
             # config.toml rather than falling back to a bare env var.
             try:
-                from openjarvis.core.config import load_config
-                from openjarvis.system._channel_kwargs import build_channel_kwargs
+                from silas.core.config import load_config
+                from silas.system._channel_kwargs import build_channel_kwargs
 
                 _cfg = load_config()
                 _kwargs = build_channel_kwargs(_cfg.channel, channel_type)
@@ -328,9 +328,9 @@ class ProactiveAgent(ToolUsingAgent):
         self._notification_channel = notification_channel
         self._notification_destination = self._notification_channel_id.partition(":")[2]
 
-        from openjarvis.tools.channel_tools import ChannelSendTool
-        from openjarvis.tools.digest_collect import DigestCollectTool
-        from openjarvis.tools.proactive_tools import (
+        from silas.tools.channel_tools import ChannelSendTool
+        from silas.tools.digest_collect import DigestCollectTool
+        from silas.tools.proactive_tools import (
             CheckPermissionTool,
             ExecutePendingActionsTool,
             GetPendingActionsTool,
@@ -442,7 +442,7 @@ class ProactiveAgent(ToolUsingAgent):
         # human can diagnose "Nothing to report" without re-running the
         # whole agent.  Best-effort; never fail the run because of logging.
         try:
-            from openjarvis.core.config import DEFAULT_CONFIG_DIR
+            from silas.core.config import DEFAULT_CONFIG_DIR
 
             log_dir = DEFAULT_CONFIG_DIR / "logs"
             log_dir.mkdir(parents=True, exist_ok=True)

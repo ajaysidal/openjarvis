@@ -32,9 +32,9 @@ except ImportError as exc:
         "    pip install colbert-ai\n"
     ) from exc
 
-from openjarvis.core.events import EventType, get_event_bus
-from openjarvis.core.registry import MemoryRegistry
-from openjarvis.tools.storage._stubs import MemoryBackend, RetrievalResult
+from silas.core.events import EventType, get_event_bus
+from silas.core.registry import MemoryRegistry
+from silas.tools.storage._stubs import MemoryBackend, RetrievalResult
 
 
 @MemoryRegistry.register("colbert")

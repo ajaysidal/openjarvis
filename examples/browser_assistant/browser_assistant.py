@@ -50,10 +50,10 @@ def main() -> None:
     args = parser.parse_args()
 
     try:
-        from openjarvis import Jarvis
+        from silas import Jarvis
     except ImportError:
         print(
-            "Error: openjarvis is not installed. "
+            "Error: silas is not installed. "
             "Install it with:  uv sync --extra dev",
             file=sys.stderr,
         )

@@ -267,10 +267,10 @@ function isProfane(text: string): boolean {
   return false;
 }
 
-const OPTIN_KEY = 'openjarvis-desktop-optin';
-const OPTIN_NAME_KEY = 'openjarvis-desktop-display-name';
-const OPTIN_EMAIL_KEY = 'openjarvis-desktop-email';
-const OPTIN_ANONID_KEY = 'openjarvis-desktop-anon-id';
+const OPTIN_KEY = 'silas-desktop-optin';
+const OPTIN_NAME_KEY = 'silas-desktop-display-name';
+const OPTIN_EMAIL_KEY = 'silas-desktop-email';
+const OPTIN_ANONID_KEY = 'silas-desktop-anon-id';
 
 function getOrCreateAnonId(): string {
   const stored = localStorage.getItem(OPTIN_ANONID_KEY);
@@ -426,7 +426,7 @@ export function SavingsDashboard({ apiUrl }: { apiUrl: string }) {
             Opt in to privately share your savings for the chance to win a Mac Mini!
           </div>
           <div style={{ marginBottom: 8 }}>
-            <input
+            <input id="savingsdashboard-input-1" name="savingsdashboard-input-1"
               type="text"
               value={nameInput}
               onChange={(e) => { setNameInput(e.target.value); setNameError(''); }}
@@ -451,7 +451,7 @@ export function SavingsDashboard({ apiUrl }: { apiUrl: string }) {
               Email <span style={{ color: colors.red }}>*</span>
               <span style={{ fontWeight: 400, marginLeft: 4, opacity: 0.7 }}>(never shown publicly)</span>
             </div>
-            <input
+            <input id="savingsdashboard-input-2" name="savingsdashboard-input-2"
               type="email"
               value={emailInput}
               onChange={(e) => { setEmailInput(e.target.value); setNameError(''); }}
@@ -543,7 +543,7 @@ export function SavingsDashboard({ apiUrl }: { apiUrl: string }) {
             {optInEnabled ? `Sharing as "${displayName}"` : 'Share Your Savings'}
           </button>
           <a
-            href="https://open-jarvis.github.io/OpenJarvis/leaderboard"
+            href="https://open-jarvis.github.io/Silas/leaderboard"
             target="_blank"
             rel="noopener noreferrer"
             style={{ fontSize: 12, color: colors.accent, textDecoration: 'none' }}

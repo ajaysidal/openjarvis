@@ -9,20 +9,20 @@ from typing import Any, Dict, List
 
 import httpx
 
-from openjarvis.core.types import Message
-from openjarvis.engine._base import (
+from silas.core.types import Message
+from silas.engine._base import (
     EngineConnectionError,
     EngineContextLengthError,
     InferenceEngine,
     estimate_prompt_tokens,
     messages_to_dicts,
 )
-from openjarvis.engine._http_async import (
+from silas.engine._http_async import (
     STREAM_TRANSPORT_ERRORS,
     AsyncHTTPEngineMixin,
 )
-from openjarvis.engine._stubs import StreamChunk
-from openjarvis.intelligence.model_catalog import resolve_model_id_for_engine
+from silas.engine._stubs import StreamChunk
+from silas.intelligence.model_catalog import resolve_model_id_for_engine
 
 logger = logging.getLogger(__name__)
 
@@ -336,6 +336,6 @@ class _OpenAICompatibleEngine(AsyncHTTPEngineMixin, InferenceEngine):
         self._close_async_client()
 
 
-# ``EngineContextLengthError`` moved to ``openjarvis.engine._base``; re-exported
+# ``EngineContextLengthError`` moved to ``silas.engine._base``; re-exported
 # here for callers/tests that import it from this module.
 __all__ = ["_OpenAICompatibleEngine", "EngineContextLengthError"]

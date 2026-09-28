@@ -1,10 +1,10 @@
 """Workflow engine — DAG-based multi-agent pipelines."""
 
-from openjarvis.workflow.builder import WorkflowBuilder
-from openjarvis.workflow.engine import WorkflowEngine
-from openjarvis.workflow.graph import WorkflowGraph
-from openjarvis.workflow.loader import load_workflow
-from openjarvis.workflow.types import (
+from silas.workflow.builder import WorkflowBuilder
+from silas.workflow.engine import WorkflowEngine
+from silas.workflow.graph import WorkflowGraph
+from silas.workflow.loader import load_workflow
+from silas.workflow.types import (
     WorkflowEdge,
     WorkflowNode,
     WorkflowResult,

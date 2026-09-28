@@ -2,7 +2,7 @@
 
 from __future__ import annotations
 
-from openjarvis.evals.core.types import (
+from silas.evals.core.types import (
     BenchmarkConfig,
     DefaultsConfig,
     EvalRecord,

@@ -8,11 +8,11 @@ import re
 from datetime import datetime, timezone
 from typing import Any
 
-from openjarvis.connectors import weather as weather_connector
-from openjarvis.core.credentials import get_tool_credential
-from openjarvis.core.registry import ToolRegistry
-from openjarvis.core.types import ToolResult
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.connectors import weather as weather_connector
+from silas.core.credentials import get_tool_credential
+from silas.core.registry import ToolRegistry
+from silas.core.types import ToolResult
+from silas.tools._stubs import BaseTool, ToolSpec
 
 _TOOL_NAME = "get_weather"
 _API_KEY_ENV = "OPENWEATHERMAP_API_KEY"
@@ -98,7 +98,7 @@ class WeatherTool(BaseTool):
         self._config_error = False
         if config is None:
             try:
-                from openjarvis.core.config import load_config
+                from silas.core.config import load_config
 
                 config = load_config().tools.weather
             except Exception:

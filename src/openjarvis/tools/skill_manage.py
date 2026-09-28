@@ -5,10 +5,10 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Any, List
 
-from openjarvis.core.paths import get_config_dir
-from openjarvis.core.registry import ToolRegistry
-from openjarvis.core.types import ToolResult
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.core.paths import get_config_dir
+from silas.core.registry import ToolRegistry
+from silas.core.types import ToolResult
+from silas.tools._stubs import BaseTool, ToolSpec
 
 
 @ToolRegistry.register("skill_manage")

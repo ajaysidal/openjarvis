@@ -1,6 +1,6 @@
 """HTTP route: ``POST /api/research`` — agentic research over the knowledge store.
 
-Drives :class:`openjarvis.agents.research_loop.ResearchAgent` and streams a
+Drives :class:`silas.agents.research_loop.ResearchAgent` and streams a
 custom SSE event schema back to the client:
 
 * ``search_call``     — about to invoke ``HybridSearch.search`` (with arguments)
@@ -31,18 +31,18 @@ from fastapi import APIRouter, Request
 from fastapi.responses import StreamingResponse
 from pydantic import BaseModel, Field
 
-from openjarvis.agents.research_loop import (
+from silas.agents.research_loop import (
     DEFAULT_PLANNER_MODEL,
     ResearchAgent,
 )
-from openjarvis.connectors.embeddings import OllamaEmbedder
-from openjarvis.connectors.hybrid_search import HybridSearch
-from openjarvis.connectors.store import KnowledgeStore
-from openjarvis.core.config import DEFAULT_CONFIG_DIR, JarvisConfig, load_config
-from openjarvis.core.types import TelemetryRecord
-from openjarvis.engine._base import InferenceEngine
-from openjarvis.engine._discovery import get_engine
-from openjarvis.telemetry.store import TelemetryStore
+from silas.connectors.embeddings import OllamaEmbedder
+from silas.connectors.hybrid_search import HybridSearch
+from silas.connectors.store import KnowledgeStore
+from silas.core.config import DEFAULT_CONFIG_DIR, JarvisConfig, load_config
+from silas.core.types import TelemetryRecord
+from silas.engine._base import InferenceEngine
+from silas.engine._discovery import get_engine
+from silas.telemetry.store import TelemetryStore
 
 logger = logging.getLogger(__name__)
 

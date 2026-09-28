@@ -5,9 +5,9 @@ from __future__ import annotations
 import logging
 from typing import Any
 
-from openjarvis.a2a.client import A2AClient
-from openjarvis.core.types import ToolResult
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.a2a.client import A2AClient
+from silas.core.types import ToolResult
+from silas.tools._stubs import BaseTool, ToolSpec
 
 logger = logging.getLogger(__name__)
 

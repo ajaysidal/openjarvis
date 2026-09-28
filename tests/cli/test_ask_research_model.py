@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from openjarvis.agents.research_loop import DEFAULT_PLANNER_MODEL
-from openjarvis.cli.ask import _resolve_research_model
-from openjarvis.core.config import JarvisConfig
+from silas.agents.research_loop import DEFAULT_PLANNER_MODEL
+from silas.cli.ask import _resolve_research_model
+from silas.core.config import JarvisConfig
 
 
 def test_explicit_model_flag_wins() -> None:

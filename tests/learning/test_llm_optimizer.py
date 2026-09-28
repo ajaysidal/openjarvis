@@ -1,4 +1,4 @@
-"""Tests for openjarvis.optimize.llm_optimizer module."""
+"""Tests for silas.optimize.llm_optimizer module."""
 
 from __future__ import annotations
 
@@ -8,11 +8,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from openjarvis.core.types import StepType, Trace, TraceStep
-from openjarvis.evals.core.backend import InferenceBackend
-from openjarvis.evals.core.types import RunSummary
-from openjarvis.learning.optimize.llm_optimizer import LLMOptimizer
-from openjarvis.learning.optimize.types import (
+from silas.core.types import StepType, Trace, TraceStep
+from silas.evals.core.backend import InferenceBackend
+from silas.evals.core.types import RunSummary
+from silas.learning.optimize.llm_optimizer import LLMOptimizer
+from silas.learning.optimize.types import (
     SampleScore,
     SearchDimension,
     SearchSpace,

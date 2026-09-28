@@ -11,11 +11,11 @@ from rich.console import Console
 from rich.markup import escape
 from rich.panel import Panel
 
-from openjarvis.cli._banner import print_banner
-from openjarvis.cli._bootstrap import detect_cloud_keys
-from openjarvis.cli.model import find_model_spec, hf_download, ollama_pull
-from openjarvis.cli.scan_cmd import PrivacyScanner
-from openjarvis.core.config import (
+from silas.cli._banner import print_banner
+from silas.cli._bootstrap import detect_cloud_keys
+from silas.cli.model import find_model_spec, hf_download, ollama_pull
+from silas.cli.scan_cmd import PrivacyScanner
+from silas.core.config import (
     DEFAULT_CONFIG_DIR,
     DEFAULT_CONFIG_PATH,
     _available_memory_gb,
@@ -305,7 +305,7 @@ def init(
     preset: Optional[str] = None,
     from_bare_jarvis: bool = False,
 ) -> None:
-    """Detect hardware and generate ~/.openjarvis/config.toml."""
+    """Detect hardware and generate ~/.silas/config.toml."""
     print_banner(quiet=(ctx.obj or {}).get("quiet", False))
     console = Console()
 
@@ -334,14 +334,14 @@ def init(
     # Handle --preset: copy a starter config and return early
     if preset:
         examples_dir = (
-            Path(__file__).resolve().parents[2] / "configs" / "openjarvis" / "examples"
+            Path(__file__).resolve().parents[2] / "configs" / "silas" / "examples"
         )
         # Also check installed package location
         if not examples_dir.exists():
             examples_dir = (
                 Path(__file__).resolve().parents[3]
                 / "configs"
-                / "openjarvis"
+                / "silas"
                 / "examples"
             )
         preset_path = examples_dir / f"{preset}.toml"

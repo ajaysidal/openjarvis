@@ -1,6 +1,6 @@
 """Web search tool — You.com or Tavily, with a DuckDuckGo fallback.
 
-Engine selection is explicit (``engine=`` or ``OPENJARVIS_WEB_SEARCH_ENGINE``)
+Engine selection is explicit (``engine=`` or ``SILAS_WEB_SEARCH_ENGINE``)
 rather than a chain of ``try``/``except`` layers. The default, ``"auto"``,
 resolves to whichever engine the environment can actually serve, preferring an
 API-backed engine over the DuckDuckGo HTML scrape:
@@ -23,11 +23,11 @@ import os
 from typing import Any
 from urllib.parse import urljoin
 
-from openjarvis import __version__
-from openjarvis.core.registry import ToolRegistry
-from openjarvis.core.types import ToolResult
-from openjarvis.security.ssrf import check_ssrf
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas import __version__
+from silas.core.registry import ToolRegistry
+from silas.core.types import ToolResult
+from silas.security.ssrf import check_ssrf
+from silas.tools._stubs import BaseTool, ToolSpec
 
 logger = logging.getLogger(__name__)
 
@@ -43,13 +43,13 @@ SERPLY_API_KEY_ENV = "SERPLY_API_KEY"
 # set. Unset means the API answers from its own default region.
 SERPLY_LOCATION_ENV = "SERPLY_PROXY_LOCATION"
 
-ENGINE_ENV = "OPENJARVIS_WEB_SEARCH_ENGINE"
+ENGINE_ENV = "SILAS_WEB_SEARCH_ENGINE"
 ENGINES = ("auto", "youcom", "tavily", "duckduckgo", "serply")
 
-# Identifies OpenJarvis to You.com. The keyless tier carries no API key, so the
+# Identifies Silas to You.com. The keyless tier carries no API key, so the
 # User-Agent is the only attribution signal; sent to You.com hosts only.
 YOUCOM_USER_AGENT = (
-    f"openjarvis/{__version__} youdotcom-integration/open-jarvis-openjarvis"
+    f"silas/{__version__} youdotcom-integration/open-jarvis-silas"
 )
 
 _MAX_FETCH_REDIRECTS = 5
@@ -60,7 +60,7 @@ _REDIRECT_STATUS_CODES = frozenset({301, 302, 303, 307, 308})
 _KEYLESS_LIMIT_STATUSES = (402, 429)
 YOUCOM_PLATFORM_URL = (
     "https://you.com/platform"
-    "?utm_source=open-jarvis-openjarvis&utm_medium=oss_integration"
+    "?utm_source=open-jarvis-silas&utm_medium=oss_integration"
     "&utm_campaign=2026-09-oss-integrations&utm_content=error-message"
 )
 _KEY_UPGRADE_HINT = (
@@ -94,7 +94,7 @@ class WebSearchTool(BaseTool):
 
         ``api_key`` remains the Tavily key, positionally, for backwards
         compatibility. ``engine`` is one of :data:`ENGINES`; when omitted it
-        comes from ``OPENJARVIS_WEB_SEARCH_ENGINE`` and defaults to ``"auto"``.
+        comes from ``SILAS_WEB_SEARCH_ENGINE`` and defaults to ``"auto"``.
         An unknown engine name falls back to ``"auto"`` with a warning rather
         than raising, so a typo in the environment cannot break tool loading.
         """
@@ -211,7 +211,7 @@ class WebSearchTool(BaseTool):
             follow_redirects=False,
             timeout=30.0,
             headers={
-                "User-Agent": "Mozilla/5.0 (compatible; OpenJarvis/1.0; +https://github.com/openjarvis)"
+                "User-Agent": "Mozilla/5.0 (compatible; Silas/1.0; +https://github.com/silas)"
             },
         ) as client:
             for _ in range(_MAX_FETCH_REDIRECTS + 1):

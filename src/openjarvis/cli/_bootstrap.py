@@ -15,9 +15,9 @@ from typing import Optional
 
 import click
 
-import openjarvis
-from openjarvis.core import config as _cfg
-from openjarvis.core.config import (
+import silas
+from silas.core import config as _cfg
+from silas.core.config import (
     HardwareInfo,
     detect_hardware,
     recommend_engine,
@@ -91,7 +91,7 @@ def _now_iso() -> str:
 
 
 def _installer_version() -> str:
-    return openjarvis.__version__
+    return silas.__version__
 
 
 def _render_provenance_lines() -> str:
@@ -135,7 +135,7 @@ def write_initial_config(
     )
 
     base_toml = (
-        f"# OpenJarvis configuration\n"
+        f"# Silas configuration\n"
         f"{hardware_line}{gpu_comment}\n"
         f"# Full reference config: jarvis init --full\n"
         f"\n"

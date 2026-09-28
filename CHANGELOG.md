@@ -1,6 +1,6 @@
 # Changelog
 
-All notable changes to OpenJarvis are documented in this file.
+All notable changes to Silas are documented in this file.
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
@@ -118,25 +118,25 @@ credential safe for WebSocket protocol syntax and does not encrypt it, so use
 `wss://` for remote connections.
 
 The former `?token=<key>` WebSocket authentication path is no longer accepted.
-Custom browser clients must migrate to the `openjarvis.auth.v1` subprotocol
+Custom browser clients must migrate to the `silas.auth.v1` subprotocol
 format documented in the API server guide.
 
 ## [1.0.2] - 2026-05-24
 
 A patch release that fixes a packaging bug which broke the v1.0.1
 wheel on PyPI, silences a noisy startup warning, restores a working
-install path while `openjarvis.ai` is down, improves desktop
+install path while `silas.ai` is down, improves desktop
 first-boot diagnostics on Windows, and ships the RAM-detection fix
 for Windows that missed the v1.0.1 cutoff.
 
 ### Fixed
 
-**`openjarvis/traces/` missing from the v1.0.1 PyPI wheel** (#372).
+**`silas/traces/` missing from the v1.0.1 PyPI wheel** (#372).
 The `.gitignore` carried an unanchored `traces/` pattern, which
 hatchling honored at wheel-build time and matched the runtime module
-`src/openjarvis/traces/` — silently dropping the whole package. Every
-fresh `pip install openjarvis==1.0.1` then failed at import with
-`ModuleNotFoundError: No module named 'openjarvis.traces'` on the
+`src/silas/traces/` — silently dropping the whole package. Every
+fresh `pip install silas==1.0.1` then failed at import with
+`ModuleNotFoundError: No module named 'silas.traces'` on the
 first `jarvis ask`, learning, or server call. Anchored the pattern to
 `/traces/`. Verified: a clean `uv build` now produces a wheel
 containing all four `traces/` files.
@@ -166,11 +166,11 @@ logic is covered by unit tests.
 ### Changed
 
 **Install URL moved to GitHub Pages** (#337, #352). The documented
-`openjarvis.ai/install.sh` URL was failing with `sslv3 alert
+`silas.ai/install.sh` URL was failing with `sslv3 alert
 handshake failure` (the domain is community-operated and had a broken
 TLS config). The canonical installer is now served from the
 project-controlled GitHub Pages site at
-`https://open-jarvis.github.io/OpenJarvis/install.sh`, generated from
+`https://open-jarvis.github.io/Silas/install.sh`, generated from
 the same `scripts/install/install.sh` at docs-build time. The README
 also documents the WSL2 path for Windows and the `uv` prerequisite
 for the desktop binary, and the installer bails early with a clear
@@ -197,9 +197,9 @@ PyPI and isn't a properly-packaged Python project as of v1.0.1) —
 see `docs/learning/ace.md` for the install path and trace-adapter
 behavior.
 
-**`jarvis self-update`** subcommand. Detects how OpenJarvis was
+**`jarvis self-update`** subcommand. Detects how Silas was
 installed (pip, uv tool, editable git checkout) by inspecting
-`openjarvis.__file__`, then runs the right upgrade command. Supports
+`silas.__file__`, then runs the right upgrade command. Supports
 `--check` (print the command without running) and `-y` (skip the
 confirmation prompt). The post-command "new version available" hint
 now points users at this command instead of guessing at the right
@@ -214,9 +214,9 @@ installed desktop app would never check. Both are now fixed; the app
 polls `releases/download/desktop-latest/latest.json` every 30 minutes
 and signature-verifies downloads against the minisign pubkey baked
 into the app. Full flow, key-rotation runbook, and dev escape hatch
-(`OPENJARVIS_NO_UPDATER=1`) documented in `docs/desktop-auto-update.md`.
+(`SILAS_NO_UPDATER=1`) documented in `docs/desktop-auto-update.md`.
 
-**Analytics env-var opt-out** (`DO_NOT_TRACK`, `OPENJARVIS_NO_ANALYTICS`).
+**Analytics env-var opt-out** (`DO_NOT_TRACK`, `SILAS_NO_ANALYTICS`).
 Tanvir's analytics module (#351) only respected the
 `[analytics] enabled` config-file setting. Both env vars are now
 honored in `is_analytics_enabled()` and in the install.sh beacon
@@ -250,7 +250,7 @@ compare against.
   `cfg.enabled` directly.
 - **Editable-git users running `jarvis self-update`** get the
   detected `git pull && uv sync` command pointed at their actual
-  checkout, not `~/OpenJarvis`. If you'd come to rely on the
+  checkout, not `~/Silas`. If you'd come to rely on the
   hardcoded path, update your muscle memory.
 
 ## [1.0.0] - 2026-05-15
@@ -259,14 +259,14 @@ The five-primitive architecture (Intelligence, Engine, Agents,
 Tools & Memory, Learning) is now stable, with efficiency and
 on-device learning as first-class capabilities alongside accuracy.
 Companion blog post:
-[From Minions to OpenJarvis: A Retrospective on Two Years in Local AI](https://hazyresearch.stanford.edu/blog/2026-05-19-minions-to-openjarvis-retrospective).
+[From Minions to Silas: A Retrospective on Two Years in Local AI](https://hazyresearch.stanford.edu/blog/2026-05-19-minions-to-silas-retrospective).
 
 ### Highlights
 
 **Five composable primitives.** Intelligence, Engine, Agents, Tools & Memory,
 and Learning each sit behind a single typed interface — any slot is
 substitutable without touching the rest. The composition layer is
-`JarvisSystem` in `src/openjarvis/system.py`, driven by a TOML config.
+`JarvisSystem` in `src/silas/system.py`, driven by a TOML config.
 
 **Built-in agents across three execution modes.** Eight agents spanning a
 single-turn chat baseline, a deep-research agent with inline citations,
@@ -287,20 +287,20 @@ in `engine/_discovery.py` picks a sensible default per host.
 ### Added — hybrid local-cloud capabilities
 
 **Per-query routing via a query-complexity analyzer**
-(`src/openjarvis/learning/routing/complexity.py`). Produces a 0.0–1.0
+(`src/silas/learning/routing/complexity.py`). Produces a 0.0–1.0
 complexity score with code/math/reasoning signals and a suggested token
 budget, populating `RoutingContext` so easy queries stay local and only
 queries that need frontier capability escalate.
 
-**LLM-guided spec search** (`src/openjarvis/learning/spec_search/`).
+**LLM-guided spec search** (`src/silas/learning/spec_search/`).
 `SpecSearchOrchestrator` wires diagnose → plan → execute → gate into a
 single learning session: a frontier model reads traces, proposes
 coordinated edits across all five primitives, and a held-out benchmark
 gate (`gate/benchmark_gate.py`, `gate/regression.py`, `gate/cold_start.py`)
 accepts only non-regressing edits. Ships with the `spec-search-quickstart`
-preset and a runnable tutorial at `examples/openjarvis/spec_search_quickstart.py`.
+preset and a runnable tutorial at `examples/silas/spec_search_quickstart.py`.
 
-**Six hybrid coordination paradigms** in `src/openjarvis/agents/hybrid/`.
+**Six hybrid coordination paradigms** in `src/silas/agents/hybrid/`.
 Each paradigm pairs a local student with a frontier cloud teacher under
 a different orchestration shape, as `LocalCloudAgent` subclasses:
 
@@ -311,7 +311,7 @@ a different orchestration shape, as `LocalCloudAgent` subclasses:
 - `skillorchestra` — per-query router across local skills
 - `toolorchestra` — RL'd local model with a tool pool
 
-A runner CLI (`python -m openjarvis.agents.hybrid.runner --cell <name>`)
+A runner CLI (`python -m silas.agents.hybrid.runner --cell <name>`)
 and a 35-cell experiment registry (one TOML per method × benchmark ×
 model triple) let researchers run, score, and compare these on equal
 footing. Includes a Modal-backed SWE-bench-Verified harness scorer
@@ -372,13 +372,13 @@ existing 30+ benchmark suite.
   - `ToolTranslator` for external tool name translation (Bash -> shell_exec, Read -> file_read, etc.)
   - Source resolvers: `HermesResolver`, `OpenClawResolver`, `GitHubResolver`
   - `SkillImporter` with provenance tracking (`.source` metadata files), optional script import
-  - Sourced subdirectory layout (`~/.openjarvis/skills/<source>/<name>/`)
+  - Sourced subdirectory layout (`~/.silas/skills/<source>/<name>/`)
 
 - **Skills learning loop** — trace tagging, pattern discovery, DSPy/GEPA optimization.
   - Trace metadata tagging: `skill`, `skill_source`, `skill_kind` flow through ToolExecutor -> TraceCollector -> TraceStep
   - `SkillDiscovery` wired into `SkillManager.discover_from_traces()` with kebab name normalization
   - `SkillOptimizer` — per-skill DSPy/GEPA wrapper that buckets traces and writes sidecar overlays
-  - `SkillOverlay` — sidecar storage at `~/.openjarvis/learning/skills/<name>/optimized.toml`
+  - `SkillOverlay` — sidecar storage at `~/.silas/learning/skills/<name>/optimized.toml`
   - `SkillManager._load_overlays()` applies optimized descriptions + few-shot examples at discovery time
   - `LearningOrchestrator._maybe_optimize_skills()` — opt-in auto-trigger
 
@@ -414,14 +414,14 @@ existing 30+ benchmark suite.
 
 ### Examples & Tutorials
 
-- `examples/openjarvis/spec_search_quickstart.py` — runnable end-to-end
+- `examples/silas/spec_search_quickstart.py` — runnable end-to-end
   LLM-guided spec search session.
 - `docs/user-guide/llm-guided-spec-search.md` — paper-aligned user guide.
 - `docs/architecture/learning.md` — Learning primitive deep-dive covering
   routing, spec search, optimizers, and the orchestrator.
 - `docs/tutorials/` — code-companion, deep-research, messaging-hub,
   scheduled-ops, and skills-workflow walkthroughs.
-- `src/openjarvis/agents/hybrid/registry/*.toml` — 35-cell registry of
+- `src/silas/agents/hybrid/registry/*.toml` — 35-cell registry of
   paradigm × benchmark × model experiments.
 
 ### Migration from 0.x
@@ -429,8 +429,8 @@ existing 30+ benchmark suite.
 - **`learning/distillation/` is now `learning/spec_search/`.** The
   subsystem was renamed to match the LLM-guided spec search semantics
   documented in the companion paper. Update any imports
-  (`from openjarvis.learning.distillation.*` →
-  `from openjarvis.learning.spec_search.*`). The `jarvis distillation`
+  (`from silas.learning.distillation.*` →
+  `from silas.learning.spec_search.*`). The `jarvis distillation`
   CLI command is removed; use `spec_search`-prefixed config keys instead.
 - **`_third_party.toml` no longer ships default paths.** Set
   `HERMES_AGENT_PATH` and `OPENCLAW_PATH` env vars to point at your

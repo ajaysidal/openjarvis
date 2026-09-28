@@ -1,6 +1,6 @@
 <#
 .SYNOPSIS
-    OpenJarvis native Windows installer.
+    Silas native Windows installer.
 
 .DESCRIPTION
     Phase-1 of the native-Windows-support RFC (#298). Mirrors the
@@ -14,18 +14,18 @@
          see #432).
       3. Check git on PATH.
       4. Install uv (https://astral.sh/uv) if absent.
-      5. Clone the OpenJarvis repository to $env:LOCALAPPDATA\OpenJarvis
-         (override with $env:OPENJARVIS_HOME).
+      5. Clone the Silas repository to $env:LOCALAPPDATA\Silas
+         (override with $env:SILAS_HOME).
       6. Run `uv sync --extra desktop --group desktop-native` so the FastAPI
          server, speech backend, and native extension are importable.
       7. Optionally register the scheduled-task service (see
          deploy/windows/jarvis-service.ps1).
 
     Usage (one-liner):
-      irm https://open-jarvis.github.io/OpenJarvis/install.ps1 | iex
+      irm https://open-jarvis.github.io/Silas/install.ps1 | iex
 
     Usage (file invocation, supports flags):
-      irm https://open-jarvis.github.io/OpenJarvis/install.ps1 -OutFile install.ps1
+      irm https://open-jarvis.github.io/Silas/install.ps1 -OutFile install.ps1
       .\install.ps1 -SkipService
 
     Flags (when running the file directly):
@@ -36,14 +36,14 @@
     Under `irm | iex` the param block is unreachable (Invoke-Expression
     can't pass named args into a piped script string), so the same knobs
     are honored via env vars when the corresponding flag is absent:
-      $env:OPENJARVIS_SKIP_SERVICE = '1'
-      $env:OPENJARVIS_SERVICE      = '1'
-      $env:OPENJARVIS_FORCE        = '1'
+      $env:SILAS_SKIP_SERVICE = '1'
+      $env:SILAS_SERVICE      = '1'
+      $env:SILAS_FORCE        = '1'
 
 .NOTES
     Loopback default: the scheduled-task service binds 127.0.0.1, so no
     API key is needed. To expose on the LAN, edit the registered task to
-    pass `--host 0.0.0.0` AND set $env:OPENJARVIS_API_KEY (an
+    pass `--host 0.0.0.0` AND set $env:SILAS_API_KEY (an
     unauthenticated 0.0.0.0 server refuses to start). See
     deploy/windows/README.md.
 #>
@@ -60,9 +60,9 @@ $ErrorActionPreference = 'Stop'
 # Env-var fallback for the `irm | iex` path, where the param block is
 # unreachable (see header comment). Any explicit -switch wins; env vars
 # only fill in the gaps.
-if (-not $SkipService -and $env:OPENJARVIS_SKIP_SERVICE) { $SkipService = $true }
-if (-not $Service     -and $env:OPENJARVIS_SERVICE)      { $Service     = $true }
-if (-not $Force       -and $env:OPENJARVIS_FORCE)        { $Force       = $true }
+if (-not $SkipService -and $env:SILAS_SKIP_SERVICE) { $SkipService = $true }
+if (-not $Service     -and $env:SILAS_SERVICE)      { $Service     = $true }
+if (-not $Force       -and $env:SILAS_FORCE)        { $Force       = $true }
 
 # ---------------------------------------------------------------------------
 # Output helpers - coloured but plain enough for Constrained Language Mode.
@@ -185,7 +185,7 @@ $pyMajor = [int]$verMatch.Groups[1].Value
 $pyMinor = [int]$verMatch.Groups[2].Value
 if ($pyMajor -ne 3 -or $pyMinor -lt 10 -or $pyMinor -gt 13) {
     Write-Fail @"
-Found Python $pyMajor.$pyMinor at $pythonExe, but OpenJarvis requires
+Found Python $pyMajor.$pyMinor at $pythonExe, but Silas requires
 3.10 - 3.13. Python 3.14 has no numpy Windows wheels yet (#432, will
 re-open once numpy ships cp314).
 "@
@@ -247,10 +247,10 @@ Write-Ok "uv ($uvExe)"
 # 5. Clone the repo
 # ---------------------------------------------------------------------------
 
-$installRoot = if ($env:OPENJARVIS_HOME) {
-    $env:OPENJARVIS_HOME
+$installRoot = if ($env:SILAS_HOME) {
+    $env:SILAS_HOME
 } else {
-    Join-Path $env:LOCALAPPDATA 'OpenJarvis'
+    Join-Path $env:LOCALAPPDATA 'Silas'
 }
 $srcDir = Join-Path $installRoot 'src'
 
@@ -260,10 +260,10 @@ if (-not (Test-Path $installRoot)) {
     New-Item -ItemType Directory -Path $installRoot | Out-Null
 }
 
-$repoUrl = if ($env:OPENJARVIS_REPO_URL) {
-    $env:OPENJARVIS_REPO_URL
+$repoUrl = if ($env:SILAS_REPO_URL) {
+    $env:SILAS_REPO_URL
 } else {
-    'https://github.com/open-jarvis/OpenJarvis.git'
+    'https://github.com/open-jarvis/Silas.git'
 }
 
 if (Test-Path (Join-Path $srcDir '.git')) {
@@ -401,7 +401,7 @@ if (-not (Test-Path $binDir)) {
 }
 
 # %~dp0 in a .cmd file resolves to the directory containing the script,
-# so the shim is self-locating - moving %LOCALAPPDATA%\OpenJarvis won't
+# so the shim is self-locating - moving %LOCALAPPDATA%\Silas won't
 # break it as long as the user moves the whole tree. `uv` is resolved
 # from PATH at runtime (astral installer adds it to User PATH); avoids
 # pinning to the install-time uv.exe path which can shift on uv updates.
@@ -413,12 +413,12 @@ uv run --project "%SRC%" jarvis %*
 "@
 Set-Content -Path $shimPath -Value $shimContent -Encoding ASCII
 
-# Add %LOCALAPPDATA%\OpenJarvis\bin to User PATH if it isn't already
+# Add %LOCALAPPDATA%\Silas\bin to User PATH if it isn't already
 # there. The current process won't see it until restart - handled in the
 # final banner.
 #
 # Compare against the EXPANDED form: a previous install may have written
-# the entry as `%LOCALAPPDATA%\OpenJarvis\bin` (unexpanded) into User
+# the entry as `%LOCALAPPDATA%\Silas\bin` (unexpanded) into User
 # PATH, and a literal `-ieq` against the expanded `$binDir` would miss
 # it and append a duplicate every re-run.
 $userPath = [System.Environment]::GetEnvironmentVariable('Path', 'User')
@@ -475,7 +475,7 @@ if ($Service) {
     $isInteractive = [Environment]::UserInteractive `
         -and -not [System.Console]::IsInputRedirected
     if ($isInteractive) {
-        $reply = Read-Host "Register OpenJarvis as a Windows scheduled task (auto-start at logon, loopback only)? [y/N]"
+        $reply = Read-Host "Register Silas as a Windows scheduled task (auto-start at logon, loopback only)? [y/N]"
         $shouldInstallService = ($reply -match '^[yY]')
     } else {
         Write-Warn2 "Non-interactive install - skipping scheduled-task setup."
@@ -493,7 +493,7 @@ if ($shouldInstallService) {
     if ($LASTEXITCODE -ne 0) {
         Write-Fail "Scheduled task setup failed."
     }
-    Write-Ok "Scheduled task 'OpenJarvis' registered (loopback default)."
+    Write-Ok "Scheduled task 'Silas' registered (loopback default)."
 }
 
 # ---------------------------------------------------------------------------
@@ -502,7 +502,7 @@ if ($shouldInstallService) {
 
 Write-Host ""
 Write-Host "  +----------------------------------+" -ForegroundColor Green
-Write-Host "  |   OpenJarvis install complete    |" -ForegroundColor Green
+Write-Host "  |   Silas install complete    |" -ForegroundColor Green
 Write-Host "  +----------------------------------+" -ForegroundColor Green
 Write-Host ""
 Write-Host "  Repo:    $srcDir"
@@ -530,9 +530,9 @@ if (-not $modelPullOk) {
 
 if ($shouldInstallService) {
     Write-Host ""
-    Write-Host "  Service: schtasks /Query /TN OpenJarvis     (status)"
+    Write-Host "  Service: schtasks /Query /TN Silas     (status)"
     Write-Host "           powershell -File `"$serviceScript`" uninstall    (remove)"
 }
 Write-Host ""
-Write-Host "  Docs:    https://open-jarvis.github.io/OpenJarvis/"
+Write-Host "  Docs:    https://open-jarvis.github.io/Silas/"
 Write-Host ""

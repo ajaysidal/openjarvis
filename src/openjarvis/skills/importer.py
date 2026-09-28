@@ -1,4 +1,4 @@
-"""SkillImporter — install ResolvedSkill instances into ~/.openjarvis/skills/.
+"""SkillImporter — install ResolvedSkill instances into ~/.silas/skills/.
 
 Steps performed by ``import_skill``:
 
@@ -24,15 +24,15 @@ from typing import List
 
 import yaml
 
-from openjarvis.core.paths import get_config_dir
-from openjarvis.skills.parser import SkillParser
-from openjarvis.skills.security import (
+from silas.core.paths import get_config_dir
+from silas.skills.parser import SkillParser
+from silas.skills.security import (
     TrustTier,
     classify_trust_tier,
     has_dangerous_capabilities,
 )
-from openjarvis.skills.sources.base import ResolvedSkill
-from openjarvis.skills.tool_translator import ToolTranslator
+from silas.skills.sources.base import ResolvedSkill
+from silas.skills.tool_translator import ToolTranslator
 
 # Subdirectories of a skill that are always copied (never gated by --with-scripts)
 COPIED_SUBDIRS = ("references", "assets", "templates")

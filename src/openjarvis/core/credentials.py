@@ -1,6 +1,6 @@
 """Credential persistence for tools and channels.
 
-Stores credentials in ~/.openjarvis/credentials.toml with 0o600 permissions.
+Stores credentials in ~/.silas/credentials.toml with 0o600 permissions.
 Thread-safe writes via lock. Sets os.environ on save for immediate effect.
 """
 
@@ -14,8 +14,8 @@ from pathlib import Path
 
 import tomlkit
 
-from openjarvis.core.paths import get_config_dir
-from openjarvis.security.file_utils import secure_write_text
+from silas.core.paths import get_config_dir
+from silas.security.file_utils import secure_write_text
 
 try:
     import tomllib
@@ -28,7 +28,7 @@ _LOCK = threading.RLock()
 
 
 def _default_path() -> Path:
-    """Resolve the credentials file under the OpenJarvis root (env-aware)."""
+    """Resolve the credentials file under the Silas root (env-aware)."""
     return get_config_dir() / "credentials.toml"
 
 

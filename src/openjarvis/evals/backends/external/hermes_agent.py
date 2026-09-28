@@ -13,13 +13,13 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict
 
-from openjarvis.evals.backends.external._subprocess_runner import run_one_shot
-from openjarvis.evals.comparison.third_party import (
+from silas.evals.backends.external._subprocess_runner import run_one_shot
+from silas.evals.comparison.third_party import (
     ThirdPartyEntry,
     load_third_party_config,
     verify_commit_pin,
 )
-from openjarvis.evals.core.backend import InferenceBackend
+from silas.evals.core.backend import InferenceBackend
 
 
 class HermesBackend(InferenceBackend):

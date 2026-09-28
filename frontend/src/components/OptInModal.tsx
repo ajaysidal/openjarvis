@@ -175,7 +175,7 @@ export function OptInModal({ onClose }: OptInModalProps) {
                 >
                   Display Name
                 </label>
-                <input
+                <input id="optinmodal-input-1" name="optinmodal-input-1"
                   type="text"
                   value={name}
                   onChange={(e) => {
@@ -206,7 +206,7 @@ export function OptInModal({ onClose }: OptInModalProps) {
                   Email <span style={{ color: 'var(--color-error)' }}>*</span>
                   <span className="font-normal ml-1" style={{ color: 'var(--color-text-tertiary)' }}>(never shown publicly)</span>
                 </label>
-                <input
+                <input id="optinmodal-input-2" name="optinmodal-input-2"
                   type="email"
                   value={email}
                   onChange={(e) => {

@@ -6,19 +6,19 @@ from dataclasses import dataclass
 from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
-    from openjarvis.agents._stubs import BaseAgent
-    from openjarvis.agents.executor import AgentExecutor
-    from openjarvis.agents.manager import AgentManager
-    from openjarvis.agents.scheduler import AgentScheduler
-    from openjarvis.scheduler.scheduler import TaskScheduler
-    from openjarvis.scheduler.store import SchedulerStore
-    from openjarvis.security.audit import AuditLogger
-    from openjarvis.security.boundary import BoundaryGuard
-    from openjarvis.security.capabilities import CapabilityPolicy
-    from openjarvis.telemetry.gpu_monitor import GpuMonitor
-    from openjarvis.telemetry.store import TelemetryStore
-    from openjarvis.traces.collector import TraceCollector
-    from openjarvis.traces.store import TraceStore
+    from silas.agents._stubs import BaseAgent
+    from silas.agents.executor import AgentExecutor
+    from silas.agents.manager import AgentManager
+    from silas.agents.scheduler import AgentScheduler
+    from silas.scheduler.scheduler import TaskScheduler
+    from silas.scheduler.store import SchedulerStore
+    from silas.security.audit import AuditLogger
+    from silas.security.boundary import BoundaryGuard
+    from silas.security.capabilities import CapabilityPolicy
+    from silas.telemetry.gpu_monitor import GpuMonitor
+    from silas.telemetry.store import TelemetryStore
+    from silas.traces.collector import TraceCollector
+    from silas.traces.store import TraceStore
 
 
 @dataclass

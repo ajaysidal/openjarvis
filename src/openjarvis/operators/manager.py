@@ -6,8 +6,8 @@ import logging
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from openjarvis.operators.loader import load_operator
-from openjarvis.operators.types import OperatorManifest
+from silas.operators.loader import load_operator
+from silas.operators.types import OperatorManifest
 
 logger = logging.getLogger(__name__)
 

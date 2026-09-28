@@ -1,5 +1,5 @@
 # Full system access: unrestricted shell and filesystem
-# Copy to ~/.openjarvis/config.toml
+# Copy to ~/.silas/config.toml
 #
 # WARNING: shell_exec runs arbitrary commands as your user. No command
 # allowlist, no denylist, no working-directory restriction. file_read and

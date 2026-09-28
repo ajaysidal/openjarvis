@@ -4,8 +4,8 @@ import os
 
 import pytest
 
-from openjarvis.core.config import JarvisConfig, load_config
-from openjarvis.security.data_boundary_audit import (
+from silas.core.config import JarvisConfig, load_config
+from silas.security.data_boundary_audit import (
     API_KEY_ENV_VARS,
     BROWSER_TOOLS,
     CHANNEL_OUTBOUND_TOOLS,
@@ -106,7 +106,7 @@ def _low_noise_config():
     """Baseline config with no warn/fail findings under an empty scan root.
 
     JarvisConfig defaults include absolute store paths under the real
-    OPENJARVIS_HOME; clear those so tests only see artifacts under tmp_path.
+    SILAS_HOME; clear those so tests only see artifacts under tmp_path.
     """
     config = JarvisConfig()
     config.analytics.enabled = False
@@ -137,7 +137,7 @@ def _low_noise_config():
     config.engine.default = "ollama"
     config.deep_research.engine = ""
     config.deep_research.model = ""
-    # Avoid scanning the developer's real ~/.openjarvis store files.
+    # Avoid scanning the developer's real ~/.silas store files.
     config.traces.db_path = ""
     config.telemetry.db_path = ""
     config.security.audit_log_path = ""
@@ -606,16 +606,16 @@ def test_config_root_error_returns_fail_without_local_store_scan(tmp_path):
         config,
         None,
         root_error=(
-            "ConfigurationError: bad OPENJARVIS_HOME at /Users/alice/private/openjarvis"
+            "ConfigurationError: bad SILAS_HOME at /Users/alice/private/silas"
         ),
     )
 
     findings = {finding.id: finding for finding in report.findings}
     assert findings["config-root-error"].status == "fail"
-    assert "bad OPENJARVIS_HOME" not in findings["config-root-error"].evidence
-    assert "/Users/alice/private/openjarvis" not in str(report.to_dict())
+    assert "bad SILAS_HOME" not in findings["config-root-error"].evidence
+    assert "/Users/alice/private/silas" not in str(report.to_dict())
     assert "path details were redacted" in findings["config-root-error"].evidence
-    assert report.root == "<unresolved-openjarvis-home>"
+    assert report.root == "<unresolved-silas-home>"
 
 
 def test_group_or_other_readable_local_store_warns(tmp_path):
@@ -1144,7 +1144,7 @@ def test_knowledge_db_posix_permissions_checked(tmp_path):
 
 
 def test_browser_resolver_tools_are_all_classified():
-    from openjarvis.agents.tool_resolver import BROWSER_SUB_TOOLS
+    from silas.agents.tool_resolver import BROWSER_SUB_TOOLS
 
     assert set(BROWSER_SUB_TOOLS) <= BROWSER_TOOLS
 
@@ -1354,40 +1354,40 @@ class TestWebSearchDestination:
             "YOUDOTCOM_API_KEY",
             "SERPLY_API_KEY",
             "SERPLY_PROXY_LOCATION",
-            "OPENJARVIS_WEB_SEARCH_ENGINE",
+            "SILAS_WEB_SEARCH_ENGINE",
         ):
             monkeypatch.delenv(key, raising=False)
 
     def test_keyless_youcom_is_named(self, monkeypatch):
-        from openjarvis.security.data_boundary_audit import _web_search_destination
+        from silas.security.data_boundary_audit import _web_search_destination
 
         self._clear(monkeypatch)
         assert "You.com" in _web_search_destination()
         assert "keyless" in _web_search_destination()
 
     def test_keyed_youcom_is_named(self, monkeypatch):
-        from openjarvis.security.data_boundary_audit import _web_search_destination
+        from silas.security.data_boundary_audit import _web_search_destination
 
         self._clear(monkeypatch)
         monkeypatch.setenv("YOUDOTCOM_API_KEY", "ydc-key")
         assert "keyed" in _web_search_destination()
 
     def test_tavily_is_named(self, monkeypatch):
-        from openjarvis.security.data_boundary_audit import _web_search_destination
+        from silas.security.data_boundary_audit import _web_search_destination
 
         self._clear(monkeypatch)
         monkeypatch.setenv("TAVILY_API_KEY", "tvly-key")
         assert "Tavily" in _web_search_destination()
 
     def test_duckduckgo_is_named(self, monkeypatch):
-        from openjarvis.security.data_boundary_audit import _web_search_destination
+        from silas.security.data_boundary_audit import _web_search_destination
 
         self._clear(monkeypatch)
-        monkeypatch.setenv("OPENJARVIS_WEB_SEARCH_ENGINE", "duckduckgo")
+        monkeypatch.setenv("SILAS_WEB_SEARCH_ENGINE", "duckduckgo")
         assert "DuckDuckGo" in _web_search_destination()
 
     def test_serply_is_named(self, monkeypatch):
-        from openjarvis.security.data_boundary_audit import _web_search_destination
+        from silas.security.data_boundary_audit import _web_search_destination
 
         self._clear(monkeypatch)
         monkeypatch.setenv("SERPLY_API_KEY", "srp-key")
@@ -1396,7 +1396,7 @@ class TestWebSearchDestination:
     def test_serply_region_is_named_when_configured(self, monkeypatch):
         """The proxy region decides which country's Google answers the query,
         so the audit has to disclose it and not just the vendor."""
-        from openjarvis.security.data_boundary_audit import _web_search_destination
+        from silas.security.data_boundary_audit import _web_search_destination
 
         self._clear(monkeypatch)
         monkeypatch.setenv("SERPLY_API_KEY", "srp-key")
@@ -1406,8 +1406,8 @@ class TestWebSearchDestination:
     def test_matches_the_tool_resolution(self, monkeypatch):
         """Guard against the audit's copy of the precedence rule drifting from
         WebSearchTool._resolve_engine, which is the source of truth."""
-        from openjarvis.security.data_boundary_audit import _web_search_destination
-        from openjarvis.tools.web_search import WebSearchTool
+        from silas.security.data_boundary_audit import _web_search_destination
+        from silas.tools.web_search import WebSearchTool
 
         labels = {
             "youcom": "You.com",
@@ -1428,7 +1428,7 @@ class TestWebSearchDestination:
                         if serply:
                             monkeypatch.setenv("SERPLY_API_KEY", serply)
                         if engine:
-                            monkeypatch.setenv("OPENJARVIS_WEB_SEARCH_ENGINE", engine)
+                            monkeypatch.setenv("SILAS_WEB_SEARCH_ENGINE", engine)
                         resolved = WebSearchTool()._resolve_engine()
                         assert labels[resolved] in _web_search_destination(), (
                             f"tavily={tavily} youcom={youcom} serply={serply} "

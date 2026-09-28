@@ -116,7 +116,7 @@ def resolve_chat_cli_model(
     if dm:
         return sanitize_model_id(dm)
 
-    from openjarvis.engine import discover_engines, discover_models
+    from silas.engine import discover_engines, discover_models
 
     all_engines = discover_engines(config)
     all_models = discover_models(all_engines)

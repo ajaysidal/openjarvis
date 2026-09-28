@@ -6,9 +6,9 @@ import logging
 from collections.abc import AsyncIterator, Sequence
 from typing import Any, Dict, List
 
-from openjarvis.core.types import Message
-from openjarvis.engine._base import InferenceEngine
-from openjarvis.engine._stubs import StreamChunk
+from silas.core.types import Message
+from silas.engine._base import InferenceEngine
+from silas.engine._stubs import StreamChunk
 
 logger = logging.getLogger(__name__)
 

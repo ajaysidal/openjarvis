@@ -9,13 +9,13 @@ from fastapi import APIRouter, HTTPException
 from fastapi.responses import FileResponse
 from pydantic import BaseModel
 
-from openjarvis.agents.digest_store import DigestStore
-from openjarvis.cli.digest_cmd import (
+from silas.agents.digest_store import DigestStore
+from silas.cli.digest_cmd import (
     _cancel_scheduler_tasks,
     _create_scheduler_task,
     _save_digest_schedule,
 )
-from openjarvis.core.config import load_config
+from silas.core.config import load_config
 
 
 class ScheduleUpdate(BaseModel):
@@ -27,7 +27,7 @@ class ScheduleUpdate(BaseModel):
 
 def _generate_digest_sync() -> str:
     """Generate a digest with the whole Jarvis lifecycle on one worker."""
-    from openjarvis.sdk import Jarvis
+    from silas.sdk import Jarvis
 
     with Jarvis() as jarvis:
         return jarvis.ask("Generate my morning digest", agent="morning_digest")

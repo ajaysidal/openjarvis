@@ -1,8 +1,8 @@
 """Personal benchmark system -- synthesize benchmarks from interaction traces."""
 
-from openjarvis.learning.optimize.personal.dataset import PersonalBenchmarkDataset
-from openjarvis.learning.optimize.personal.scorer import PersonalBenchmarkScorer
-from openjarvis.learning.optimize.personal.synthesizer import (
+from silas.learning.optimize.personal.dataset import PersonalBenchmarkDataset
+from silas.learning.optimize.personal.scorer import PersonalBenchmarkScorer
+from silas.learning.optimize.personal.synthesizer import (
     PersonalBenchmark,
     PersonalBenchmarkSample,
     PersonalBenchmarkSynthesizer,

@@ -2,7 +2,7 @@
 
 import importlib
 
-from openjarvis.channels._stubs import (
+from silas.channels._stubs import (
     BaseChannel,
     ChannelHandler,
     ChannelMessage,

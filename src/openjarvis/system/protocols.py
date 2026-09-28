@@ -5,15 +5,15 @@ from __future__ import annotations
 from typing import TYPE_CHECKING, Any, List, Optional, Protocol
 
 if TYPE_CHECKING:
-    from openjarvis.core.config import JarvisConfig
-    from openjarvis.core.events import EventBus
-    from openjarvis.engine._stubs import InferenceEngine
-    from openjarvis.security.capabilities import CapabilityPolicy
-    from openjarvis.sessions.session import SessionStore
-    from openjarvis.tools._stubs import BaseTool
-    from openjarvis.tools.storage._stubs import MemoryBackend
-    from openjarvis.traces.collector import TraceCollector
-    from openjarvis.traces.store import TraceStore
+    from silas.core.config import JarvisConfig
+    from silas.core.events import EventBus
+    from silas.engine._stubs import InferenceEngine
+    from silas.security.capabilities import CapabilityPolicy
+    from silas.sessions.session import SessionStore
+    from silas.tools._stubs import BaseTool
+    from silas.tools.storage._stubs import MemoryBackend
+    from silas.traces.collector import TraceCollector
+    from silas.traces.store import TraceStore
 
 
 class OrchestratorDeps(Protocol):

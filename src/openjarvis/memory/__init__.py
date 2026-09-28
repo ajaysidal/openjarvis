@@ -1,4 +1,4 @@
-"""Native persistent long-term memory for OpenJarvis.
+"""Native persistent long-term memory for Silas.
 
 This package provides the automatic memory service that extracts durable facts
 from conversations in the background and persists them across sessions. It is
@@ -8,13 +8,13 @@ and configured via the ``[memory]`` section of ``config.toml``.
 
 from __future__ import annotations
 
-from openjarvis.memory.extractor import FactExtractor
-from openjarvis.memory.service import (
+from silas.memory.extractor import FactExtractor
+from silas.memory.service import (
     MemoryService,
     build_memory_service,
     publish_completed_exchange,
 )
-from openjarvis.memory.store import (
+from silas.memory.store import (
     Fact,
     FactStore,
     LocalFactStore,

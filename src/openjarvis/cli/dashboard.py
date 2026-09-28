@@ -9,7 +9,7 @@ logger = logging.getLogger(__name__)
 
 
 class DashboardApp:
-    """Terminal dashboard for OpenJarvis monitoring.
+    """Terminal dashboard for Silas monitoring.
 
     Panels:
     - System status (engine health, model, memory backend)
@@ -55,9 +55,9 @@ class DashboardApp:
             )
 
         class JarvisDashboard(App):
-            """OpenJarvis TUI Dashboard."""
+            """Silas TUI Dashboard."""
 
-            TITLE = "OpenJarvis Dashboard"
+            TITLE = "Silas Dashboard"
             CSS_PATH = None
             CSS = """
             Screen {
@@ -108,7 +108,7 @@ class DashboardApp:
 
                 # Try to connect to event bus
                 try:
-                    from openjarvis.core.events import get_event_bus
+                    from silas.core.events import get_event_bus
 
                     bus = get_event_bus()
 
@@ -120,7 +120,7 @@ class DashboardApp:
                         except Exception as exc:
                             logger.debug("Event serialization failed: %s", exc)
 
-                    from openjarvis.core.events import EventType
+                    from silas.core.events import EventType
 
                     for et in EventType:
                         bus.subscribe(et, _on_event)
@@ -134,7 +134,7 @@ class DashboardApp:
                 status = self.query_one("#status-panel", Static)
                 lines = ["System Status", "─────────────"]
                 try:
-                    from openjarvis.core.config import load_config
+                    from silas.core.config import load_config
 
                     config = load_config()
                     lines.append(f"Engine: {config.engine.default}")

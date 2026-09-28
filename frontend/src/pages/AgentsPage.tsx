@@ -852,7 +852,7 @@ function LaunchWizard({
           {/* Name */}
           <div>
             <label className="block text-sm font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Agent Name</label>
-            <input
+            <input id="agentspage-input-1" name="agentspage-input-1"
               value={wizard.name}
               onChange={(e) => setWizard((w) => ({ ...w, name: e.target.value }))}
               placeholder="e.g. AI Research Tracker"
@@ -864,7 +864,7 @@ function LaunchWizard({
           {/* Instruction */}
           <div>
             <label className="block text-sm font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>What should this agent do?</label>
-            <textarea
+            <textarea id="agentspage-textarea-2" name="agentspage-textarea-2"
               value={wizard.instruction}
               onChange={(e) => setWizard((w) => ({ ...w, instruction: e.target.value }))}
               placeholder="e.g. Monitor the latest research papers on reasoning and chain-of-thought in LLMs"
@@ -892,7 +892,7 @@ function LaunchWizard({
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="block text-sm font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Intelligence</label>
-              <select
+              <select id="agentspage-select-3" name="agentspage-select-3"
                 value={wizard.model}
                 onChange={(e) => setWizard((w) => ({ ...w, model: e.target.value }))}
                 className="w-full px-3 py-2 rounded-lg text-sm"
@@ -907,7 +907,7 @@ function LaunchWizard({
             </div>
             <div>
               <label className="block text-sm font-medium mb-1" style={{ color: 'var(--color-text-secondary)' }}>Schedule</label>
-              <select
+              <select id="agentspage-select-4" name="agentspage-select-4"
                 value={wizard.scheduleType}
                 onChange={(e) => setWizard((w) => ({ ...w, scheduleType: e.target.value, scheduleValue: e.target.value === 'manual' ? '' : w.scheduleValue }))}
                 className="w-full px-3 py-2 rounded-lg text-sm"
@@ -920,7 +920,7 @@ function LaunchWizard({
                 <option value="cron">Custom (cron expression)</option>
               </select>
               {wizard.scheduleType === 'daily' && (
-                <select
+                <select id="agentspage-select-5" name="agentspage-select-5"
                   value={(() => { const m = wizard.scheduleValue.match(/^0\s+(\d+)\s/); return m ? m[1] : '9'; })()}
                   onChange={(e) => setWizard((w) => ({ ...w, scheduleValue: `0 ${e.target.value} * * *` }))}
                   className="w-full px-3 py-1.5 rounded-lg text-xs mt-1.5"
@@ -962,7 +962,7 @@ function LaunchWizard({
                       );
                     })}
                   </div>
-                  <select
+                  <select id="agentspage-select-6" name="agentspage-select-6"
                     value={(() => { const m = wizard.scheduleValue.match(/^0\s+(\d+)\s/); return m ? m[1] : '9'; })()}
                     onChange={(e) => {
                       const cronParts = wizard.scheduleValue.match(/\*\s+\*\s+(.+)$/);
@@ -982,7 +982,7 @@ function LaunchWizard({
               {wizard.scheduleType === 'hourly' && (
                 <div className="flex items-center gap-2 mt-1.5">
                   <span className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>Every</span>
-                  <input
+                  <input id="agentspage-input-7" name="agentspage-input-7"
                     type="number" min="1" max="24"
                     value={(() => { const secs = parseInt(wizard.scheduleValue || '0', 10); return secs > 0 ? Math.round(secs / 3600) : 1; })()}
                     onChange={(e) => {
@@ -996,7 +996,7 @@ function LaunchWizard({
                 </div>
               )}
               {wizard.scheduleType === 'cron' && (
-                <input
+                <input id="agentspage-input-8" name="agentspage-input-8"
                   value={wizard.scheduleValue}
                   onChange={(e) => setWizard((w) => ({ ...w, scheduleValue: e.target.value }))}
                   placeholder="0 9 * * *"
@@ -1030,7 +1030,7 @@ function LaunchWizard({
               <div className="grid grid-cols-2 gap-3 text-sm">
                 <div>
                   <label className="block text-xs mb-1" style={{ color: 'var(--color-text-tertiary)' }}>Memory Extraction<Tooltip text="How the agent remembers context between runs" /></label>
-                  <select value={wizard.memoryExtraction} onChange={(e) => setWizard((w) => ({ ...w, memoryExtraction: e.target.value }))}
+                  <select id="agentspage-select-9" name="agentspage-select-9" value={wizard.memoryExtraction} onChange={(e) => setWizard((w) => ({ ...w, memoryExtraction: e.target.value }))}
                     className="w-full px-2 py-1 rounded text-xs" style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}>
                     <option value="structured_json">Structured JSON</option>
                     <option value="causality_graph">Causality Graph</option>
@@ -1040,7 +1040,7 @@ function LaunchWizard({
                 </div>
                 <div>
                   <label className="block text-xs mb-1" style={{ color: 'var(--color-text-tertiary)' }}>Observation Compression<Tooltip text="How the agent summarizes long tool outputs" /></label>
-                  <select value={wizard.observationCompression} onChange={(e) => setWizard((w) => ({ ...w, observationCompression: e.target.value }))}
+                  <select id="agentspage-select-10" name="agentspage-select-10" value={wizard.observationCompression} onChange={(e) => setWizard((w) => ({ ...w, observationCompression: e.target.value }))}
                     className="w-full px-2 py-1 rounded text-xs" style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}>
                     <option value="summarize">Summarize</option>
                     <option value="truncate">Truncate</option>
@@ -1049,7 +1049,7 @@ function LaunchWizard({
                 </div>
                 <div>
                   <label className="block text-xs mb-1" style={{ color: 'var(--color-text-tertiary)' }}>Retrieval Strategy<Tooltip text="How the agent searches your knowledge base" /></label>
-                  <select value={wizard.retrievalStrategy} onChange={(e) => setWizard((w) => ({ ...w, retrievalStrategy: e.target.value }))}
+                  <select id="agentspage-select-11" name="agentspage-select-11" value={wizard.retrievalStrategy} onChange={(e) => setWizard((w) => ({ ...w, retrievalStrategy: e.target.value }))}
                     className="w-full px-2 py-1 rounded text-xs" style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}>
                     <option value="sqlite">BM25 (SQLite FTS5)</option>
                     <option value="hybrid">Hybrid (BM25 + Semantic)</option>
@@ -1059,7 +1059,7 @@ function LaunchWizard({
                 </div>
                 <div>
                   <label className="block text-xs mb-1" style={{ color: 'var(--color-text-tertiary)' }}>Task Decomposition<Tooltip text="How the agent breaks complex tasks into steps" /></label>
-                  <select value={wizard.taskDecomposition} onChange={(e) => setWizard((w) => ({ ...w, taskDecomposition: e.target.value }))}
+                  <select id="agentspage-select-12" name="agentspage-select-12" value={wizard.taskDecomposition} onChange={(e) => setWizard((w) => ({ ...w, taskDecomposition: e.target.value }))}
                     className="w-full px-2 py-1 rounded text-xs" style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}>
                     <option value="hierarchical">Hierarchical</option>
                     <option value="phased">Phased</option>
@@ -1068,24 +1068,24 @@ function LaunchWizard({
                 </div>
                 <div>
                   <label className="block text-xs mb-1" style={{ color: 'var(--color-text-tertiary)' }}>Max Turns</label>
-                  <input type="number" value={wizard.maxTurns} onChange={(e) => setWizard((w) => ({ ...w, maxTurns: parseInt(e.target.value, 10) || 25 }))}
+                  <input id="agentspage-input-13" name="agentspage-input-13" type="number" value={wizard.maxTurns} onChange={(e) => setWizard((w) => ({ ...w, maxTurns: parseInt(e.target.value, 10) || 25 }))}
                     className="w-full px-2 py-1 rounded text-xs" style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }} />
                 </div>
                 <div>
                   <label className="block text-xs mb-1" style={{ color: 'var(--color-text-tertiary)' }}>Temperature</label>
-                  <input type="number" step="0.1" min="0" max="2" value={wizard.temperature}
+                  <input id="agentspage-input-14" name="agentspage-input-14" type="number" step="0.1" min="0" max="2" value={wizard.temperature}
                     onChange={(e) => setWizard((w) => ({ ...w, temperature: parseFloat(e.target.value) || 0.3 }))}
                     className="w-full px-2 py-1 rounded text-xs" style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }} />
                 </div>
                 <div>
                   <label className="block text-xs mb-1" style={{ color: 'var(--color-text-tertiary)' }}>Budget ($)</label>
-                  <input type="number" step="0.01" value={wizard.budget} onChange={(e) => setWizard((w) => ({ ...w, budget: e.target.value }))}
+                  <input id="agentspage-input-15" name="agentspage-input-15" type="number" step="0.01" value={wizard.budget} onChange={(e) => setWizard((w) => ({ ...w, budget: e.target.value }))}
                     placeholder="Unlimited"
                     className="w-full px-2 py-1 rounded text-xs" style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }} />
                 </div>
                 <div>
                   <label className="block text-xs mb-1" style={{ color: 'var(--color-text-tertiary)' }}>Schedule Type</label>
-                  <select value={wizard.scheduleType} onChange={(e) => setWizard((w) => ({ ...w, scheduleType: e.target.value, scheduleValue: e.target.value === 'manual' ? '' : w.scheduleValue }))}
+                  <select id="agentspage-select-16" name="agentspage-select-16" value={wizard.scheduleType} onChange={(e) => setWizard((w) => ({ ...w, scheduleType: e.target.value, scheduleValue: e.target.value === 'manual' ? '' : w.scheduleValue }))}
                     className="w-full px-2 py-1 rounded text-xs" style={{ background: 'var(--color-bg)', border: '1px solid var(--color-border)', color: 'var(--color-text)' }}>
                     <option value="manual">Manual</option>
                     <option value="daily">Daily</option>
@@ -1369,7 +1369,7 @@ function AgentInstructionSection({ agent, onAgentUpdated }: { agent: ManagedAgen
       </div>
       {editing ? (
         <div className="space-y-2">
-          <textarea
+          <textarea id="agentspage-textarea-17" name="agentspage-textarea-17"
             autoFocus
             value={draft}
             onChange={(e) => setDraft(e.target.value)}
@@ -1467,7 +1467,7 @@ function AgentConfigGrid({ agent, onAgentUpdated }: { agent: ManagedAgent; onAge
       changingModel ? (
         <span className="text-sm" style={{ color: 'var(--color-text-tertiary)' }}>Switching model...</span>
       ) : (
-        <select
+        <select id="agentspage-select-18" name="agentspage-select-18"
           autoFocus
           defaultValue={currentModel}
           onChange={(e) => changeModel(e.target.value)}
@@ -1922,7 +1922,7 @@ function InteractTab({ agentId, agentStatus, onRunStateChange }: { agentId: stri
 
       {/* ── Follow-up chat input ───────────────────────────── */}
       <div className="mt-3 pt-3" style={{ borderTop: '1px solid var(--color-border)' }}>
-        <textarea
+        <textarea id="agentspage-textarea-19" name="agentspage-textarea-19"
           value={input}
           onChange={(e) => setInput(e.target.value)}
           onKeyDown={(e) => {
@@ -2308,7 +2308,7 @@ function InlineConnectForm({
   return (
     <div>
       {fields.map((f) => (
-        <input
+        <input id="agentspage-input-20" name="agentspage-input-20"
           key={f.name}
           value={inputs[f.name] || ''}
           onChange={(e) => update(f.name, e.target.value)}
@@ -2374,11 +2374,11 @@ const MESSAGING_CHANNELS: MessagingChannelConfig[] = [
     setupSteps: [
       '1. Go to api.slack.com/apps → click "Create New App" → choose "From an app manifest"',
       '2. Select your workspace. When asked for the manifest format, choose JSON. Then paste the manifest below (click "Copy" to copy it):',
-      'COPYABLE:{"display_information":{"name":"OpenJarvis"},"features":{"app_home":{"home_tab_enabled":true,"messages_tab_enabled":true,"messages_tab_read_only_enabled":false},"bot_user":{"display_name":"OpenJarvis","always_online":true}},"oauth_config":{"scopes":{"bot":["chat:write","im:write","im:read","im:history","mpim:read","mpim:history","users:read","channels:read","channels:history","channels:join","groups:read","groups:history","app_mentions:read"]}},"settings":{"event_subscriptions":{"bot_events":["message.im"]},"socket_mode_enabled":true}}',
+      'COPYABLE:{"display_information":{"name":"Silas"},"features":{"app_home":{"home_tab_enabled":true,"messages_tab_enabled":true,"messages_tab_read_only_enabled":false},"bot_user":{"display_name":"Silas","always_online":true}},"oauth_config":{"scopes":{"bot":["chat:write","im:write","im:read","im:history","mpim:read","mpim:history","users:read","channels:read","channels:history","channels:join","groups:read","groups:history","app_mentions:read"]}},"settings":{"event_subscriptions":{"bot_events":["message.im"]},"socket_mode_enabled":true}}',
       '3. Click "Next" → review the summary → click "Create". Then go to "Install App" in the left sidebar → click "Install to Workspace" → click "Allow"',
       '4. In the left sidebar, click "OAuth & Permissions". Copy the "Bot User OAuth Token" (starts with xoxb-...)',
       '5. In the left sidebar, click "Basic Information" → scroll to "App-Level Tokens" → click "Generate Token and Scopes" → name it "socket" → click "Add Scope" → select "connections:write" → click "Generate" → copy the token (starts with xapp-...)',
-      '6. (Optional) Still in "Basic Information", scroll to "Display Information" → upload the OpenJarvis icon as the app icon',
+      '6. (Optional) Still in "Basic Information", scroll to "Display Information" → upload the Silas icon as the app icon',
       '7. Paste both tokens below and click Connect',
     ],
     fields: [
@@ -2386,7 +2386,7 @@ const MESSAGING_CHANNELS: MessagingChannelConfig[] = [
       { key: 'app_token', label: 'App Token', placeholder: 'xapp-...', type: 'password', required: true },
     ],
     activeLabel: () => 'Connected to Slack',
-    howToUse: () => 'Open Slack and DM @OpenJarvis to talk to your agent.',
+    howToUse: () => 'Open Slack and DM @Silas to talk to your agent.',
   },
 ];
 
@@ -2445,7 +2445,7 @@ function SendBlueWebhookStep({
           <div style={{ marginTop: 4 }}><strong>3.</strong> Paste it below and click "Register Webhook"</div>
         </div>
         <div style={{ display: 'flex', gap: 6 }}>
-          <input
+          <input id="agentspage-input-21" name="agentspage-input-21"
             value={webhookUrl}
             onChange={(e) => { setWebhookUrl(e.target.value); setWebhookStatus('idle'); }}
             placeholder="https://abc123.ngrok-free.app"
@@ -2691,7 +2691,7 @@ function SendBlueWizard({
             Send a test message
           </div>
           <div style={{ display: 'flex', gap: 6 }}>
-            <input
+            <input id="agentspage-input-22" name="agentspage-input-22"
               value={testNumber}
               onChange={(e) => { setTestNumber(e.target.value); setTestSent(false); }}
               placeholder="Your phone number (+1...)"
@@ -2764,13 +2764,13 @@ function SendBlueWizard({
             <label style={{ display: 'block', fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 3, fontWeight: 500 }}>
               API Key ID *
             </label>
-            <input value={apiKey} onChange={(e) => setApiKey(e.target.value)} placeholder="Your API key ID" style={inputStyle} />
+            <input id="agentspage-input-23" name="agentspage-input-23" value={apiKey} onChange={(e) => setApiKey(e.target.value)} placeholder="Your API key ID" style={inputStyle} />
           </div>
           <div style={{ marginBottom: 12 }}>
             <label style={{ display: 'block', fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 3, fontWeight: 500 }}>
               API Secret Key *
             </label>
-            <input value={apiSecret} onChange={(e) => setApiSecret(e.target.value)} placeholder="Your API secret key" type="password" style={inputStyle} />
+            <input id="agentspage-input-24" name="agentspage-input-24" value={apiSecret} onChange={(e) => setApiSecret(e.target.value)} placeholder="Your API secret key" type="password" style={inputStyle} />
           </div>
 
           {error && <div style={{ color: 'var(--color-error)', fontSize: 11, marginBottom: 8 }}>{error}</div>}
@@ -2803,7 +2803,7 @@ function SendBlueWizard({
               <label style={{ display: 'block', fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 3, fontWeight: 500 }}>
                 Select a number for your agent
               </label>
-              <select
+              <select id="agentspage-select-25" name="agentspage-select-25"
                 value={selectedNumber}
                 onChange={(e) => setSelectedNumber(e.target.value)}
                 style={{ ...inputStyle, padding: '8px 10px' }}
@@ -2837,7 +2837,7 @@ function SendBlueWizard({
               <label style={{ display: 'block', fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 3, fontWeight: 500 }}>
                 SendBlue phone number *
               </label>
-              <input
+              <input id="agentspage-input-26" name="agentspage-input-26"
                 value={selectedNumber}
                 onChange={(e) => setSelectedNumber(e.target.value)}
                 placeholder="+16452468235"
@@ -3102,7 +3102,7 @@ function MessagingTab({ agentId }: { agentId: string }) {
                     }}>
                       {field.label}{field.required ? ' *' : ''}
                     </label>
-                    <input
+                    <input id="agentspage-input-27" name="agentspage-input-27"
                       type={field.type || 'text'}
                       value={formValues[field.key] || ''}
                       onChange={(e) => setField(field.key, e.target.value)}

@@ -6,9 +6,9 @@ import logging
 import time
 from typing import Any, Dict, List, Optional
 
-from openjarvis.channels._stubs import BaseChannel, ChannelStatus
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.server.session_store import SessionStore
+from silas.channels._stubs import BaseChannel, ChannelStatus
+from silas.core.events import EventBus, EventType
+from silas.server.session_store import SessionStore
 
 logger = logging.getLogger(__name__)
 

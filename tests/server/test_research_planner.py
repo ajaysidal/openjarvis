@@ -7,9 +7,9 @@ from types import SimpleNamespace
 
 import pytest
 
-from openjarvis.agents.research_loop import DEFAULT_PLANNER_MODEL
-from openjarvis.core.config import JarvisConfig
-from openjarvis.server import research_router
+from silas.agents.research_loop import DEFAULT_PLANNER_MODEL
+from silas.core.config import JarvisConfig
+from silas.server import research_router
 
 
 class _DummyEngine:

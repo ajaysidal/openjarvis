@@ -11,8 +11,8 @@ from typing import List
 
 import httpx
 
-from openjarvis.core.registry import TTSRegistry
-from openjarvis.speech.tts import TTSBackend, TTSResult
+from silas.core.registry import TTSRegistry
+from silas.speech.tts import TTSBackend, TTSResult
 
 _CARTESIA_API_BASE = "https://api.cartesia.ai"
 

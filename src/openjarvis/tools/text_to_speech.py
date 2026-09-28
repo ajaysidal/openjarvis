@@ -8,9 +8,9 @@ import uuid
 from pathlib import Path
 from typing import Any
 
-from openjarvis.core.registry import ToolRegistry, TTSRegistry
-from openjarvis.core.types import ToolResult
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.core.registry import ToolRegistry, TTSRegistry
+from silas.core.types import ToolResult
+from silas.tools._stubs import BaseTool, ToolSpec
 
 
 @ToolRegistry.register("text_to_speech")
@@ -56,7 +56,7 @@ class TextToSpeechTool(BaseTool):
 
     def execute(self, **params: Any) -> ToolResult:
         # Ensure TTS backends are registered
-        import openjarvis.speech  # noqa: F401
+        import silas.speech  # noqa: F401
 
         text = params.get("text", "")
         voice_id = params.get("voice_id", "")
@@ -67,7 +67,7 @@ class TextToSpeechTool(BaseTool):
         # backend default. Explicit params always win.
         if not voice_id or not backend_key:
             try:
-                from openjarvis.core.config import load_config
+                from silas.core.config import load_config
 
                 speech = getattr(load_config(), "speech", None)
                 if not backend_key:

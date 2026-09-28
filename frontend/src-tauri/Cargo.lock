@@ -2806,7 +2806,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "openjarvis-desktop"
+name = "silas-desktop"
 version = "1.0.1"
 dependencies = [
  "dispatch",

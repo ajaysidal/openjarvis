@@ -6,11 +6,11 @@ import json
 
 import pytest
 
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.core.types import ToolCall, ToolResult
-from openjarvis.security.capabilities import DEFAULT_TOOL_CAPABILITIES
-from openjarvis.tools._stubs import BaseTool, ToolExecutor, ToolSpec
-from openjarvis.tools.code_interpreter import CodeInterpreterTool
+from silas.core.events import EventBus, EventType
+from silas.core.types import ToolCall, ToolResult
+from silas.security.capabilities import DEFAULT_TOOL_CAPABILITIES
+from silas.tools._stubs import BaseTool, ToolExecutor, ToolSpec
+from silas.tools.code_interpreter import CodeInterpreterTool
 
 # ---------------------------------------------------------------------------
 # Helpers

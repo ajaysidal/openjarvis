@@ -1,13 +1,13 @@
 //! PyO3 bindings for engine types.
 
 use crate::core::PyMessage;
-use openjarvis_engine::InferenceEngine;
+use silas_engine::InferenceEngine;
 use pyo3::prelude::*;
 
 /// Wraps the Engine enum (static dispatch internally, opaque to Python).
 #[pyclass(name = "Engine")]
 pub struct PyEngine {
-    pub inner: openjarvis_engine::Engine,
+    pub inner: silas_engine::Engine,
 }
 
 #[pymethods]
@@ -18,74 +18,74 @@ impl PyEngine {
     #[pyo3(signature = (engine_key="ollama", host=None))]
     fn new(engine_key: &str, host: Option<&str>) -> PyResult<Self> {
         let engine = match engine_key {
-            "ollama" => openjarvis_engine::Engine::Ollama(
-                openjarvis_engine::OllamaEngine::new(
+            "ollama" => silas_engine::Engine::Ollama(
+                silas_engine::OllamaEngine::new(
                     host.unwrap_or("http://localhost:11434"),
                     120.0,
                 ),
             ),
-            "vllm" => openjarvis_engine::Engine::Vllm(
-                openjarvis_engine::OpenAICompatEngine::vllm(
+            "vllm" => silas_engine::Engine::Vllm(
+                silas_engine::OpenAICompatEngine::vllm(
                     host.unwrap_or("http://localhost:8000"),
                 ),
             ),
-            "sglang" => openjarvis_engine::Engine::Sglang(
-                openjarvis_engine::OpenAICompatEngine::sglang(
+            "sglang" => silas_engine::Engine::Sglang(
+                silas_engine::OpenAICompatEngine::sglang(
                     host.unwrap_or("http://localhost:30000"),
                 ),
             ),
-            "llamacpp" => openjarvis_engine::Engine::LlamaCpp(
-                openjarvis_engine::OpenAICompatEngine::llamacpp(
+            "llamacpp" => silas_engine::Engine::LlamaCpp(
+                silas_engine::OpenAICompatEngine::llamacpp(
                     host.unwrap_or("http://localhost:8080"),
                 ),
             ),
-            "mlx" => openjarvis_engine::Engine::Mlx(
-                openjarvis_engine::OpenAICompatEngine::mlx(
+            "mlx" => silas_engine::Engine::Mlx(
+                silas_engine::OpenAICompatEngine::mlx(
                     host.unwrap_or("http://localhost:8080"),
                 ),
             ),
-            "lmstudio" => openjarvis_engine::Engine::LmStudio(
-                openjarvis_engine::OpenAICompatEngine::lmstudio(
+            "lmstudio" => silas_engine::Engine::LmStudio(
+                silas_engine::OpenAICompatEngine::lmstudio(
                     host.unwrap_or("http://localhost:1234"),
                 ),
             ),
-            "exo" => openjarvis_engine::Engine::Exo(
-                openjarvis_engine::OpenAICompatEngine::exo(
+            "exo" => silas_engine::Engine::Exo(
+                silas_engine::OpenAICompatEngine::exo(
                     host.unwrap_or("http://localhost:52415"),
                 ),
             ),
-            "nexa" => openjarvis_engine::Engine::Nexa(
-                openjarvis_engine::OpenAICompatEngine::nexa(
+            "nexa" => silas_engine::Engine::Nexa(
+                silas_engine::OpenAICompatEngine::nexa(
                     host.unwrap_or("http://localhost:18181"),
                 ),
             ),
-            "uzu" => openjarvis_engine::Engine::Uzu(
-                openjarvis_engine::OpenAICompatEngine::uzu(
+            "uzu" => silas_engine::Engine::Uzu(
+                silas_engine::OpenAICompatEngine::uzu(
                     host.unwrap_or("http://localhost:8080"),
                 ),
             ),
-            "apple_fm" => openjarvis_engine::Engine::AppleFm(
-                openjarvis_engine::OpenAICompatEngine::apple_fm(
+            "apple_fm" => silas_engine::Engine::AppleFm(
+                silas_engine::OpenAICompatEngine::apple_fm(
                     host.unwrap_or("http://localhost:8079"),
                 ),
             ),
-            "vllm_native" => openjarvis_engine::Engine::VLLM(
-                openjarvis_engine::VLLMEngine::new(
+            "vllm_native" => silas_engine::Engine::VLLM(
+                silas_engine::VLLMEngine::new(
                     host.unwrap_or("http://localhost"),
                     8000,
                     None,
                     120.0,
                 ),
             ),
-            "sglang_native" => openjarvis_engine::Engine::SGLang(
-                openjarvis_engine::SGLangEngine::new(
+            "sglang_native" => silas_engine::Engine::SGLang(
+                silas_engine::SGLangEngine::new(
                     host.unwrap_or("http://localhost"),
                     30000,
                     120.0,
                 ),
             ),
-            "llamacpp_native" => openjarvis_engine::Engine::LlamaCppNative(
-                openjarvis_engine::LlamaCppEngine::new(
+            "llamacpp_native" => silas_engine::Engine::LlamaCppNative(
+                silas_engine::LlamaCppEngine::new(
                     host.unwrap_or("http://localhost"),
                     8080,
                     120.0,
@@ -126,7 +126,7 @@ impl PyEngine {
         temperature: f64,
         max_tokens: i64,
     ) -> PyResult<String> {
-        let core_msgs: Vec<openjarvis_core::Message> =
+        let core_msgs: Vec<silas_core::Message> =
             messages.iter().map(|m| m.to_core()).collect();
         let result = self
             .inner
@@ -143,7 +143,7 @@ impl PyEngine {
 /// Convenience alias for backward compatibility.
 #[pyclass(name = "OllamaEngine")]
 pub struct PyOllamaEngine {
-    inner: openjarvis_engine::OllamaEngine,
+    inner: silas_engine::OllamaEngine,
 }
 
 #[pymethods]
@@ -152,7 +152,7 @@ impl PyOllamaEngine {
     #[pyo3(signature = (host="http://localhost:11434", timeout=120.0))]
     fn new(host: &str, timeout: f64) -> Self {
         Self {
-            inner: openjarvis_engine::OllamaEngine::new(host, timeout),
+            inner: silas_engine::OllamaEngine::new(host, timeout),
         }
     }
 
@@ -178,7 +178,7 @@ impl PyOllamaEngine {
         temperature: f64,
         max_tokens: i64,
     ) -> PyResult<String> {
-        let core_msgs: Vec<openjarvis_core::Message> =
+        let core_msgs: Vec<silas_core::Message> =
             messages.iter().map(|m| m.to_core()).collect();
         let result = self
             .inner

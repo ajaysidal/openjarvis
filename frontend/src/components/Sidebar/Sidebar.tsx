@@ -175,7 +175,7 @@ export function Sidebar() {
               style={{ background: 'var(--color-bg-secondary)', border: '1px solid var(--color-border)' }}
             >
               <Search size={14} style={{ color: 'var(--color-text-tertiary)' }} />
-              <input
+              <input id="sidebar-search-input" name="sidebarSearchInput"
                 type="text"
                 placeholder="Search chats..."
                 value={searchQuery}

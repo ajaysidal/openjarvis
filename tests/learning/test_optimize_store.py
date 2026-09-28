@@ -1,9 +1,9 @@
-"""Tests for openjarvis.optimize.store module."""
+"""Tests for silas.optimize.store module."""
 
 from __future__ import annotations
 
-from openjarvis.learning.optimize.store import OptimizationStore
-from openjarvis.learning.optimize.types import (
+from silas.learning.optimize.store import OptimizationStore
+from silas.learning.optimize.types import (
     OptimizationRun,
     SampleScore,
     SearchDimension,

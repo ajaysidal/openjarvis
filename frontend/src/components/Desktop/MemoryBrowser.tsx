@@ -286,7 +286,7 @@ export function MemoryBrowser({ apiUrl }: { apiUrl: string }) {
 
       {/* Search bar */}
       <div style={styles.searchBar}>
-        <input
+        <input id="memorybrowser-input-1" name="memorybrowser-input-1"
           style={styles.input}
           type="text"
           placeholder="Search memory..."

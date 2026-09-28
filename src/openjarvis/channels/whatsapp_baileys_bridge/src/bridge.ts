@@ -1,5 +1,5 @@
 /**
- * OpenJarvis WhatsApp Baileys Bridge
+ * Silas WhatsApp Baileys Bridge
  *
  * JSON-line protocol on stdio:
  *

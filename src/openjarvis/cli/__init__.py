@@ -1,4 +1,4 @@
-"""Command-line interface for OpenJarvis (Click-based)."""
+"""Command-line interface for Silas (Click-based)."""
 
 from __future__ import annotations
 
@@ -6,8 +6,8 @@ import sys
 
 import click
 
-import openjarvis
-from openjarvis.cli.scan_cmd import scan
+import silas
+from silas.cli.scan_cmd import scan
 
 
 def _invoked_command(argv: list[str]) -> str:
@@ -19,7 +19,7 @@ def _invoked_command(argv: list[str]) -> str:
     return ""
 
 
-# A data-boundary scan must be able to diagnose an invalid OPENJARVIS_HOME.
+# A data-boundary scan must be able to diagnose an invalid SILAS_HOME.
 # Importing the rest of the CLI eagerly would import core.config and resolve that
 # path before the scan can turn the failure into a finding.
 _DATA_BOUNDARY_BOOTSTRAP = (
@@ -35,10 +35,10 @@ def _should_skip_update_check(ctx: click.Context, argv: list[str]) -> bool:
 
 
 @click.group(
-    help="OpenJarvis — modular AI assistant backend",
+    help="Silas — modular AI assistant backend",
     invoke_without_command=True,
 )
-@click.version_option(version=openjarvis.__version__, prog_name="jarvis")
+@click.version_option(version=silas.__version__, prog_name="jarvis")
 @click.option("--verbose", is_flag=True, default=False, help="Enable debug logging")
 @click.option("--quiet", is_flag=True, default=False, help="Suppress non-error output")
 @click.option(
@@ -54,7 +54,7 @@ def _should_skip_update_check(ctx: click.Context, argv: list[str]) -> bool:
 @click.pass_context
 def cli(ctx: click.Context, verbose: bool, quiet: bool, pick_model_bare: bool) -> None:
     """Top-level CLI group."""
-    from openjarvis.cli.log_config import setup_logging
+    from silas.cli.log_config import setup_logging
 
     ctx.ensure_object(dict)
     ctx.obj["verbose"] = verbose
@@ -74,7 +74,7 @@ def cli(ctx: click.Context, verbose: bool, quiet: bool, pick_model_bare: bool) -
     if not quiet and ctx.invoked_subcommand and not skip_update_check:
         import threading
 
-        from openjarvis.cli._version_check import check_for_updates
+        from silas.cli._version_check import check_for_updates
 
         # Run the PyPI version poll off the hot path: on a cache miss it does
         # a blocking urlopen (up to 3s) that otherwise delays every command,
@@ -90,49 +90,49 @@ def cli(ctx: click.Context, verbose: bool, quiet: bool, pick_model_bare: bool) -
 
     # First-run guard — routes bare `jarvis` to chat or init.
     if ctx.invoked_subcommand is None:
-        from openjarvis.cli._first_run import check_and_route
+        from silas.cli._first_run import check_and_route
 
         check_and_route(ctx)
 
 
 cli.add_command(scan, "scan")
 if not _DATA_BOUNDARY_BOOTSTRAP:
-    from openjarvis.cli._bootstrap import bootstrap_cmd
-    from openjarvis.cli.add_cmd import add
-    from openjarvis.cli.agent_cmd import agent
-    from openjarvis.cli.ask import ask
-    from openjarvis.cli.bench_cmd import bench
-    from openjarvis.cli.channel_cmd import channel
-    from openjarvis.cli.channels_cmd import channels
-    from openjarvis.cli.chat_cmd import chat
-    from openjarvis.cli.compose_cmd import compose
-    from openjarvis.cli.config_cmd import config
-    from openjarvis.cli.connect_cmd import connect
-    from openjarvis.cli.daemon_cmd import restart, start, status, stop
-    from openjarvis.cli.digest_cmd import digest
-    from openjarvis.cli.doctor_cmd import doctor
-    from openjarvis.cli.eval_cmd import eval_group
-    from openjarvis.cli.feedback_cmd import feedback_group
-    from openjarvis.cli.gateway_cmd import gateway
-    from openjarvis.cli.gui_cmd import gui
-    from openjarvis.cli.host_cmd import host
-    from openjarvis.cli.init_cmd import init
-    from openjarvis.cli.memory_cmd import memory
-    from openjarvis.cli.mine_cmd import mine
-    from openjarvis.cli.model import model
-    from openjarvis.cli.operators_cmd import operators
-    from openjarvis.cli.optimize_cmd import optimize_group
-    from openjarvis.cli.pearl_cmd import pearl
-    from openjarvis.cli.quickstart_cmd import quickstart
-    from openjarvis.cli.registry_cmd import registry
-    from openjarvis.cli.scheduler_cmd import scheduler
-    from openjarvis.cli.self_update_cmd import self_update
-    from openjarvis.cli.serve import serve
-    from openjarvis.cli.skill_cmd import skill
-    from openjarvis.cli.telemetry_cmd import telemetry
-    from openjarvis.cli.tool_cmd import tool
-    from openjarvis.cli.vault_cmd import vault
-    from openjarvis.cli.workflow_cmd import workflow
+    from silas.cli._bootstrap import bootstrap_cmd
+    from silas.cli.add_cmd import add
+    from silas.cli.agent_cmd import agent
+    from silas.cli.ask import ask
+    from silas.cli.bench_cmd import bench
+    from silas.cli.channel_cmd import channel
+    from silas.cli.channels_cmd import channels
+    from silas.cli.chat_cmd import chat
+    from silas.cli.compose_cmd import compose
+    from silas.cli.config_cmd import config
+    from silas.cli.connect_cmd import connect
+    from silas.cli.daemon_cmd import restart, start, status, stop
+    from silas.cli.digest_cmd import digest
+    from silas.cli.doctor_cmd import doctor
+    from silas.cli.eval_cmd import eval_group
+    from silas.cli.feedback_cmd import feedback_group
+    from silas.cli.gateway_cmd import gateway
+    from silas.cli.gui_cmd import gui
+    from silas.cli.host_cmd import host
+    from silas.cli.init_cmd import init
+    from silas.cli.memory_cmd import memory
+    from silas.cli.mine_cmd import mine
+    from silas.cli.model import model
+    from silas.cli.operators_cmd import operators
+    from silas.cli.optimize_cmd import optimize_group
+    from silas.cli.pearl_cmd import pearl
+    from silas.cli.quickstart_cmd import quickstart
+    from silas.cli.registry_cmd import registry
+    from silas.cli.scheduler_cmd import scheduler
+    from silas.cli.self_update_cmd import self_update
+    from silas.cli.serve import serve
+    from silas.cli.skill_cmd import skill
+    from silas.cli.telemetry_cmd import telemetry
+    from silas.cli.tool_cmd import tool
+    from silas.cli.vault_cmd import vault
+    from silas.cli.workflow_cmd import workflow
 
     cli.add_command(init, "init")
     cli.add_command(ask, "ask")
@@ -175,7 +175,7 @@ if not _DATA_BOUNDARY_BOOTSTRAP:
     # Deep Research setup pulls the ingestion pipeline (embeddings/numpy). Guard
     # it so an import-time dependency failure cannot take down the whole CLI.
     try:
-        from openjarvis.cli.deep_research_setup_cmd import deep_research_setup
+        from silas.cli.deep_research_setup_cmd import deep_research_setup
 
         cli.add_command(deep_research_setup, "deep-research-setup")
         cli.add_command(deep_research_setup, "research")
@@ -190,14 +190,14 @@ if not _DATA_BOUNDARY_BOOTSTRAP:
 
     # Gateway CLI commands (lazy import to avoid pulling starlette)
     try:
-        from openjarvis.cli.auth_cmd import auth
+        from silas.cli.auth_cmd import auth
 
         cli.add_command(auth, "auth")
     except ImportError:
         pass
 
     try:
-        from openjarvis.cli.tunnel_cmd import tunnel
+        from silas.cli.tunnel_cmd import tunnel
 
         cli.add_command(tunnel, "tunnel")
     except ImportError:

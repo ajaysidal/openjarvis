@@ -15,14 +15,14 @@ from typing import Any, Dict, List, Tuple
 
 import httpx
 
-from openjarvis.core.registry import EngineRegistry
-from openjarvis.core.types import Message
-from openjarvis.engine._base import (
+from silas.core.registry import EngineRegistry
+from silas.core.types import Message
+from silas.engine._base import (
     EngineConnectionError,
     InferenceEngine,
     messages_to_dicts,
 )
-from openjarvis.engine._stubs import StreamChunk
+from silas.engine._stubs import StreamChunk
 
 logger = logging.getLogger(__name__)
 
@@ -671,7 +671,7 @@ class CloudEngine(InferenceEngine):
             raise EngineConnectionError(
                 "OpenAI client not available — set "
                 "OPENAI_API_KEY and install "
-                "openjarvis[inference-cloud]"
+                "silas[inference-cloud]"
             )
         # Extract response_format before spreading kwargs into create_kwargs
         response_format = kwargs.pop("response_format", None)
@@ -686,7 +686,7 @@ class CloudEngine(InferenceEngine):
 
         # Apply structured output / JSON mode
         if response_format is not None:
-            from openjarvis.engine._stubs import ResponseFormat
+            from silas.engine._stubs import ResponseFormat
 
             if isinstance(response_format, ResponseFormat):
                 if response_format.type == "json_schema" and response_format.schema:
@@ -751,7 +751,7 @@ class CloudEngine(InferenceEngine):
             raise EngineConnectionError(
                 "Anthropic client not available — set "
                 "ANTHROPIC_API_KEY and install "
-                "openjarvis[inference-cloud]"
+                "silas[inference-cloud]"
             )
         system_text, chat_msgs = self._prepare_anthropic_messages(messages)
         create_kwargs: Dict[str, Any] = {
@@ -771,7 +771,7 @@ class CloudEngine(InferenceEngine):
         # Apply structured output via Anthropic's tool_choice pattern
         response_format = kwargs.pop("response_format", None)
         if response_format is not None:
-            from openjarvis.engine._stubs import ResponseFormat
+            from silas.engine._stubs import ResponseFormat
 
             if isinstance(response_format, ResponseFormat):
                 json_tool = {
@@ -875,7 +875,7 @@ class CloudEngine(InferenceEngine):
             raise EngineConnectionError(
                 "Google client not available — set "
                 "GEMINI_API_KEY or GOOGLE_API_KEY and install "
-                "openjarvis[inference-google]"
+                "silas[inference-google]"
             )
         # Build contents from messages, converting tool roles for Gemini
         system_text = ""
@@ -949,7 +949,7 @@ class CloudEngine(InferenceEngine):
         # Apply structured output / JSON mode for Google
         response_format = kwargs.pop("response_format", None)
         if response_format is not None:
-            from openjarvis.engine._stubs import ResponseFormat
+            from silas.engine._stubs import ResponseFormat
 
             if isinstance(response_format, ResponseFormat):
                 config.response_mime_type = "application/json"

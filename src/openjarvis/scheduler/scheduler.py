@@ -10,7 +10,7 @@ from datetime import datetime, timedelta, timezone
 from typing import Any, Dict, List, Optional
 from zoneinfo import ZoneInfo
 
-from openjarvis.scheduler.store import SchedulerStore
+from silas.scheduler.store import SchedulerStore
 
 logger = logging.getLogger(__name__)
 
@@ -321,7 +321,7 @@ class TaskScheduler:
             from croniter import croniter  # type: ignore[import-untyped]
         except ImportError as exc:
             raise RuntimeError(
-                "croniter is required for cron schedules; reinstall OpenJarvis"
+                "croniter is required for cron schedules; reinstall Silas"
             ) from exc
 
         if now.tzinfo is None:

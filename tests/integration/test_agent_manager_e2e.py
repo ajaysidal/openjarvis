@@ -7,7 +7,7 @@ from pathlib import Path
 
 import pytest
 
-from openjarvis.agents.manager import AgentManager
+from silas.agents.manager import AgentManager
 
 
 @pytest.fixture

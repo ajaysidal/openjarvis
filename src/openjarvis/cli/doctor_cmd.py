@@ -1,4 +1,4 @@
-"""``jarvis doctor`` — run diagnostic checks on the OpenJarvis installation."""
+"""``jarvis doctor`` — run diagnostic checks on the Silas installation."""
 
 from __future__ import annotations
 
@@ -14,7 +14,7 @@ import click
 from rich.console import Console
 from rich.table import Table
 
-from openjarvis.core.config import DEFAULT_CONFIG_PATH, load_config
+from silas.core.config import DEFAULT_CONFIG_PATH, load_config
 
 
 @dataclass
@@ -74,7 +74,7 @@ def _check_config_parses() -> CheckResult:
 def _ensure_engines_imported() -> None:
     """Import engine modules to trigger registration decorators."""
     try:
-        import openjarvis.engine  # noqa: F401
+        import silas.engine  # noqa: F401
     except Exception:
         pass
 
@@ -84,7 +84,7 @@ def _get_config() -> Any:
     try:
         return load_config()
     except Exception:
-        from openjarvis.core.config import JarvisConfig
+        from silas.core.config import JarvisConfig
 
         return JarvisConfig()
 
@@ -93,8 +93,8 @@ def _probe_engines(config: Any | None = None) -> Dict[str, _EngineProbe]:
     """Instantiate and health-check every engine once, concurrently."""
     _ensure_engines_imported()
 
-    from openjarvis.core.registry import EngineRegistry
-    from openjarvis.engine import _discovery
+    from silas.core.registry import EngineRegistry
+    from silas.engine import _discovery
 
     resolved_config = config or _get_config()
     keys = sorted(EngineRegistry.keys())
@@ -191,7 +191,7 @@ def _check_default_model(
             details="Router will select a model dynamically.",
         )
 
-    from openjarvis.intelligence.model_catalog import resolve_model_id_for_engine
+    from silas.intelligence.model_catalog import resolve_model_id_for_engine
 
     preferred = config.intelligence.preferred_engine or config.engine.default
     resolved_probes = probes if probes is not None else _probe_engines(config)
@@ -226,17 +226,17 @@ def _check_optional_deps() -> List[CheckResult]:
     """Check availability of optional dependency packages."""
     results: List[CheckResult] = []
     optional_packages = [
-        ("fastapi", "openjarvis[server]", "REST API server"),
+        ("fastapi", "silas[server]", "REST API server"),
         ("torch", "pip install torch", "SFT/GRPO training"),
-        ("pynvml", "openjarvis[gpu-metrics]", "NVIDIA energy monitoring"),
-        ("amdsmi", "openjarvis[energy-amd]", "AMD energy monitoring"),
-        ("colbert", "openjarvis[memory-colbert]", "ColBERT memory backend"),
+        ("pynvml", "silas[gpu-metrics]", "NVIDIA energy monitoring"),
+        ("amdsmi", "silas[energy-amd]", "AMD energy monitoring"),
+        ("colbert", "silas[memory-colbert]", "ColBERT memory backend"),
         (
             "zeus_apple_silicon",
-            "openjarvis[energy-apple]",
+            "silas[energy-apple]",
             "Apple Silicon energy monitoring",
         ),
-        ("apple_fm_sdk", "openjarvis[afm]", "Apple Foundation Models (AFM 3)"),
+        ("apple_fm_sdk", "silas[afm]", "Apple Foundation Models (AFM 3)"),
     ]
     for pkg, install_hint, description in optional_packages:
         try:
@@ -256,7 +256,7 @@ def _check_optional_deps() -> List[CheckResult]:
 def _check_speech_backend() -> CheckResult:
     """Check whether the configured speech backend can load."""
     try:
-        from openjarvis.speech._discovery import get_speech_backend
+        from silas.speech._discovery import get_speech_backend
 
         config = _get_config()
         backend = get_speech_backend(config)
@@ -297,7 +297,7 @@ def _check_speech_backend() -> CheckResult:
 def _check_security_profile() -> CheckResult:
     """Check if a security profile is configured."""
     try:
-        from openjarvis.core.config import load_config
+        from silas.core.config import load_config
 
         config = load_config()
         if config.security.profile:
@@ -392,7 +392,7 @@ def _results_to_dicts(checks: List[CheckResult]) -> List[Dict[str, Any]]:
 @click.command()
 @click.option("--json", "as_json", is_flag=True, help="Output results as JSON.")
 def doctor(as_json: bool) -> None:
-    """Run diagnostic checks on your OpenJarvis installation."""
+    """Run diagnostic checks on your Silas installation."""
     checks = _run_all_checks()
 
     if as_json:
@@ -401,7 +401,7 @@ def doctor(as_json: bool) -> None:
 
     console = Console()
     console.print()
-    console.print("[bold]OpenJarvis Doctor[/bold]")
+    console.print("[bold]Silas Doctor[/bold]")
     console.print()
 
     table = Table(show_header=True, header_style="bold")
@@ -426,8 +426,8 @@ def doctor(as_json: bool) -> None:
     console.print()
 
     # Background tasks section
-    from openjarvis.cli._bg_state import get_status
-    from openjarvis.core.paths import get_config_dir
+    from silas.cli._bg_state import get_status
+    from silas.core.paths import get_config_dir
 
     scripts_dir = get_config_dir() / ".scripts"
     console.print("[bold]Background tasks[/bold]")

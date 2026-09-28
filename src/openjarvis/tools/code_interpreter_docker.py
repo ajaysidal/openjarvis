@@ -4,9 +4,9 @@ from __future__ import annotations
 
 from typing import Any
 
-from openjarvis.core.registry import ToolRegistry
-from openjarvis.core.types import ToolResult
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.core.registry import ToolRegistry
+from silas.core.types import ToolResult
+from silas.tools._stubs import BaseTool, ToolSpec
 
 
 @ToolRegistry.register("code_interpreter_docker")

@@ -27,8 +27,8 @@ import json
 import urllib.request
 from typing import Any, Dict, Optional, Tuple
 
-from openjarvis.agents._stubs import AgentContext
-from openjarvis.agents.hybrid._base import (
+from silas.agents._stubs import AgentContext
+from silas.agents.hybrid._base import (
     GEMINI_SEARCH_COST_PER_CALL,
     OPENAI_WEB_SEARCH_COST_PER_CALL,
     WEB_SEARCH_COST_PER_CALL,
@@ -37,10 +37,10 @@ from openjarvis.agents.hybrid._base import (
     tavily_search_context,
     web_search_cfg,
 )
-from openjarvis.agents.hybrid.mini_swe_agent import (
+from silas.agents.hybrid.mini_swe_agent import (
     run_swe_agent_loop,
 )
-from openjarvis.core.registry import AgentRegistry
+from silas.core.registry import AgentRegistry
 
 # Prompts paraphrased from advisor-models/{math,template}/config.py.
 

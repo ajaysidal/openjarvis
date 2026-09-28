@@ -9,11 +9,11 @@ from __future__ import annotations
 
 from typing import Any, List, Optional
 
-from openjarvis.connectors.store import KnowledgeStore
-from openjarvis.core.registry import ToolRegistry
-from openjarvis.core.types import Message, Role, ToolResult
-from openjarvis.engine._stubs import InferenceEngine
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.connectors.store import KnowledgeStore
+from silas.core.registry import ToolRegistry
+from silas.core.types import Message, Role, ToolResult
+from silas.engine._stubs import InferenceEngine
+from silas.tools._stubs import BaseTool, ToolSpec
 
 _DEFAULT_MAX_CHUNKS = 200
 _DEFAULT_BATCH_SIZE = 20

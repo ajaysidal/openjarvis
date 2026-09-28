@@ -45,21 +45,21 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-from openjarvis.agents._stubs import AgentContext
-from openjarvis.agents.hybrid._base import (
+from silas.agents._stubs import AgentContext
+from silas.agents.hybrid._base import (
     LocalCloudAgent,
     _bump_cloud_calls,
     _bump_local_calls,
     _record_event,
 )
-from openjarvis.agents.hybrid._prices import (
+from silas.agents.hybrid._prices import (
     cost as estimate_cost,
 )
-from openjarvis.agents.hybrid._prices import (
+from silas.agents.hybrid._prices import (
     is_gpt5_family,
     supports_temperature,
 )
-from openjarvis.core.registry import AgentRegistry
+from silas.core.registry import AgentRegistry
 
 # Gemini's FunctionDeclaration.parameters expects a Schema-shaped dict (or
 # Schema object) with capitalized type strings ("OBJECT", "STRING"). The
@@ -1403,7 +1403,7 @@ def _loop_local(
             # server walled the call. Compact aggressively (keep_last=1)
             # and retry once. Re-raise on anything else or on a second
             # failure — the runner records the row as errored.
-            from openjarvis.engine._base import looks_like_context_length_error
+            from silas.engine._base import looks_like_context_length_error
 
             msg = str(exc)
             is_ctx = looks_like_context_length_error(msg)

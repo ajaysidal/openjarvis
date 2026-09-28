@@ -1,6 +1,6 @@
 //! Built-in model catalog with well-known ModelSpec entries.
 //!
-//! Rust translation of `src/openjarvis/intelligence/model_catalog.py`.
+//! Rust translation of `src/silas/intelligence/model_catalog.py`.
 
 use once_cell::sync::Lazy;
 use std::collections::HashMap;
@@ -13,7 +13,7 @@ pub static BUILTIN_MODELS: Lazy<Vec<ModelSpec>> = Lazy::new(|| {
     vec![
         // Qwen3 family
         ModelSpec {
-            model_id: "qwen3:0.6b".into(),
+            model_id: "qwen3:8b".into(),
             name: "Qwen3 0.6B".into(),
             parameter_count_b: 0.6,
             context_length: 32768,

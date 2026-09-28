@@ -1,1 +1,1 @@
-"""OpenJarvis Evaluation Framework."""
+"""Silas Evaluation Framework."""

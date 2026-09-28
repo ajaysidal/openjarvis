@@ -5,12 +5,12 @@ from __future__ import annotations
 from collections.abc import AsyncIterator
 from typing import Any, Dict, List, Optional, Sequence
 
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.core.types import Message
-from openjarvis.engine._stubs import InferenceEngine, StreamChunk
-from openjarvis.security._stubs import BaseScanner
-from openjarvis.security.scanner import PIIScanner, SecretScanner
-from openjarvis.security.types import RedactionMode, ScanResult
+from silas.core.events import EventBus, EventType
+from silas.core.types import Message
+from silas.engine._stubs import InferenceEngine, StreamChunk
+from silas.security._stubs import BaseScanner
+from silas.security.scanner import PIIScanner, SecretScanner
+from silas.security.types import RedactionMode, ScanResult
 
 
 class SecurityBlockError(Exception):

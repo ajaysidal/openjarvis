@@ -18,11 +18,11 @@ from rich.console import Console
 from rich.panel import Panel
 from rich.table import Table
 
-from openjarvis.core.config import DEFAULT_CONFIG_DIR, load_config
-from openjarvis.core.registry import ModelRegistry
-from openjarvis.engine import discover_engines, discover_models
-from openjarvis.intelligence import merge_discovered_models, register_builtin_models
-from openjarvis.intelligence.model_catalog import BUILTIN_MODELS
+from silas.core.config import DEFAULT_CONFIG_DIR, load_config
+from silas.core.registry import ModelRegistry
+from silas.engine import discover_engines, discover_models
+from silas.intelligence import merge_discovered_models, register_builtin_models
+from silas.intelligence.model_catalog import BUILTIN_MODELS
 
 
 @click.group()
@@ -315,7 +315,7 @@ def _convert_mlx(hf_repo: str, output: str, mlx_4bit: bool, console: Console) ->
     except ImportError:
         console.print(
             "[red]MLX conversion needs the inference-mlx extra.[/red]\n"
-            'Install it: [cyan]pip install "openjarvis[inference-mlx]"[/cyan]'
+            'Install it: [cyan]pip install "silas[inference-mlx]"[/cyan]'
         )
         return False
 

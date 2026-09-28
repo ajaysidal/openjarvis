@@ -16,7 +16,7 @@ from functools import wraps
 from typing import Any, Dict, List, Optional
 from uuid import uuid4
 
-from openjarvis.core.paths import get_config_dir
+from silas.core.paths import get_config_dir
 
 logger = logging.getLogger(__name__)
 
@@ -595,7 +595,7 @@ class AgentManager:
 
         # Built-in templates
         try:
-            tpl_dir = importlib.resources.files("openjarvis.agents") / "templates"
+            tpl_dir = importlib.resources.files("silas.agents") / "templates"
             for item in tpl_dir.iterdir():
                 if str(item).endswith(".toml"):
                     data = tomllib.loads(item.read_text(encoding="utf-8"))

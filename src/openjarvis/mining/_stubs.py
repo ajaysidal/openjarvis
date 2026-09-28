@@ -1,4 +1,4 @@
-# src/openjarvis/mining/_stubs.py
+# src/silas/mining/_stubs.py
 """ABCs and dataclasses for the mining subsystem.
 
 See spec ``docs/design/2026-05-05-vllm-pearl-mining-integration-design.md``
@@ -15,7 +15,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 from typing import Any, Optional, Union
 
-from openjarvis.core.config import HardwareInfo
+from silas.core.config import HardwareInfo
 
 # ---------------------------------------------------------------------------
 # Capability descriptor
@@ -141,7 +141,7 @@ class MiningProvider(ABC):
 
 
 class Sidecar:
-    """Read/write helpers for ``~/.openjarvis/runtime/mining.json``."""
+    """Read/write helpers for ``~/.silas/runtime/mining.json``."""
 
     @staticmethod
     def write(path: Path, payload: dict[str, Any]) -> None:

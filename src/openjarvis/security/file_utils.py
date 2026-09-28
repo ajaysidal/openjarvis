@@ -1,6 +1,6 @@
 """Secure file and directory creation helpers.
 
-All OpenJarvis data files under ``~/.openjarvis/`` should be created
+All Silas data files under ``~/.silas/`` should be created
 through these helpers to ensure consistent, restrictive permissions.
 """
 

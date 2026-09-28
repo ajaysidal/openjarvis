@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
-# install.sh — OpenJarvis curl-pipe-bash installer.
+# install.sh — Silas curl-pipe-bash installer.
 #
 # Usage:
-#   curl -fsSL https://open-jarvis.github.io/OpenJarvis/install.sh | bash
+#   curl -fsSL https://open-jarvis.github.io/Silas/install.sh | bash
 #
 # Flags (only used in tests / power users):
 #   --no-bg-orchestrator   Skip the detached background orchestrator
@@ -10,9 +10,9 @@
 #   --force                Re-run all steps even if state file says done
 #
 # Environment overrides:
-#   OPENJARVIS_HOME        Install dir (default: $HOME/.openjarvis)
-#   OPENJARVIS_REPO_URL    git repo URL (default: https://github.com/open-jarvis/OpenJarvis.git)
-#   OPENJARVIS_FORCE_WSL   Set 1 to force WSL detection (testing)
+#   SILAS_HOME        Install dir (default: $HOME/.silas)
+#   SILAS_REPO_URL    git repo URL (default: https://github.com/open-jarvis/Silas.git)
+#   SILAS_FORCE_WSL   Set 1 to force WSL detection (testing)
 
 set -euo pipefail
 
@@ -32,7 +32,7 @@ done
 # ---- non-WSL Windows refusal ----
 # Running the installer in Git Bash / MSYS2 / Cygwin on native Windows
 # (i.e. NOT inside WSL2) gets the user into a confusing failure state:
-# uv/git tooling installs to Windows paths the rest of OpenJarvis can't
+# uv/git tooling installs to Windows paths the rest of Silas can't
 # reach, and Ollama integration silently breaks. The supported Windows
 # path is WSL2. Bail early with a clear next step rather than letting
 # users discover this 3 minutes into a doomed install.
@@ -41,7 +41,7 @@ case "$(uname -s 2>/dev/null)" in
         cat >&2 <<'EOF'
 install.sh: native Windows (Git Bash / MSYS2 / Cygwin) is not supported.
 
-OpenJarvis runs on Windows via WSL2. Two paths:
+Silas runs on Windows via WSL2. Two paths:
 
   1. WSL2 (recommended for the CLI). One-time setup in an admin PowerShell:
 
@@ -49,13 +49,13 @@ OpenJarvis runs on Windows via WSL2. Two paths:
 
      Open the Ubuntu shell that gets installed, then re-run:
 
-       curl -fsSL https://open-jarvis.github.io/OpenJarvis/install.sh | bash
+       curl -fsSL https://open-jarvis.github.io/Silas/install.sh | bash
 
   2. Desktop app — download the .exe from the Releases page:
-     https://github.com/open-jarvis/OpenJarvis/releases
+     https://github.com/open-jarvis/Silas/releases
 
 See the WSL2 install guide for the full walkthrough:
-  https://open-jarvis.github.io/OpenJarvis/getting-started/wsl2/
+  https://open-jarvis.github.io/Silas/getting-started/wsl2/
 EOF
         exit 1
         ;;
@@ -66,7 +66,7 @@ if [[ "$(id -u)" -eq 0 ]]; then
     cat >&2 <<'EOF'
 install.sh: don't run as root.
 
-OpenJarvis installs to $HOME/.openjarvis, not /usr/local. Re-run as your
+Silas installs to $HOME/.silas, not /usr/local. Re-run as your
 regular user (without sudo).
 EOF
     exit 1
@@ -148,7 +148,7 @@ Two ways forward:
        Arch:          sudo pacman -S $tool
 
   2. Pre-authenticate sudo before piping (caches credentials for 5 min):
-       sudo -v && curl -fsSL https://open-jarvis.github.io/OpenJarvis/install.sh | bash
+       sudo -v && curl -fsSL https://open-jarvis.github.io/Silas/install.sh | bash
 EOF
         exit 1
     fi
@@ -210,27 +210,27 @@ if ! command -v python3 >/dev/null 2>&1; then
 fi
 
 # ---- env ----
-# OpenJarvis keeps ALL of its state (install tree + runtime data, configs,
+# Silas keeps ALL of its state (install tree + runtime data, configs,
 # databases, caches, logs) under a single root so it never clutters $HOME
-# beyond one directory. Relocate it by exporting OPENJARVIS_HOME before
+# beyond one directory. Relocate it by exporting SILAS_HOME before
 # running the installer, e.g.:
-#     OPENJARVIS_HOME=~/apps/openjarvis curl ... | bash
-# The Python runtime honors the same override (and, when OPENJARVIS_HOME is
-# unset, $XDG_DATA_HOME/openjarvis if XDG_DATA_HOME is set). With nothing set
-# the root is ~/.openjarvis, so existing installs are untouched.
-OPENJARVIS_HOME="${OPENJARVIS_HOME:-$HOME/.openjarvis}"
-OPENJARVIS_REPO_URL="${OPENJARVIS_REPO_URL:-https://github.com/open-jarvis/OpenJarvis.git}"
-SRC_DIR="$OPENJARVIS_HOME/src"
-VENV_DIR="$OPENJARVIS_HOME/.venv"
-STATE_DIR="$OPENJARVIS_HOME/.state"
-SCRIPTS_DIR="$OPENJARVIS_HOME/.scripts"
+#     SILAS_HOME=~/apps/silas curl ... | bash
+# The Python runtime honors the same override (and, when SILAS_HOME is
+# unset, $XDG_DATA_HOME/silas if XDG_DATA_HOME is set). With nothing set
+# the root is ~/.silas, so existing installs are untouched.
+SILAS_HOME="${SILAS_HOME:-$HOME/.silas}"
+SILAS_REPO_URL="${SILAS_REPO_URL:-https://github.com/open-jarvis/Silas.git}"
+SRC_DIR="$SILAS_HOME/src"
+VENV_DIR="$SILAS_HOME/.venv"
+STATE_DIR="$SILAS_HOME/.state"
+SCRIPTS_DIR="$SILAS_HOME/.scripts"
 STATE_FILE="$STATE_DIR/install-state.json"
 
-mkdir -p "$OPENJARVIS_HOME" "$STATE_DIR" "$SCRIPTS_DIR"
+mkdir -p "$SILAS_HOME" "$STATE_DIR" "$SCRIPTS_DIR"
 
 # ---- WSL detection ----
 WSL=0
-if [[ "${OPENJARVIS_FORCE_WSL:-0}" == "1" ]]; then
+if [[ "${SILAS_FORCE_WSL:-0}" == "1" ]]; then
     WSL=1
 elif [[ -f /proc/sys/kernel/osrelease ]] && grep -qi "microsoft" /proc/sys/kernel/osrelease 2>/dev/null; then
     WSL=1
@@ -239,13 +239,13 @@ fi
 # ---- analytics beacon (anonymized install funnel) ----
 #
 # Posts a small JSON event to PostHog at each install stage so the
-# OpenJarvis team can see where users drop off during install.
+# Silas team can see where users drop off during install.
 # No content, no IPs (handled by PostHog disable_geoip on server),
 # no hardware identifiers — just OS, arch, elapsed time, and stage name.
 #
-ANALYTICS_HOST="${OPENJARVIS_ANALYTICS_HOST:-https://34.231.106.201.sslip.io}"
-ANALYTICS_KEY="${OPENJARVIS_ANALYTICS_KEY:-phc_ysKu72QaxzYNmDpHFcesD2ZZAe68zkdWJEKoYYkc5e3n}"
-ANON_ID_FILE="$OPENJARVIS_HOME/anon_id"
+ANALYTICS_HOST="${SILAS_ANALYTICS_HOST:-https://34.231.106.201.sslip.io}"
+ANALYTICS_KEY="${SILAS_ANALYTICS_KEY:-phc_ysKu72QaxzYNmDpHFcesD2ZZAe68zkdWJEKoYYkc5e3n}"
+ANON_ID_FILE="$SILAS_HOME/anon_id"
 INSTALL_START_EPOCH="$(date +%s)"
 CURRENT_STAGE=""
 
@@ -450,10 +450,10 @@ clone_repo() {
     fi
     # Keep commit/tag history for hatch-vcs. Local sources may themselves be
     # shallow and cannot safely serve a partial clone's lazy object fetches.
-    if [[ "$OPENJARVIS_REPO_URL" == file://* || -e "$OPENJARVIS_REPO_URL" ]]; then
-        git clone "$OPENJARVIS_REPO_URL" "$SRC_DIR"
+    if [[ "$SILAS_REPO_URL" == file://* || -e "$SILAS_REPO_URL" ]]; then
+        git clone "$SILAS_REPO_URL" "$SRC_DIR"
     else
-        git clone --filter=blob:none "$OPENJARVIS_REPO_URL" "$SRC_DIR"
+        git clone --filter=blob:none "$SILAS_REPO_URL" "$SRC_DIR"
     fi
 }
 
@@ -628,7 +628,7 @@ ensure_path() {
     else
         rc="$HOME/.bashrc"
     fi
-    if grep -q "OpenJarvis" "$rc" 2>/dev/null; then
+    if grep -q "Silas" "$rc" 2>/dev/null; then
         # rc already has our PATH line from a prior install; just remind.
         PATH_MODIFIED=1
         PATH_MODIFIED_RC="$rc"
@@ -636,7 +636,7 @@ ensure_path() {
     fi
     {
         echo ''
-        echo '# OpenJarvis'
+        echo '# Silas'
         echo 'export PATH="$HOME/.local/bin:$PATH"'
     } >> "$rc"
     PATH_MODIFIED=1
@@ -650,7 +650,7 @@ detach_bg_orchestrator() {
     fi
     local models
     models=$("$VENV_DIR/bin/python" - <<'PYEOF' 2>/dev/null || true
-from openjarvis.core.config import detect_hardware, recommend_model
+from silas.core.config import detect_hardware, recommend_model
 hw = detect_hardware()
 tier = recommend_model(hw, "ollama")
 TIERS = ["qwen3.5:2b", "qwen3.5:4b", "qwen3.5:9b", "qwen3.5:27b"]
@@ -671,18 +671,18 @@ PYEOF
 }
 
 # ---- run ----
-echo "OpenJarvis installer"
-echo "  install dir: $OPENJARVIS_HOME"
+echo "Silas installer"
+echo "  install dir: $SILAS_HOME"
 echo "  WSL2:        $WSL"
 echo
 
 beacon "install_started"
 
 step install_uv         "Install uv"            install_uv
-step clone_repo         "Clone OpenJarvis repo" clone_repo
+step clone_repo         "Clone Silas repo" clone_repo
 step copy_scripts       "Copy install scripts"  copy_scripts
 step create_venv        "Create venv"           create_venv
-step editable_install   "Install OpenJarvis"    editable_install
+step editable_install   "Install Silas"    editable_install
 step install_ollama     "Install Ollama"        install_ollama
 step start_ollama       "Start Ollama daemon"   start_ollama
 step pull_default_model "Pull qwen3.5:2b"       pull_default_model

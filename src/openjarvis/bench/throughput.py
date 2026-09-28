@@ -6,11 +6,11 @@ import logging
 import time
 from typing import Any, List
 
-from openjarvis.bench._stats import compute_stats
-from openjarvis.bench._stubs import BaseBenchmark, BenchmarkResult, engine_info
-from openjarvis.core.registry import BenchmarkRegistry
-from openjarvis.core.types import Message, Role
-from openjarvis.engine._stubs import InferenceEngine
+from silas.bench._stats import compute_stats
+from silas.bench._stubs import BaseBenchmark, BenchmarkResult, engine_info
+from silas.core.registry import BenchmarkRegistry
+from silas.core.types import Message, Role
+from silas.engine._stubs import InferenceEngine
 
 logger = logging.getLogger(__name__)
 

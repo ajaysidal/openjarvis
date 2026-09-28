@@ -16,7 +16,7 @@ import os
 import sys
 from typing import TYPE_CHECKING
 
-from openjarvis.core import config as _cfg
+from silas.core import config as _cfg
 
 if TYPE_CHECKING:
     import click
@@ -32,8 +32,8 @@ def check_and_route(ctx: click.Context) -> None:
         return
 
     # Late imports to avoid circular import with cli/__init__.py.
-    from openjarvis.cli.chat_cmd import chat as chat_cmd
-    from openjarvis.cli.init_cmd import init as init_cmd
+    from silas.cli.chat_cmd import chat as chat_cmd
+    from silas.cli.init_cmd import init as init_cmd
 
     if _cfg.DEFAULT_CONFIG_PATH.exists():
         pick_bare = bool(getattr(ctx, "obj", None) and ctx.obj.get("pick_model_bare"))

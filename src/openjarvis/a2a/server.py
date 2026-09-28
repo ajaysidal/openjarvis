@@ -5,13 +5,13 @@ from __future__ import annotations
 import secrets
 from typing import Any, Callable, Dict, List, Optional
 
-from openjarvis.a2a.protocol import (
+from silas.a2a.protocol import (
     A2AResponse,
     A2ATask,
     AgentCard,
     TaskState,
 )
-from openjarvis.core.events import EventBus, EventType
+from silas.core.events import EventBus, EventType
 
 
 class A2AServer:

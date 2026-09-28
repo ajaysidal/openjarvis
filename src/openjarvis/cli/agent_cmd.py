@@ -12,9 +12,9 @@ from rich.table import Table
 
 def _get_manager():
     """Get or create the AgentManager singleton."""
-    from openjarvis.agents.manager import AgentManager
-    from openjarvis.core.config import load_config
-    from openjarvis.core.paths import get_config_dir
+    from silas.agents.manager import AgentManager
+    from silas.core.config import load_config
+    from silas.core.paths import get_config_dir
 
     config = load_config()
     db_path = config.agent_manager.db_path or str(get_config_dir() / "agents.db")
@@ -269,9 +269,9 @@ def search(agent_id: str, query: str, limit: int) -> None:
     """Cross-session search across agent traces."""
     console = Console(stderr=True)
     try:
-        from openjarvis.core.config import load_config
-        from openjarvis.core.paths import get_config_dir
-        from openjarvis.traces.store import TraceStore
+        from silas.core.config import load_config
+        from silas.core.paths import get_config_dir
+        from silas.traces.store import TraceStore
 
         config = load_config()
         mgr = _get_manager()
@@ -300,7 +300,7 @@ def templates() -> None:
     """List available agent templates."""
     console = Console(stderr=True)
     try:
-        from openjarvis.agents.manager import AgentManager
+        from silas.agents.manager import AgentManager
 
         tpls = AgentManager.list_templates()
         if not tpls:
@@ -325,7 +325,7 @@ def templates() -> None:
 
 def _get_system():
     """Build a JarvisSystem for CLI commands that need scheduler/executor."""
-    from openjarvis.system import SystemBuilder
+    from silas.system import SystemBuilder
 
     try:
         return SystemBuilder().build()
@@ -365,7 +365,7 @@ def _run_tick_with_live_trace(executor, agent_id: str, console: Console) -> None
     are always torn down in the ``finally`` so a second invocation in the
     same process doesn't double-print.
     """
-    from openjarvis.core.events import EventType
+    from silas.core.events import EventType
 
     bus = getattr(executor, "_bus", None)
 
@@ -405,7 +405,7 @@ def _run_tick_with_live_trace(executor, agent_id: str, console: Console) -> None
 @agent.command()
 def launch():
     """Interactive agent launcher."""
-    from openjarvis.agents.manager import AgentManager as _AM
+    from silas.agents.manager import AgentManager as _AM
 
     templates = _AM.list_templates()
     click.echo("Available templates:")
@@ -623,7 +623,7 @@ def learning(agent_id, trigger_run):
 
     if trigger_run:
         click.echo(f'Triggering learning for "{agent_data["name"]}"...')
-        from openjarvis.core.events import EventType, get_event_bus
+        from silas.core.events import EventType, get_event_bus
 
         bus = get_event_bus()
         bus.publish(EventType.AGENT_LEARNING_STARTED, {"agent_id": agent_id})
@@ -658,9 +658,9 @@ def trace(agent_id, run_number, limit):
     """Show step-by-step trace of agent ticks."""
     import datetime
 
-    from openjarvis.core.config import load_config
-    from openjarvis.core.paths import get_config_dir
-    from openjarvis.traces.store import TraceStore
+    from silas.core.config import load_config
+    from silas.core.paths import get_config_dir
+    from silas.traces.store import TraceStore
 
     manager = _get_manager()
     agent_data = manager.get_agent(agent_id)
@@ -760,7 +760,7 @@ def watch(agent_id):
     """Live feed of agent activity."""
     import signal
 
-    from openjarvis.core.events import EventType, get_event_bus
+    from silas.core.events import EventType, get_event_bus
 
     click.echo("Watching agent events... (press Ctrl+C to stop)")
     bus = get_event_bus()

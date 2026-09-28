@@ -17,7 +17,7 @@ const DEFAULT_SETTINGS: Settings = {
   theme: 'dark',
 };
 
-const STORAGE_KEY = 'openjarvis-settings';
+const STORAGE_KEY = 'silas-settings';
 
 function loadSettings(): Settings {
   try {
@@ -139,7 +139,7 @@ export function SettingsPanel({ onSettingsChange }: SettingsPanelProps) {
 
       <div style={styles.fieldGroup}>
         <label style={styles.label}>API URL</label>
-        <input
+        <input id="settingspanel-input-1" name="settingspanel-input-1"
           style={styles.input}
           type="text"
           value={settings.apiUrl}
@@ -152,7 +152,7 @@ export function SettingsPanel({ onSettingsChange }: SettingsPanelProps) {
 
       <div style={styles.fieldGroup}>
         <label style={styles.label}>Auto-refresh interval</label>
-        <select
+        <select id="settingspanel-select-2" name="settingspanel-select-2"
           style={styles.select}
           value={settings.refreshInterval}
           onChange={(e) =>

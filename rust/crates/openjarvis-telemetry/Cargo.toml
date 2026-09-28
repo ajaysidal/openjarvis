@@ -1,11 +1,11 @@
 [package]
-name = "openjarvis-telemetry"
+name = "silas-telemetry"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-openjarvis-core = { path = "../openjarvis-core" }
-openjarvis-engine = { path = "../openjarvis-engine" }
+silas-core = { path = "../silas-core" }
+silas-engine = { path = "../silas-engine" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }

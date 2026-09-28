@@ -10,19 +10,19 @@ from typing import Any, Dict, List
 
 import httpx
 
-from openjarvis.core.registry import EngineRegistry
-from openjarvis.core.types import Message
-from openjarvis.engine._base import (
+from silas.core.registry import EngineRegistry
+from silas.core.types import Message
+from silas.engine._base import (
     EngineConnectionError,
     InferenceEngine,
     estimate_prompt_tokens,
     messages_to_dicts,
 )
-from openjarvis.engine._http_async import (
+from silas.engine._http_async import (
     STREAM_TRANSPORT_ERRORS,
     AsyncHTTPEngineMixin,
 )
-from openjarvis.engine._stubs import StreamChunk
+from silas.engine._stubs import StreamChunk
 
 logger = logging.getLogger(__name__)
 
@@ -183,7 +183,7 @@ class OllamaEngine(AsyncHTTPEngineMixin, InferenceEngine):
         # Apply structured output / JSON mode
         response_format = kwargs.get("response_format")
         if response_format is not None:
-            from openjarvis.engine._stubs import ResponseFormat
+            from silas.engine._stubs import ResponseFormat
 
             if isinstance(response_format, ResponseFormat):
                 payload["format"] = "json"

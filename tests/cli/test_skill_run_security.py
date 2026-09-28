@@ -10,10 +10,10 @@ from unittest.mock import patch
 import pytest
 from click.testing import CliRunner
 
-from openjarvis.cli import cli
-from openjarvis.core.config import JarvisConfig
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.core.types import ToolResult
+from silas.cli import cli
+from silas.core.config import JarvisConfig
+from silas.core.events import EventBus, EventType
+from silas.core.types import ToolResult
 
 
 def write_skill(root: Path, name: str, steps: list[dict]) -> None:
@@ -28,9 +28,9 @@ def write_skill(root: Path, name: str, steps: list[dict]) -> None:
 
 @pytest.fixture
 def skill_cli(tmp_path):
-    from openjarvis.core.registry import ToolRegistry
-    from openjarvis.tools.calculator import CalculatorTool
-    from openjarvis.tools.shell_exec import ShellExecTool
+    from silas.core.registry import ToolRegistry
+    from silas.tools.calculator import CalculatorTool
+    from silas.tools.shell_exec import ShellExecTool
 
     ToolRegistry.register_value("calculator", CalculatorTool)
     ToolRegistry.register_value("shell_exec", ShellExecTool)
@@ -42,10 +42,10 @@ def skill_cli(tmp_path):
     cfg.learning.skills.overlay_dir = str(tmp_path / "overlays")
     bus = EventBus(record_history=True)
     with (
-        patch("openjarvis.cli.skill_cmd._get_skill_paths", return_value=[tmp_path]),
-        patch("openjarvis.cli.skill_cmd.load_config", return_value=cfg),
-        patch("openjarvis.core.config.load_config", return_value=cfg),
-        patch("openjarvis.cli.skill_cmd.EventBus", return_value=bus),
+        patch("silas.cli.skill_cmd._get_skill_paths", return_value=[tmp_path]),
+        patch("silas.cli.skill_cmd.load_config", return_value=cfg),
+        patch("silas.core.config.load_config", return_value=cfg),
+        patch("silas.cli.skill_cmd.EventBus", return_value=bus),
     ):
         yield tmp_path, cfg, bus
 
@@ -122,7 +122,7 @@ def test_default_deny_blocks_real_shell_before_dispatch(skill_cli):
             }
         ],
     )
-    with patch("openjarvis.tools.shell_exec.ShellExecTool.execute") as execute:
+    with patch("silas.tools.shell_exec.ShellExecTool.execute") as execute:
         result = CliRunner().invoke(cli, ["skill", "run", "shell"], input="y\n")
     assert result.exit_code != 0
     assert "code:execute" in result.output and "denied" in result.output
@@ -168,7 +168,7 @@ def test_granted_shell_still_requires_user_confirmation(
         ],
     )
     with patch(
-        "openjarvis.tools.shell_exec.ShellExecTool.execute",
+        "silas.tools.shell_exec.ShellExecTool.execute",
         return_value=ToolResult(
             tool_name="shell_exec",
             content="STEP_RAN",
@@ -215,7 +215,7 @@ def test_policy_startup_failure_never_dispatches(skill_cli):
             }
         ],
     )
-    with patch("openjarvis.tools.shell_exec.ShellExecTool.execute") as execute:
+    with patch("silas.tools.shell_exec.ShellExecTool.execute") as execute:
         result = CliRunner().invoke(cli, ["skill", "run", "shell"])
     assert result.exit_code != 0
     execute.assert_not_called()

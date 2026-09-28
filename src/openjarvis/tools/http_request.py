@@ -10,10 +10,10 @@ from typing import Any
 
 import httpx
 
-from openjarvis.core.registry import ToolRegistry
-from openjarvis.core.types import ToolResult
-from openjarvis.security.ssrf import check_ssrf
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.core.registry import ToolRegistry
+from silas.core.types import ToolResult
+from silas.security.ssrf import check_ssrf
+from silas.tools._stubs import BaseTool, ToolSpec
 
 logger = logging.getLogger(__name__)
 
@@ -118,7 +118,7 @@ class HttpRequestTool(BaseTool):
 
         _rust = None
         try:
-            from openjarvis._rust_bridge import get_rust_module
+            from silas._rust_bridge import get_rust_module
 
             _rust = get_rust_module()
         except ImportError:

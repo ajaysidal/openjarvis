@@ -1,9 +1,9 @@
-"""MCP (Model Context Protocol) layer for OpenJarvis."""
+"""MCP (Model Context Protocol) layer for Silas."""
 
-from openjarvis.mcp.client import MCPClient
-from openjarvis.mcp.protocol import MCPError, MCPNotification, MCPRequest, MCPResponse
-from openjarvis.mcp.server import MCPServer
-from openjarvis.mcp.transport import (
+from silas.mcp.client import MCPClient
+from silas.mcp.protocol import MCPError, MCPNotification, MCPRequest, MCPResponse
+from silas.mcp.server import MCPServer
+from silas.mcp.transport import (
     InProcessTransport,
     MCPTransport,
     SSETransport,

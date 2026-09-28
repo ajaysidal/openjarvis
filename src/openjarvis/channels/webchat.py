@@ -5,14 +5,14 @@ from __future__ import annotations
 import logging
 from typing import Any, Dict, List, Optional
 
-from openjarvis.channels._stubs import (
+from silas.channels._stubs import (
     BaseChannel,
     ChannelHandler,
     ChannelMessage,
     ChannelStatus,
 )
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.core.registry import ChannelRegistry
+from silas.core.events import EventBus, EventType
+from silas.core.registry import ChannelRegistry
 
 logger = logging.getLogger(__name__)
 

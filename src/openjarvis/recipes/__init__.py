@@ -1,10 +1,10 @@
 """Recipe system — composable primitive configurations."""
 
-from openjarvis.recipes.composer import (
+from silas.recipes.composer import (
     recipe_to_eval_suite,
     recipe_to_operator,
 )
-from openjarvis.recipes.loader import (
+from silas.recipes.loader import (
     Recipe,
     discover_recipes,
     load_recipe,

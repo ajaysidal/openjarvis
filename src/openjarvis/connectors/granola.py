@@ -16,11 +16,11 @@ from typing import Any, Dict, Iterator, List, Optional
 
 import httpx
 
-from openjarvis.connectors._stubs import BaseConnector, Document, SyncStatus
-from openjarvis.connectors.oauth import delete_tokens, load_tokens, save_tokens
-from openjarvis.core.config import DEFAULT_CONFIG_DIR
-from openjarvis.core.registry import ConnectorRegistry
-from openjarvis.tools._stubs import ToolSpec
+from silas.connectors._stubs import BaseConnector, Document, SyncStatus
+from silas.connectors.oauth import delete_tokens, load_tokens, save_tokens
+from silas.core.config import DEFAULT_CONFIG_DIR
+from silas.core.registry import ConnectorRegistry
+from silas.tools._stubs import ToolSpec
 
 logger = logging.getLogger(__name__)
 
@@ -219,7 +219,7 @@ class GranolaConnector(BaseConnector):
         credentials file.
     credentials_path:
         Path to the JSON file where the API key is stored.  Defaults to
-        ``~/.openjarvis/connectors/granola.json``.
+        ``~/.silas/connectors/granola.json``.
     """
 
     connector_id = "granola"

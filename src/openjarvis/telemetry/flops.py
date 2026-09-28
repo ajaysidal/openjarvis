@@ -22,7 +22,7 @@ GPU_PEAK_TFLOPS_BF16: dict[str, float] = {
 
 MODEL_PARAMS_B: dict[str, float] = {
     "qwen3:8b": 8.0,
-    "qwen3:0.6b": 0.6,
+    "qwen3:8b": 0.6,
     "qwen3:4b": 4.0,
     "llama-3.1-70b": 70.0,
     "llama-3.1-8b": 8.0,

@@ -22,8 +22,8 @@ from dataclasses import asdict, dataclass
 from pathlib import Path
 from typing import Any, Iterable, Iterator, List
 
-from openjarvis.core.paths import get_config_dir
-from openjarvis.core.registry import FactStoreRegistry
+from silas.core.paths import get_config_dir
+from silas.core.registry import FactStoreRegistry
 
 if sys.platform != "win32":
     import fcntl

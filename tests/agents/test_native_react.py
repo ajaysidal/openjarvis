@@ -7,12 +7,12 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from openjarvis.agents._stubs import AgentContext
-from openjarvis.agents.native_react import NativeReActAgent
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.core.registry import AgentRegistry
-from openjarvis.core.types import Conversation, Message, Role, ToolResult
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.agents._stubs import AgentContext
+from silas.agents.native_react import NativeReActAgent
+from silas.core.events import EventBus, EventType
+from silas.core.registry import AgentRegistry
+from silas.core.types import Conversation, Message, Role, ToolResult
+from silas.tools._stubs import BaseTool, ToolSpec
 
 # ---------------------------------------------------------------------------
 # Helpers

@@ -10,10 +10,10 @@ import httpx
 import pytest
 import respx
 
-from openjarvis.core.registry import EngineRegistry
-from openjarvis.core.types import Message, Role
-from openjarvis.engine._base import EngineConnectionError
-from openjarvis.engine.openai_compat_engines import LemonadeEngine
+from silas.core.registry import EngineRegistry
+from silas.core.types import Message, Role
+from silas.engine._base import EngineConnectionError
+from silas.engine.openai_compat_engines import LemonadeEngine
 
 
 @pytest.fixture()

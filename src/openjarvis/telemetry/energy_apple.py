@@ -28,7 +28,7 @@ from contextlib import contextmanager
 from dataclasses import dataclass
 from typing import Any, Generator, Optional
 
-from openjarvis.telemetry.energy_monitor import (
+from silas.telemetry.energy_monitor import (
     BASIS_SOC,
     EnergyMonitor,
     EnergySample,
@@ -276,7 +276,7 @@ class AppleEnergyMonitor(EnergyMonitor):
         result: EnergySample,
     ) -> Generator[EnergySample, None, None]:
         assert self._reader is not None
-        window = f"openjarvis_{time.monotonic_ns()}"
+        window = f"silas_{time.monotonic_ns()}"
         t_start = time.monotonic()
         self._reader.begin_window(window)
 

@@ -1,13 +1,13 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# ── OpenJarvis Quickstart ─────────────────────────────────────────────
+# ── Silas Quickstart ─────────────────────────────────────────────
 # One-command setup: installs deps, starts Ollama + model, launches
 # the backend API server and frontend, then opens the browser.
 #
 # Usage:
-#   git clone https://github.com/open-jarvis/OpenJarvis.git
-#   cd OpenJarvis
+#   git clone https://github.com/open-jarvis/Silas.git
+#   cd Silas
 #   ./scripts/quickstart.sh
 # ──────────────────────────────────────────────────────────────────────
 
@@ -42,7 +42,7 @@ cd "$REPO_ROOT"
 
 echo -e "${BOLD}"
 echo "  ┌──────────────────────────────────┐"
-echo "  │       OpenJarvis Quickstart      │"
+echo "  │       Silas Quickstart      │"
 echo "  └──────────────────────────────────┘"
 echo -e "${NC}"
 
@@ -136,7 +136,7 @@ else
 fi
 
 # ── 6. Pull a starter model ─────────────────────────────────────────
-MODEL="${OPENJARVIS_MODEL:-qwen3:0.6b}"
+MODEL="${SILAS_MODEL:-qwen3:8b}"
 info "Ensuring model '$MODEL' is available..."
 if ollama list 2>/dev/null | grep -q "$MODEL"; then
   ok "Model '$MODEL' already pulled"
@@ -154,8 +154,8 @@ ok "Python dependencies installed"
 
 # ── 7b. Build Rust extension ──────────────────────────────────────
 info "Building Rust extension..."
-uv run maturin develop -m rust/crates/openjarvis-python/Cargo.toml --quiet 2>/dev/null \
-  || uv run maturin develop -m rust/crates/openjarvis-python/Cargo.toml
+uv run maturin develop -m rust/crates/silas-python/Cargo.toml --quiet 2>/dev/null \
+  || uv run maturin develop -m rust/crates/silas-python/Cargo.toml
 ok "Rust extension built"
 
 # ── 8. Install frontend dependencies ────────────────────────────────
@@ -166,7 +166,7 @@ ok "Frontend dependencies installed"
 # ── 9. Start backend ────────────────────────────────────────────────
 info "Starting backend API server on port 8000..."
 if curl -sf http://localhost:8000/health &>/dev/null; then
-  fail "An OpenJarvis server is already running on port 8000. Stop it before re-running quickstart so updated environment variables are applied."
+  fail "An Silas server is already running on port 8000. Stop it before re-running quickstart so updated environment variables are applied."
 fi
 uv run jarvis serve --port 8000 &>/dev/null &
 BACKEND_PID=$!
@@ -199,7 +199,7 @@ case "$(uname -s)" in
 esac
 
 echo ""
-echo -e "${GREEN}${BOLD}  OpenJarvis is running!${NC}"
+echo -e "${GREEN}${BOLD}  Silas is running!${NC}"
 echo ""
 echo "  Chat UI:  http://localhost:5173"
 echo "  API:      http://localhost:8000"

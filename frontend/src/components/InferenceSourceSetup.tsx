@@ -185,7 +185,7 @@ export function OllamaConsent({
             Allow local model setup?
           </h2>
           <p className="text-sm leading-relaxed" style={{ color: 'var(--color-text-secondary)' }}>
-            OpenJarvis will start Ollama and may download one model selected for this computer. Model downloads can use several gigabytes of disk space and network data.
+            Silas will start Ollama and may download one model selected for this computer. Model downloads can use several gigabytes of disk space and network data.
           </p>
         </div>
       </div>
@@ -269,12 +269,12 @@ export function CustomEndpointSetup({
             Connect your server
           </h2>
           <p className="text-xs" style={{ color: 'var(--color-text-secondary)' }}>
-            OpenJarvis will connect only after you submit this form. Ollama will not start or download models.
+            Silas will connect only after you submit this form. Ollama will not start or download models.
           </p>
         </div>
         <label className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
           Server URL
-          <input
+          <input id="inferencesourcesetup-input-1" name="inferencesourcesetup-input-1"
             aria-label="Server URL"
             type="url"
             required
@@ -286,7 +286,7 @@ export function CustomEndpointSetup({
         </label>
         <label className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
           Model ID
-          <input
+          <input id="inferencesourcesetup-input-2" name="inferencesourcesetup-input-2"
             aria-label="Model ID"
             type="text"
             required
@@ -299,7 +299,7 @@ export function CustomEndpointSetup({
         </label>
         <label className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
           Server type
-          <select
+          <select id="inferencesourcesetup-select-3" name="inferencesourcesetup-select-3"
             aria-label="Server type"
             value={engine}
             onChange={(event) => setEngine(event.target.value)}
@@ -315,7 +315,7 @@ export function CustomEndpointSetup({
         </label>
         <label className="text-xs font-medium" style={{ color: 'var(--color-text-secondary)' }}>
           API key (optional)
-          <input
+          <input id="inferencesourcesetup-input-4" name="inferencesourcesetup-input-4"
             aria-label="API key"
             type="password"
             value={apiKey}

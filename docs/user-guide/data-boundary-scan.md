@@ -1,7 +1,7 @@
 # Data-boundary scan
 
 `jarvis scan --data-boundaries` reports application-level data boundaries in the
-current OpenJarvis configuration. It complements the existing host/environment
+current Silas configuration. It complements the existing host/environment
 scan, which checks OS posture such as disk encryption, cloud-sync agents, remote
 access tools, and exposed engine ports.
 
@@ -63,7 +63,7 @@ The current checks cover:
 
 Configured database paths (for example `traces.db_path` or `memory.db_path`)
 are resolved from config when set, not only the default locations under the
-OpenJarvis home directory.
+Silas home directory.
 
 Static Deep Research targeting uses configuration only (no request overrides):
 `deep_research.engine` or `engine.default`, and `deep_research.model` or
@@ -164,8 +164,8 @@ users know that browser/Tauri credential storage must be reviewed separately.
 ## Configuration resolution
 
 The scan follows the same explicit configuration override used by the runtime:
-if `OPENJARVIS_CONFIG` is set, that file is audited. Otherwise the scan uses
-the default OpenJarvis config path under the resolved OpenJarvis home. If the
+if `SILAS_CONFIG` is set, that file is audited. Otherwise the scan uses
+the default Silas config path under the resolved Silas home. If the
 home directory cannot be resolved, the command reports a `config-root-error`
 finding instead of crashing.
 

@@ -1,11 +1,11 @@
 [package]
-name = "openjarvis-learning"
+name = "silas-learning"
 version = "0.1.0"
 edition = "2021"
 
 [dependencies]
-openjarvis-core = { path = "../openjarvis-core" }
-openjarvis-traces = { path = "../openjarvis-traces" }
+silas-core = { path = "../silas-core" }
+silas-traces = { path = "../silas-traces" }
 serde = { workspace = true }
 serde_json = { workspace = true }
 thiserror = { workspace = true }

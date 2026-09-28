@@ -15,7 +15,7 @@ from typing import NoReturn
 
 import httpx
 
-from openjarvis.engine._base import (
+from silas.engine._base import (
     EngineConnectionError,
     EngineContextLengthError,
     looks_like_context_length_error,

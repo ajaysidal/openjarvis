@@ -1,23 +1,23 @@
 ---
 title: Downloads
-description: Download the OpenJarvis desktop app, browser app, CLI, or Python SDK
+description: Download the Silas desktop app, browser app, CLI, or Python SDK
 ---
 
 # Downloads
 
-OpenJarvis runs entirely on your hardware. Choose the interface that fits your workflow.
+Silas runs entirely on your hardware. Choose the interface that fits your workflow.
 
 ---
 
 ## Desktop App
 
-The desktop app is a native window for the OpenJarvis chat UI. All inference and backend
+The desktop app is a native window for the Silas chat UI. All inference and backend
 processing happens on your local machine — the app connects to the backend you start locally.
 
 !!! info "Backend required"
     Start the backend before opening the desktop app. The quickstart script handles everything:
     ```bash
-    git clone https://github.com/open-jarvis/OpenJarvis.git && cd OpenJarvis
+    git clone https://github.com/open-jarvis/Silas.git && cd Silas
     ./scripts/quickstart.sh
     ```
 
@@ -25,30 +25,30 @@ processing happens on your local machine — the app connects to the backend you
 
 | Platform | Download | Notes |
 |----------|----------|-------|
-| macOS (Universal) | [:material-download: **OpenJarvis.dmg**](https://github.com/open-jarvis/OpenJarvis/releases/download/desktop-v1.0.2/OpenJarvis_1.0.1_universal.dmg) | Apple Silicon + Intel |
-| Windows (64-bit) | [:material-download: **OpenJarvis-setup.exe**](https://github.com/open-jarvis/OpenJarvis/releases/download/desktop-v1.0.2/OpenJarvis_1.0.1_x64-setup.exe) | Windows 10+ |
-| Linux (DEB) | [:material-download: **OpenJarvis.deb**](https://github.com/open-jarvis/OpenJarvis/releases/download/desktop-v1.0.2/OpenJarvis_1.0.1_amd64.deb) | Ubuntu, Debian |
-| Linux (RPM) | [:material-download: **OpenJarvis.rpm**](https://github.com/open-jarvis/OpenJarvis/releases/download/desktop-v1.0.2/OpenJarvis-1.0.1-1.x86_64.rpm) | Fedora, RHEL |
-| Linux (AppImage) | [:material-download: **OpenJarvis.AppImage**](https://github.com/open-jarvis/OpenJarvis/releases/download/desktop-v1.0.2/OpenJarvis_1.0.1_amd64.AppImage) | Any distro |
+| macOS (Universal) | [:material-download: **Silas.dmg**](https://github.com/open-jarvis/Silas/releases/download/desktop-v1.0.2/Silas_1.0.1_universal.dmg) | Apple Silicon + Intel |
+| Windows (64-bit) | [:material-download: **Silas-setup.exe**](https://github.com/open-jarvis/Silas/releases/download/desktop-v1.0.2/Silas_1.0.1_x64-setup.exe) | Windows 10+ |
+| Linux (DEB) | [:material-download: **Silas.deb**](https://github.com/open-jarvis/Silas/releases/download/desktop-v1.0.2/Silas_1.0.1_amd64.deb) | Ubuntu, Debian |
+| Linux (RPM) | [:material-download: **Silas.rpm**](https://github.com/open-jarvis/Silas/releases/download/desktop-v1.0.2/Silas-1.0.1-1.x86_64.rpm) | Fedora, RHEL |
+| Linux (AppImage) | [:material-download: **Silas.AppImage**](https://github.com/open-jarvis/Silas/releases/download/desktop-v1.0.2/Silas_1.0.1_amd64.AppImage) | Any distro |
 
 !!! tip "All releases"
-    Browse all versions on the [GitHub Releases](https://github.com/open-jarvis/OpenJarvis/releases) page.
+    Browse all versions on the [GitHub Releases](https://github.com/open-jarvis/Silas/releases) page.
 
 ### macOS: "app is damaged" fix
 
 macOS Gatekeeper quarantines apps downloaded from the internet that aren't notarized
-by Apple. If you see **"OpenJarvis is damaged and can't be opened"**, run this in
+by Apple. If you see **"Silas is damaged and can't be opened"**, run this in
 Terminal to clear the quarantine flag:
 
 ```bash
-xattr -cr /Applications/OpenJarvis.app
+xattr -cr /Applications/Silas.app
 ```
 
 Then open the app normally. If you installed from the DMG but haven't moved it to
 `/Applications` yet, point the command at wherever the `.app` bundle is:
 
 ```bash
-xattr -cr ~/Downloads/OpenJarvis.app
+xattr -cr ~/Downloads/Silas.app
 ```
 
 !!! note
@@ -69,8 +69,8 @@ The backend (Ollama, Python API server, inference) runs separately on your machi
 ### Build from source
 
 ```bash
-git clone https://github.com/open-jarvis/OpenJarvis.git
-cd OpenJarvis/desktop
+git clone https://github.com/open-jarvis/Silas.git
+cd Silas/desktop
 npm install
 npm run tauri build
 ```
@@ -87,8 +87,8 @@ your machine and the frontend connects via `localhost`.
 ### One-command setup
 
 ```bash
-git clone https://github.com/open-jarvis/OpenJarvis.git
-cd OpenJarvis
+git clone https://github.com/open-jarvis/Silas.git
+cd Silas
 ./scripts/quickstart.sh
 ```
 
@@ -107,8 +107,8 @@ If you prefer to run each step yourself:
 === "Step 1: Clone and install"
 
     ```bash
-    git clone https://github.com/open-jarvis/OpenJarvis.git
-    cd OpenJarvis
+    git clone https://github.com/open-jarvis/Silas.git
+    cd Silas
     uv sync --extra desktop
     cd frontend && npm install && cd ..
     ```
@@ -118,7 +118,7 @@ If you prefer to run each step yourself:
     ```bash
     # Install from https://ollama.com if not already installed
     ollama serve &
-    ollama pull qwen3:0.6b
+    ollama pull qwen3:8b
     ```
 
 === "Step 3: Start backend"
@@ -148,14 +148,14 @@ Then open [http://localhost:5173](http://localhost:5173).
 
 ## CLI
 
-The command-line interface is the fastest way to interact with OpenJarvis
+The command-line interface is the fastest way to interact with Silas
 programmatically. Every feature is accessible from the terminal.
 
 ### Install
 
 ```bash
-git clone https://github.com/open-jarvis/OpenJarvis.git
-cd OpenJarvis
+git clone https://github.com/open-jarvis/Silas.git
+cd Silas
 uv sync
 ```
 
@@ -202,15 +202,15 @@ For programmatic access, the `Jarvis` class provides a high-level sync API.
 ### Install
 
 ```bash
-git clone https://github.com/open-jarvis/OpenJarvis.git
-cd OpenJarvis
+git clone https://github.com/open-jarvis/Silas.git
+cd Silas
 uv sync
 ```
 
 ### Quick example
 
 ```python
-from openjarvis import Jarvis
+from silas import Jarvis
 
 j = Jarvis()
 print(j.ask("Explain quicksort in two sentences."))
@@ -235,7 +235,7 @@ print(result["turns"])         # number of agent turns
 For full control, use the `SystemBuilder`:
 
 ```python
-from openjarvis import SystemBuilder
+from silas import SystemBuilder
 
 system = (
     SystemBuilder()

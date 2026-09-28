@@ -291,7 +291,7 @@ function LaunchWizard({
                 <label style={{ display: 'block', color: C.subtext0, fontSize: 12, marginBottom: 6, fontWeight: 500 }}>
                   Agent Name *
                 </label>
-                <input
+                <input id="agentspanel-input-1" name="agentspanel-input-1"
                   style={inputStyle}
                   type="text"
                   placeholder="e.g. Research Assistant"
@@ -305,7 +305,7 @@ function LaunchWizard({
                   <label style={{ display: 'block', color: C.subtext0, fontSize: 12, marginBottom: 6, fontWeight: 500 }}>
                     Schedule Type
                   </label>
-                  <select
+                  <select id="agentspanel-select-2" name="agentspanel-select-2"
                     style={selectStyle}
                     value={wizard.scheduleType}
                     onChange={(e) => update({ scheduleType: e.target.value })}
@@ -319,7 +319,7 @@ function LaunchWizard({
                   <label style={{ display: 'block', color: C.subtext0, fontSize: 12, marginBottom: 6, fontWeight: 500 }}>
                     Schedule Value
                   </label>
-                  <input
+                  <input id="agentspanel-input-3" name="agentspanel-input-3"
                     style={{ ...inputStyle, opacity: wizard.scheduleType === 'manual' ? 0.4 : 1 }}
                     type="text"
                     placeholder={wizard.scheduleType === 'cron' ? '0 * * * *' : wizard.scheduleType === 'interval' ? '1h' : '—'}
@@ -345,7 +345,7 @@ function LaunchWizard({
                         border: `1px solid ${wizard.selectedTools.includes(tool.id) ? C.accent + '60' : C.border}`,
                       }}
                     >
-                      <input
+                      <input id="agentspanel-input-4" name="agentspanel-input-4"
                         type="checkbox"
                         checked={wizard.selectedTools.includes(tool.id)}
                         onChange={() => toggleTool(tool.id)}
@@ -361,7 +361,7 @@ function LaunchWizard({
                   <label style={{ display: 'block', color: C.subtext0, fontSize: 12, marginBottom: 6, fontWeight: 500 }}>
                     Budget ($, optional)
                   </label>
-                  <input
+                  <input id="agentspanel-input-5" name="agentspanel-input-5"
                     style={inputStyle}
                     type="number"
                     placeholder="e.g. 5.00"
@@ -377,7 +377,7 @@ function LaunchWizard({
                     padding: '8px 10px', borderRadius: 6, cursor: 'pointer',
                     background: C.surface0, width: '100%', boxSizing: 'border-box',
                   }}>
-                    <input
+                    <input id="agentspanel-input-6" name="agentspanel-input-6"
                       type="checkbox"
                       checked={wizard.learningEnabled}
                       onChange={(e) => update({ learningEnabled: e.target.checked })}
@@ -540,7 +540,7 @@ function InteractTab({ apiUrl, agentId }: { apiUrl: string; agentId: string }) {
       {/* Input area */}
       <div style={{ display: 'flex', gap: 8, alignItems: 'flex-end', paddingTop: 8, borderTop: `1px solid ${C.border}` }}>
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 4 }}>
-          <textarea
+          <textarea id="agentspanel-textarea-7" name="agentspanel-textarea-7"
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}

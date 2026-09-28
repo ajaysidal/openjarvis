@@ -10,7 +10,7 @@ import click
 
 @click.group()
 def gateway() -> None:
-    """Manage the OpenJarvis multi-channel gateway."""
+    """Manage the Silas multi-channel gateway."""
 
 
 @gateway.command()
@@ -24,14 +24,14 @@ def start(install: bool) -> None:
     if install:
         import platform as plat
 
-        from openjarvis.daemon.service import (
+        from silas.daemon.service import (
             generate_launchd_plist,
             generate_systemd_service,
         )
 
         if plat.system() == "Darwin":
             plist_path = (
-                Path.home() / "Library/LaunchAgents/com.openjarvis.gateway.plist"
+                Path.home() / "Library/LaunchAgents/com.silas.gateway.plist"
             )
             generate_launchd_plist(plist_path)
             click.echo(f"Wrote {plist_path}")
@@ -41,7 +41,7 @@ def start(install: bool) -> None:
             )
         else:
             service_path = (
-                Path.home() / ".config/systemd/user/openjarvis-gateway.service"
+                Path.home() / ".config/systemd/user/silas-gateway.service"
             )
             generate_systemd_service(service_path)
             click.echo(f"Wrote {service_path}")
@@ -50,11 +50,11 @@ def start(install: bool) -> None:
                 check=False,
             )
             subprocess.run(
-                ["systemctl", "--user", "enable", "--now", "openjarvis-gateway"],
+                ["systemctl", "--user", "enable", "--now", "silas-gateway"],
                 check=False,
             )
     else:
-        click.echo("Starting OpenJarvis gateway (foreground)...")
+        click.echo("Starting Silas gateway (foreground)...")
         click.echo("Gateway started. Press Ctrl+C to stop.")
 
 
@@ -65,12 +65,12 @@ def stop() -> None:
 
     if plat.system() == "Darwin":
         subprocess.run(
-            ["launchctl", "remove", "com.openjarvis.gateway"],
+            ["launchctl", "remove", "com.silas.gateway"],
             check=False,
         )
     else:
         subprocess.run(
-            ["systemctl", "--user", "stop", "openjarvis-gateway"],
+            ["systemctl", "--user", "stop", "silas-gateway"],
             check=False,
         )
     click.echo("Gateway stopped.")
@@ -83,12 +83,12 @@ def status() -> None:
 
     if plat.system() == "Darwin":
         subprocess.run(
-            ["launchctl", "list", "com.openjarvis.gateway"],
+            ["launchctl", "list", "com.silas.gateway"],
             check=False,
         )
     else:
         subprocess.run(
-            ["systemctl", "--user", "status", "openjarvis-gateway"],
+            ["systemctl", "--user", "status", "silas-gateway"],
             check=False,
         )
 
@@ -99,9 +99,9 @@ def logs() -> None:
     import platform as plat
 
     if plat.system() == "Darwin":
-        click.echo("Check ~/Library/Logs/com.openjarvis.gateway.log")
+        click.echo("Check ~/Library/Logs/com.silas.gateway.log")
     else:
         subprocess.run(
-            ["journalctl", "--user", "-u", "openjarvis-gateway", "-f"],
+            ["journalctl", "--user", "-u", "silas-gateway", "-f"],
             check=False,
         )

@@ -37,7 +37,7 @@ import {
 } from '../lib/api';
 import { isAutoUpdateDisabled, setAutoUpdateDisabled } from '../components/Desktop/UpdateChecker';
 
-const CLOUD_KEY_STATUS_CHANGED = 'openjarvis-cloud-key-status-changed';
+const CLOUD_KEY_STATUS_CHANGED = 'silas-cloud-key-status-changed';
 
 function OllamaModelList() {
   const [models, setModels] = useState<Array<{ name: string; size: number }>>([]);
@@ -143,7 +143,7 @@ function ApiKeyInput({
 
   return (
     <div className="flex items-center gap-2">
-      <input
+      <input id="settingspage-input-1" name="settingspage-input-1"
         type="password"
         value={value}
         onChange={e => setValue(e.target.value)}
@@ -319,19 +319,19 @@ export function SettingsPage() {
   const [memoryStatus, setMemoryStatus] = useState<MemoryStatus>({ kind: 'loading' });
   const memoryRequestId = useRef(0);
   const [memoryEnabled, setMemoryEnabled] = useState(() => {
-    try { return localStorage.getItem('openjarvis-memory-enabled') !== 'false'; } catch { return true; }
+    try { return localStorage.getItem('silas-memory-enabled') !== 'false'; } catch { return true; }
   });
   const [memoryBackend, setMemoryBackend] = useState(() => {
-    try { return localStorage.getItem('openjarvis-memory-backend') || 'sqlite'; } catch { return 'sqlite'; }
+    try { return localStorage.getItem('silas-memory-backend') || 'sqlite'; } catch { return 'sqlite'; }
   });
   const [memoryTopK, setMemoryTopK] = useState(() => {
-    try { return parseInt(localStorage.getItem('openjarvis-memory-top-k') || '5'); } catch { return 5; }
+    try { return parseInt(localStorage.getItem('silas-memory-top-k') || '5'); } catch { return 5; }
   });
   const [memoryMinScore, setMemoryMinScore] = useState(() => {
-    try { return parseFloat(localStorage.getItem('openjarvis-memory-min-score') || '0.1'); } catch { return 0.1; }
+    try { return parseFloat(localStorage.getItem('silas-memory-min-score') || '0.1'); } catch { return 0.1; }
   });
   const [memoryMaxTokens, setMemoryMaxTokens] = useState(() => {
-    try { return parseInt(localStorage.getItem('openjarvis-memory-max-tokens') || '2048'); } catch { return 2048; }
+    try { return parseInt(localStorage.getItem('silas-memory-max-tokens') || '2048'); } catch { return 2048; }
   });
 
   const [srcKind, setSrcKind] = useState<InferenceSource['kind']>('ollama');
@@ -407,12 +407,12 @@ export function SettingsPage() {
   };
 
   const handleExport = () => {
-    const data = localStorage.getItem('openjarvis-conversations') || '{}';
+    const data = localStorage.getItem('silas-conversations') || '{}';
     const blob = new Blob([data], { type: 'application/json' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `openjarvis-export-${new Date().toISOString().slice(0, 10)}.json`;
+    a.download = `silas-export-${new Date().toISOString().slice(0, 10)}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -429,7 +429,7 @@ export function SettingsPage() {
         try {
           const data = JSON.parse(ev.target?.result as string);
           if (data.version === 1) {
-            localStorage.setItem('openjarvis-conversations', JSON.stringify(data));
+            localStorage.setItem('silas-conversations', JSON.stringify(data));
             useAppStore.getState().loadConversations();
             showSaved();
           }
@@ -447,7 +447,7 @@ export function SettingsPage() {
       setTimeout(() => setConfirmClear(false), 3000);
       return;
     }
-    localStorage.removeItem('openjarvis-conversations');
+    localStorage.removeItem('silas-conversations');
     useAppStore.getState().loadConversations();
     setConfirmClear(false);
     showSaved();
@@ -478,7 +478,7 @@ export function SettingsPage() {
         <div className="flex flex-col gap-4">
           {/* Appearance */}
           <Section title="Appearance">
-            <SettingRow label="Theme" description="Choose how OpenJarvis looks">
+            <SettingRow label="Theme" description="Choose how Silas looks">
               <div className="flex gap-1 p-0.5 rounded-lg" style={{ background: 'var(--color-bg-secondary)' }}>
                 {themeOptions.map((opt) => {
                   const isActive = settings.theme === opt.value;
@@ -501,7 +501,7 @@ export function SettingsPage() {
               </div>
             </SettingRow>
             <SettingRow label="Font size">
-              <select
+              <select id="settingspage-select-2" name="settingspage-select-2"
                 value={settings.fontSize}
                 onChange={(e) => { updateSettings({ fontSize: e.target.value as any }); showSaved(); }}
                 className="text-sm px-3 py-1.5 rounded-lg outline-none cursor-pointer"
@@ -532,7 +532,7 @@ export function SettingsPage() {
               </div>
             </SettingRow>
             <SettingRow label="API URL" description="Set if backend runs on a different port or host">
-              <input
+              <input id="settingspage-input-3" name="settingspage-input-3"
                 type="text"
                 value={settings.apiUrl}
                 onChange={(e) => { updateSettings({ apiUrl: e.target.value }); showSaved(); }}
@@ -546,11 +546,11 @@ export function SettingsPage() {
               />
             </SettingRow>
             <SettingRow label="API key" description="Required only if the server was started with an API key">
-              <input
+              <input id="settingspage-input-4" name="settingspage-input-4"
                 type="password"
                 value={settings.apiKey}
                 onChange={(e) => { updateSettings({ apiKey: e.target.value }); showSaved(); }}
-                placeholder="OPENJARVIS_API_KEY"
+                placeholder="SILAS_API_KEY"
                 autoComplete="off"
                 className="text-sm px-3 py-1.5 rounded-lg outline-none w-56"
                 style={{
@@ -565,7 +565,7 @@ export function SettingsPage() {
           {/* Inference source */}
           <Section title="Inference source">
             <SettingRow label="Source" description="Where the app runs models. Applies after restart.">
-              <select
+              <select id="settingspage-select-5" name="settingspage-select-5"
                 value={srcKind}
                 onChange={(e) => { setSrcKind(e.target.value as InferenceSource['kind']); setSrcMsg(''); }}
                 className="text-sm px-3 py-1.5 rounded-lg outline-none w-56"
@@ -578,17 +578,17 @@ export function SettingsPage() {
             {srcKind === 'custom' && (
               <>
                 <SettingRow label="Server URL" description="e.g. LM Studio: http://localhost:1234/v1">
-                  <input type="text" value={customHost} onChange={(e) => { setCustomHost(e.target.value); setSrcMsg(''); }} placeholder="http://localhost:1234/v1"
+                  <input id="settingspage-input-6" name="settingspage-input-6" type="text" value={customHost} onChange={(e) => { setCustomHost(e.target.value); setSrcMsg(''); }} placeholder="http://localhost:1234/v1"
                     className="text-sm px-3 py-1.5 rounded-lg outline-none w-56"
                     style={{ background: 'var(--color-bg-secondary)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} />
                 </SettingRow>
                 <SettingRow label="Model" description="Model id served by your endpoint">
-                  <input type="text" value={customModel} onChange={(e) => { setCustomModel(e.target.value); setSrcMsg(''); }} placeholder="qwen2.5-7b-instruct"
+                  <input id="settingspage-input-7" name="settingspage-input-7" type="text" value={customModel} onChange={(e) => { setCustomModel(e.target.value); setSrcMsg(''); }} placeholder="qwen2.5-7b-instruct"
                     className="text-sm px-3 py-1.5 rounded-lg outline-none w-56"
                     style={{ background: 'var(--color-bg-secondary)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} />
                 </SettingRow>
                 <SettingRow label="Server type" description="OpenAI-compatible engine">
-                  <select value={customEngine} onChange={(e) => { setCustomEngine(e.target.value); setSrcMsg(''); }}
+                  <select id="settingspage-select-8" name="settingspage-select-8" value={customEngine} onChange={(e) => { setCustomEngine(e.target.value); setSrcMsg(''); }}
                     className="text-sm px-3 py-1.5 rounded-lg outline-none w-56"
                     style={{ background: 'var(--color-bg-secondary)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }}>
                     <option value="lmstudio">LM Studio</option>
@@ -599,7 +599,7 @@ export function SettingsPage() {
                   </select>
                 </SettingRow>
                 <SettingRow label="API key (optional)" description="Only if your server requires one">
-                  <input type="password" value={customKey} onChange={(e) => { setCustomKey(e.target.value); setSrcMsg(''); }} placeholder="leave blank if none"
+                  <input id="settingspage-input-9" name="settingspage-input-9" type="password" value={customKey} onChange={(e) => { setCustomKey(e.target.value); setSrcMsg(''); }} placeholder="leave blank if none"
                     className="text-sm px-3 py-1.5 rounded-lg outline-none w-56"
                     style={{ background: 'var(--color-bg-secondary)', color: 'var(--color-text)', border: '1px solid var(--color-border)' }} />
                 </SettingRow>
@@ -667,7 +667,7 @@ export function SettingsPage() {
                 onClick={() => {
                   const next = !memoryEnabled;
                   setMemoryEnabled(next);
-                  try { localStorage.setItem('openjarvis-memory-enabled', String(next)); } catch {}
+                  try { localStorage.setItem('silas-memory-enabled', String(next)); } catch {}
                   showSaved();
                 }}
                 className="relative w-11 h-6 rounded-full transition-colors cursor-pointer"
@@ -685,11 +685,11 @@ export function SettingsPage() {
               </button>
             </SettingRow>
             <SettingRow label="Memory backend" description="Which retrieval engine to use">
-              <select
+              <select id="settingspage-select-10" name="settingspage-select-10"
                 value={memoryBackend}
                 onChange={(e) => {
                   setMemoryBackend(e.target.value);
-                  try { localStorage.setItem('openjarvis-memory-backend', e.target.value); } catch {}
+                  try { localStorage.setItem('silas-memory-backend', e.target.value); } catch {}
                   showSaved();
                 }}
                 className="text-sm px-3 py-1.5 rounded-lg outline-none cursor-pointer"
@@ -707,7 +707,7 @@ export function SettingsPage() {
               </select>
             </SettingRow>
             <SettingRow label="Results to inject" description={`${memoryTopK}`}>
-              <input
+              <input id="settingspage-input-11" name="settingspage-input-11"
                 type="range"
                 min="1"
                 max="20"
@@ -716,14 +716,14 @@ export function SettingsPage() {
                 onChange={(e) => {
                   const v = parseInt(e.target.value);
                   setMemoryTopK(v);
-                  try { localStorage.setItem('openjarvis-memory-top-k', String(v)); } catch {}
+                  try { localStorage.setItem('silas-memory-top-k', String(v)); } catch {}
                   showSaved();
                 }}
                 className="w-32 cursor-pointer accent-[var(--color-accent)]"
               />
             </SettingRow>
             <SettingRow label="Min relevance score" description={`${memoryMinScore}`}>
-              <input
+              <input id="settingspage-input-12" name="settingspage-input-12"
                 type="range"
                 min="0"
                 max="1"
@@ -732,14 +732,14 @@ export function SettingsPage() {
                 onChange={(e) => {
                   const v = parseFloat(e.target.value);
                   setMemoryMinScore(v);
-                  try { localStorage.setItem('openjarvis-memory-min-score', String(v)); } catch {}
+                  try { localStorage.setItem('silas-memory-min-score', String(v)); } catch {}
                   showSaved();
                 }}
                 className="w-32 cursor-pointer accent-[var(--color-accent)]"
               />
             </SettingRow>
             <SettingRow label="Max context tokens" description={`${memoryMaxTokens}`}>
-              <input
+              <input id="settingspage-input-13" name="settingspage-input-13"
                 type="range"
                 min="256"
                 max="8192"
@@ -748,7 +748,7 @@ export function SettingsPage() {
                 onChange={(e) => {
                   const v = parseInt(e.target.value);
                   setMemoryMaxTokens(v);
-                  try { localStorage.setItem('openjarvis-memory-max-tokens', String(v)); } catch {}
+                  try { localStorage.setItem('silas-memory-max-tokens', String(v)); } catch {}
                   showSaved();
                 }}
                 className="w-32 cursor-pointer accent-[var(--color-accent)]"
@@ -759,7 +759,7 @@ export function SettingsPage() {
           {/* Model defaults */}
           <Section title="Model Defaults">
             <SettingRow label="Temperature" description={`${settings.temperature}`}>
-              <input
+              <input id="settingspage-input-14" name="settingspage-input-14"
                 type="range"
                 min="0"
                 max="2"
@@ -770,7 +770,7 @@ export function SettingsPage() {
               />
             </SettingRow>
             <SettingRow label="Max tokens" description={`${settings.maxTokens}`}>
-              <input
+              <input id="settingspage-input-15" name="settingspage-input-15"
                 type="range"
                 min="256"
                 max="32768"
@@ -873,7 +873,7 @@ export function SettingsPage() {
             {!speechBackendAvailable && speechBackendAvailable !== null && (
               <div className="text-xs mt-2 px-1" style={{ color: 'var(--color-text-tertiary)' }}>
                 Set up a speech backend to use voice input.
-                See the <a href="https://open-jarvis.github.io/OpenJarvis/user-guide/tools/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-accent)' }}>documentation</a> for details.
+                See the <a href="https://open-jarvis.github.io/Silas/user-guide/tools/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--color-accent)' }}>documentation</a> for details.
               </div>
             )}
           </Section>
@@ -956,14 +956,14 @@ export function SettingsPage() {
           <Section title="About">
             <div className="text-sm" style={{ color: 'var(--color-text-secondary)' }}>
               <p className="mb-2">
-                <span className="font-semibold" style={{ color: 'var(--color-text)' }}>OpenJarvis</span> — Programming abstractions for on-device AI.
+                <span className="font-semibold" style={{ color: 'var(--color-text)' }}>Silas</span> — Programming abstractions for on-device AI.
               </p>
               <p className="text-xs" style={{ color: 'var(--color-text-tertiary)' }}>
                 Part of Intelligence Per Watt, a research initiative at Stanford SAIL.
               </p>
               <div className="flex gap-3 mt-3 text-xs">
                 <a
-                  href="https://openjarvis.stanford.edu/"
+                  href="https://silas.stanford.edu/"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: 'var(--color-accent)' }}
@@ -971,7 +971,7 @@ export function SettingsPage() {
                   Project site
                 </a>
                 <a
-                  href="https://open-jarvis.github.io/OpenJarvis/"
+                  href="https://open-jarvis.github.io/Silas/"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ color: 'var(--color-accent)' }}

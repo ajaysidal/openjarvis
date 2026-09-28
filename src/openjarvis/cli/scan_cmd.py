@@ -12,8 +12,8 @@ from typing import Callable, List
 
 import click
 
-from openjarvis.core.paths import get_config_dir, get_config_path
-from openjarvis.security.data_boundary_audit import (
+from silas.core.paths import get_config_dir, get_config_path
+from silas.security.data_boundary_audit import (
     DataBoundaryReport,
     build_data_boundary_report,
 )
@@ -137,7 +137,7 @@ class PrivacyScanner:
             )
 
     def check_icloud_sync(self) -> ScanResult:
-        """Check whether ~/.openjarvis is inside iCloud Drive sync scope."""
+        """Check whether ~/.silas is inside iCloud Drive sync scope."""
         try:
             config_path = get_config_dir().resolve()
             icloud_path = Path("~/Library/Mobile Documents/").expanduser().resolve()
@@ -145,7 +145,7 @@ class PrivacyScanner:
                 return ScanResult(
                     name="iCloud Sync",
                     status="warn",
-                    message="~/.openjarvis may be synced to iCloud.",
+                    message="~/.silas may be synced to iCloud.",
                     platform="darwin",
                 )
             # Also probe defaults for com.apple.bird (iCloud daemon)
@@ -166,7 +166,7 @@ class PrivacyScanner:
             return ScanResult(
                 name="iCloud Sync",
                 status="ok",
-                message="~/.openjarvis is not inside iCloud Drive.",
+                message="~/.silas is not inside iCloud Drive.",
                 platform="darwin",
             )
         except Exception:
@@ -452,7 +452,7 @@ _RICH_ICONS = {
 
 
 def _resolve_data_boundary_config_path() -> Path:
-    env_config = os.environ.get("OPENJARVIS_CONFIG")
+    env_config = os.environ.get("SILAS_CONFIG")
     if env_config:
         return Path(env_config).expanduser().resolve()
     return get_config_path()
@@ -473,7 +473,7 @@ def _load_data_boundary_config():
         return None, root, False, "", root_error
 
     try:
-        from openjarvis.core.config import JarvisConfig, load_config
+        from silas.core.config import JarvisConfig, load_config
     except Exception as exc:
         return None, root, False, f"{type(exc).__name__}: {exc}", ""
 
@@ -492,7 +492,7 @@ def _render_results(results: List[ScanResult]) -> None:
 
     console = Console()
     console.print()
-    console.print("[bold]OpenJarvis Security Scan[/bold]")
+    console.print("[bold]Silas Security Scan[/bold]")
     console.print()
 
     table = Table(show_header=True, header_style="bold", show_lines=True)
@@ -523,7 +523,7 @@ def _render_results(results: List[ScanResult]) -> None:
     if fail_count:
         console.print(
             "[red bold]Action required:[/red bold] address critical findings "
-            "before storing sensitive data with OpenJarvis."
+            "before storing sensitive data with Silas."
         )
         console.print()
     elif warn_count:
@@ -545,7 +545,7 @@ def _render_data_boundary_report(
 
     console = Console()
     console.print()
-    console.print("[bold]OpenJarvis Data-Boundary Scan[/bold]")
+    console.print("[bold]Silas Data-Boundary Scan[/bold]")
     console.print(f"Verdict: [bold]{report.verdict}[/bold]")
     console.print()
 

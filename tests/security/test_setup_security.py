@@ -6,9 +6,9 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from openjarvis.core.config import CapabilitiesConfig, JarvisConfig, SecurityConfig
-from openjarvis.core.events import EventBus
-from openjarvis.security import SecurityContext, setup_security
+from silas.core.config import CapabilitiesConfig, JarvisConfig, SecurityConfig
+from silas.core.events import EventBus
+from silas.security import SecurityContext, setup_security
 
 
 def _make_mock_engine() -> MagicMock:
@@ -34,7 +34,7 @@ def _make_config(*, enabled: bool = True, caps_enabled: bool = False) -> JarvisC
 
 def _has_rust() -> bool:
     try:
-        import openjarvis_rust  # noqa: F401
+        import silas_rust  # noqa: F401
 
         return True
     except ImportError:
@@ -44,7 +44,7 @@ def _has_rust() -> bool:
 class TestSetupSecurityEnabled:
     @pytest.mark.skipif(not _has_rust(), reason="Rust extension not compiled")
     def test_returns_wrapped_engine(self) -> None:
-        from openjarvis.security.guardrails import GuardrailsEngine
+        from silas.security.guardrails import GuardrailsEngine
 
         engine = _make_mock_engine()
         bus = EventBus()
@@ -82,7 +82,7 @@ class TestSetupSecurityEnabled:
             raise RuntimeError("policy unavailable")
 
         monkeypatch.setattr(
-            "openjarvis.security.capabilities.CapabilityPolicy",
+            "silas.security.capabilities.CapabilityPolicy",
             _broken_policy,
         )
 
@@ -100,7 +100,7 @@ class TestSetupSecurityEnabled:
             raise RuntimeError("limiter unavailable")
 
         monkeypatch.setattr(
-            "openjarvis.security.rate_limiter.RateLimiter",
+            "silas.security.rate_limiter.RateLimiter",
             _broken_limiter,
         )
 
@@ -134,7 +134,7 @@ def test_partial_capability_config_preserves_profile_defaults(
     enabled,
     default_deny,
 ):
-    from openjarvis.core.config import load_config
+    from silas.core.config import load_config
 
     path = tmp_path / "config.toml"
     path.write_text(

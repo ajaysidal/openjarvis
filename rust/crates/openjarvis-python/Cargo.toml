@@ -1,29 +1,29 @@
 [package]
-name = "openjarvis-python"
+name = "silas-python"
 version = "0.1.0"
 edition = "2021"
 
 [lib]
-name = "openjarvis_rust"
+name = "silas_rust"
 crate-type = ["cdylib"]
 
 [dependencies]
-openjarvis-core = { path = "../openjarvis-core" }
-openjarvis-engine = { path = "../openjarvis-engine" }
-openjarvis-security = { path = "../openjarvis-security" }
-openjarvis-tools = { path = "../openjarvis-tools" }
-openjarvis-agents = { path = "../openjarvis-agents" }
-openjarvis-traces = { path = "../openjarvis-traces" }
-openjarvis-telemetry = { path = "../openjarvis-telemetry" }
-openjarvis-learning = { path = "../openjarvis-learning" }
-openjarvis-mcp = { path = "../openjarvis-mcp" }
-openjarvis-sessions = { path = "../openjarvis-sessions" }
-openjarvis-workflow = { path = "../openjarvis-workflow" }
-openjarvis-skills = { path = "../openjarvis-skills" }
-openjarvis-recipes = { path = "../openjarvis-recipes" }
-openjarvis-templates = { path = "../openjarvis-templates" }
-openjarvis-a2a = { path = "../openjarvis-a2a" }
-openjarvis-scheduler = { path = "../openjarvis-scheduler" }
+silas-core = { path = "../silas-core" }
+silas-engine = { path = "../silas-engine" }
+silas-security = { path = "../silas-security" }
+silas-tools = { path = "../silas-tools" }
+silas-agents = { path = "../silas-agents" }
+silas-traces = { path = "../silas-traces" }
+silas-telemetry = { path = "../silas-telemetry" }
+silas-learning = { path = "../silas-learning" }
+silas-mcp = { path = "../silas-mcp" }
+silas-sessions = { path = "../silas-sessions" }
+silas-workflow = { path = "../silas-workflow" }
+silas-skills = { path = "../silas-skills" }
+silas-recipes = { path = "../silas-recipes" }
+silas-templates = { path = "../silas-templates" }
+silas-a2a = { path = "../silas-a2a" }
+silas-scheduler = { path = "../silas-scheduler" }
 pyo3 = { workspace = true }
 serde = { workspace = true }
 serde_json = { workspace = true }

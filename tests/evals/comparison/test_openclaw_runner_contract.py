@@ -33,7 +33,7 @@ def test_openclaw_runner_parses_real_agent_json_shape(tmp_path: Path) -> None:
 
     runner = (
         Path(__file__).resolve().parents[3]
-        / "src/openjarvis/evals/backends/external/_runners/openclaw_runner.mjs"
+        / "src/silas/evals/backends/external/_runners/openclaw_runner.mjs"
     )
     out_json = tmp_path / "out.json"
     # subprocess.run's `env` REPLACES the environment rather than merging
@@ -55,7 +55,7 @@ def test_openclaw_runner_parses_real_agent_json_shape(tmp_path: Path) -> None:
             "--task",
             "Say hello.",
             "--model",
-            "qwen3:0.6b",
+            "qwen3:8b",
             "--base-url",
             "http://127.0.0.1:11434/v1",
             "--api-key",

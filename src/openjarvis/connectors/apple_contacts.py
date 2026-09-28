@@ -20,9 +20,9 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Any, Dict, Iterator, List, Optional
 
-from openjarvis.connectors._stubs import BaseConnector, Document, SyncStatus
-from openjarvis.core.registry import ConnectorRegistry
-from openjarvis.tools._stubs import ToolSpec
+from silas.connectors._stubs import BaseConnector, Document, SyncStatus
+from silas.core.registry import ConnectorRegistry
+from silas.tools._stubs import ToolSpec
 
 # ---------------------------------------------------------------------------
 # Constants

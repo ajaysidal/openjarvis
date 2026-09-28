@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, patch
 
 class TestGEPAOptimizerConfig:
     def test_default_config(self) -> None:
-        from openjarvis.core.config import GEPAOptimizerConfig
+        from silas.core.config import GEPAOptimizerConfig
 
         cfg = GEPAOptimizerConfig()
         assert cfg.max_metric_calls == 150
@@ -16,8 +16,8 @@ class TestGEPAOptimizerConfig:
         assert cfg.min_traces == 20
 
     def test_optimizer_init(self) -> None:
-        from openjarvis.core.config import GEPAOptimizerConfig
-        from openjarvis.learning.agents.gepa_optimizer import GEPAAgentOptimizer
+        from silas.core.config import GEPAOptimizerConfig
+        from silas.learning.agents.gepa_optimizer import GEPAAgentOptimizer
 
         cfg = GEPAOptimizerConfig()
         optimizer = GEPAAgentOptimizer(cfg)
@@ -26,8 +26,8 @@ class TestGEPAOptimizerConfig:
 
 class TestGEPAOptimizerOptimize:
     def test_too_few_traces_skipped(self) -> None:
-        from openjarvis.core.config import GEPAOptimizerConfig
-        from openjarvis.learning.agents.gepa_optimizer import GEPAAgentOptimizer
+        from silas.core.config import GEPAOptimizerConfig
+        from silas.learning.agents.gepa_optimizer import GEPAAgentOptimizer
 
         optimizer = GEPAAgentOptimizer(GEPAOptimizerConfig(min_traces=10))
         mock_store = MagicMock()
@@ -37,9 +37,9 @@ class TestGEPAOptimizerOptimize:
         assert result["status"] == "skipped"
 
     def test_no_gepa_reports_error(self) -> None:
-        from openjarvis.core.config import GEPAOptimizerConfig
-        from openjarvis.core.types import StepType, Trace, TraceStep
-        from openjarvis.learning.agents.gepa_optimizer import GEPAAgentOptimizer
+        from silas.core.config import GEPAOptimizerConfig
+        from silas.core.types import StepType, Trace, TraceStep
+        from silas.learning.agents.gepa_optimizer import GEPAAgentOptimizer
 
         cfg = GEPAOptimizerConfig(min_traces=1)
         optimizer = GEPAAgentOptimizer(cfg)
@@ -73,7 +73,7 @@ class TestGEPAOptimizerOptimize:
         # Ensure gepa is not available
         with patch.dict("sys.modules", {"gepa": None}):
             with patch(
-                "openjarvis.learning.agents.gepa_optimizer.HAS_GEPA",
+                "silas.learning.agents.gepa_optimizer.HAS_GEPA",
                 False,
             ):
                 result = optimizer.optimize(mock_store)
@@ -81,15 +81,15 @@ class TestGEPAOptimizerOptimize:
                 assert "gepa" in result["reason"].lower()
 
 
-class TestOpenJarvisGEPAAdapter:
+class TestSilasGEPAAdapter:
     def test_adapter_init(self) -> None:
-        from openjarvis.core.config import GEPAOptimizerConfig
-        from openjarvis.learning.agents.gepa_optimizer import (
-            OpenJarvisGEPAAdapter,
+        from silas.core.config import GEPAOptimizerConfig
+        from silas.learning.agents.gepa_optimizer import (
+            SilasGEPAAdapter,
         )
 
         mock_store = MagicMock()
-        adapter = OpenJarvisGEPAAdapter(
+        adapter = SilasGEPAAdapter(
             mock_store,
             "native_react",
             GEPAOptimizerConfig(),

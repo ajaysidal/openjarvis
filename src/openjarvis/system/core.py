@@ -6,45 +6,45 @@ import logging
 from dataclasses import dataclass, field
 from typing import TYPE_CHECKING, Any, Dict, List, Optional
 
-from openjarvis.core.config import JarvisConfig
-from openjarvis.core.events import EventBus
-from openjarvis.core.types import Message, Role
-from openjarvis.engine._stubs import InferenceEngine
-from openjarvis.system.bundles import (
+from silas.core.config import JarvisConfig
+from silas.core.events import EventBus
+from silas.core.types import Message, Role
+from silas.engine._stubs import InferenceEngine
+from silas.system.bundles import (
     AgentRuntime,
     Observability,
     Scheduling,
     SecurityContext,
 )
-from openjarvis.tools._stubs import BaseTool, ToolExecutor
+from silas.tools._stubs import BaseTool, ToolExecutor
 
 if TYPE_CHECKING:
-    from openjarvis.agents._stubs import BaseAgent
-    from openjarvis.agents.executor import AgentExecutor
-    from openjarvis.agents.manager import AgentManager
-    from openjarvis.agents.scheduler import AgentScheduler
-    from openjarvis.channels._stubs import BaseChannel
-    from openjarvis.learning._stubs import RouterPolicy
-    from openjarvis.learning.learning_orchestrator import LearningOrchestrator
-    from openjarvis.mcp.client import MCPClient
-    from openjarvis.mcp.server import MCPServer
-    from openjarvis.operators.manager import OperatorManager
-    from openjarvis.sandbox.runner import ContainerRunner
-    from openjarvis.scheduler.scheduler import TaskScheduler
-    from openjarvis.scheduler.store import SchedulerStore
-    from openjarvis.security.audit import AuditLogger
-    from openjarvis.security.boundary import BoundaryGuard
-    from openjarvis.security.capabilities import CapabilityPolicy
-    from openjarvis.sessions.session import SessionStore
-    from openjarvis.skills.manager import SkillManager
-    from openjarvis.speech._stubs import SpeechBackend
-    from openjarvis.system.orchestrator import QueryOrchestrator
-    from openjarvis.telemetry.gpu_monitor import GpuMonitor
-    from openjarvis.telemetry.store import TelemetryStore
-    from openjarvis.tools.storage._stubs import MemoryBackend
-    from openjarvis.traces.collector import TraceCollector
-    from openjarvis.traces.store import TraceStore
-    from openjarvis.workflow.engine import WorkflowEngine
+    from silas.agents._stubs import BaseAgent
+    from silas.agents.executor import AgentExecutor
+    from silas.agents.manager import AgentManager
+    from silas.agents.scheduler import AgentScheduler
+    from silas.channels._stubs import BaseChannel
+    from silas.learning._stubs import RouterPolicy
+    from silas.learning.learning_orchestrator import LearningOrchestrator
+    from silas.mcp.client import MCPClient
+    from silas.mcp.server import MCPServer
+    from silas.operators.manager import OperatorManager
+    from silas.sandbox.runner import ContainerRunner
+    from silas.scheduler.scheduler import TaskScheduler
+    from silas.scheduler.store import SchedulerStore
+    from silas.security.audit import AuditLogger
+    from silas.security.boundary import BoundaryGuard
+    from silas.security.capabilities import CapabilityPolicy
+    from silas.sessions.session import SessionStore
+    from silas.skills.manager import SkillManager
+    from silas.speech._stubs import SpeechBackend
+    from silas.system.orchestrator import QueryOrchestrator
+    from silas.telemetry.gpu_monitor import GpuMonitor
+    from silas.telemetry.store import TelemetryStore
+    from silas.tools.storage._stubs import MemoryBackend
+    from silas.traces.collector import TraceCollector
+    from silas.traces.store import TraceStore
+    from silas.workflow.engine import WorkflowEngine
 
 logger = logging.getLogger(__name__)
 
@@ -129,7 +129,7 @@ class JarvisSystem:
     def _get_orchestrator(self) -> QueryOrchestrator:
         orch = self.__dict__.get("_orchestrator")
         if orch is None:
-            from openjarvis.system.orchestrator import QueryOrchestrator
+            from silas.system.orchestrator import QueryOrchestrator
 
             orch = QueryOrchestrator(self)
             self.__dict__["_orchestrator"] = orch
@@ -201,11 +201,11 @@ class JarvisSystem:
         Parameters
         ----------
         channel_bridge:
-            A connected :class:`~openjarvis.channels._stubs.BaseChannel`
+            A connected :class:`~silas.channels._stubs.BaseChannel`
             instance whose ``on_message`` method accepts a callable.
         """
-        from openjarvis.core.types import Message
-        from openjarvis.sessions.session import SessionStore
+        from silas.core.types import Message
+        from silas.sessions.session import SessionStore
 
         if self.session_store is None:
             from pathlib import Path

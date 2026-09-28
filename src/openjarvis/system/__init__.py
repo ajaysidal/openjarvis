@@ -1,15 +1,15 @@
 """Top-level system composition: JarvisSystem, SystemBuilder, and helpers."""
 
-from openjarvis.system.builder import SystemBuilder
-from openjarvis.system.bundles import (
+from silas.system.builder import SystemBuilder
+from silas.system.bundles import (
     AgentRuntime,
     Observability,
     Scheduling,
     SecurityContext,
 )
-from openjarvis.system.core import JarvisSystem
-from openjarvis.system.orchestrator import QueryOrchestrator
-from openjarvis.system.protocols import OrchestratorDeps
+from silas.system.core import JarvisSystem
+from silas.system.orchestrator import QueryOrchestrator
+from silas.system.protocols import OrchestratorDeps
 
 __all__ = [
     "AgentRuntime",

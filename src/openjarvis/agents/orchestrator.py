@@ -18,12 +18,12 @@ import logging
 import re
 from typing import Any, Callable, List, Optional
 
-from openjarvis.agents._stubs import AgentContext, AgentResult, ToolUsingAgent
-from openjarvis.core.events import EventBus
-from openjarvis.core.registry import AgentRegistry
-from openjarvis.core.types import Message, Role, ToolCall, ToolResult
-from openjarvis.engine._stubs import InferenceEngine
-from openjarvis.tools._stubs import BaseTool
+from silas.agents._stubs import AgentContext, AgentResult, ToolUsingAgent
+from silas.core.events import EventBus
+from silas.core.registry import AgentRegistry
+from silas.core.types import Message, Role, ToolCall, ToolResult
+from silas.engine._stubs import InferenceEngine
+from silas.tools._stubs import BaseTool
 
 logger = logging.getLogger(__name__)
 
@@ -157,7 +157,7 @@ class OrchestratorAgent(ToolUsingAgent):
         if self._system_prompt:
             sys_prompt = self._system_prompt
         else:
-            from openjarvis.learning.intelligence.orchestrator.prompt_registry import (
+            from silas.learning.intelligence.orchestrator.prompt_registry import (
                 build_system_prompt,
             )
 

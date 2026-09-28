@@ -6,9 +6,9 @@ import concurrent.futures
 import time
 from typing import Any, Dict, List, Optional
 
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.workflow.graph import WorkflowGraph
-from openjarvis.workflow.types import (
+from silas.core.events import EventBus, EventType
+from silas.workflow.graph import WorkflowGraph
+from silas.workflow.types import (
     NodeType,
     WorkflowNode,
     WorkflowResult,
@@ -246,7 +246,7 @@ class WorkflowEngine:
         tool_name = node.config.get("tool_name", "")
         tool_args = node.config.get("tool_args", "{}")
         if system and system.tool_executor:
-            from openjarvis.core.types import ToolCall
+            from silas.core.types import ToolCall
 
             tc = ToolCall(id=f"wf_{node.id}", name=tool_name, arguments=tool_args)
             tr = system.tool_executor.execute(tc)
@@ -282,7 +282,7 @@ class WorkflowEngine:
         # beyond a fixed set of safe builtins, so escape vectors are
         # unreachable by construction. Anything it cannot evaluate raises and
         # is treated as a false condition (unchanged fail-safe behavior).
-        from openjarvis.tools.templates.loader import safe_eval_expr
+        from silas.tools.templates.loader import safe_eval_expr
 
         try:
             result = str(safe_eval_expr(expr, {"outputs": outputs}))

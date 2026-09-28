@@ -4,8 +4,8 @@ from __future__ import annotations
 
 from typing import Any, Optional
 
-from openjarvis.agents._stubs import AgentContext, AgentResult, BaseAgent
-from openjarvis.core.registry import AgentRegistry
+from silas.agents._stubs import AgentContext, AgentResult, BaseAgent
+from silas.core.registry import AgentRegistry
 
 
 @AgentRegistry.register("simple")

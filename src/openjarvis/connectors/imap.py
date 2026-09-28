@@ -9,15 +9,15 @@ import ssl
 from datetime import datetime
 from typing import Iterator, Optional
 
-from openjarvis.connectors._stubs import Document
-from openjarvis.connectors.gmail_imap import (
+from silas.connectors._stubs import Document
+from silas.connectors.gmail_imap import (
     _IMAP_TIMEOUT_SECONDS,
     _SECURITY_STARTTLS,
     _SECURITY_TLS,
     GmailIMAPConnector,
 )
-from openjarvis.core.config import DEFAULT_CONFIG_DIR
-from openjarvis.core.registry import ConnectorRegistry
+from silas.core.config import DEFAULT_CONFIG_DIR
+from silas.core.registry import ConnectorRegistry
 
 _DEFAULT_CREDENTIALS_PATH = str(DEFAULT_CONFIG_DIR / "connectors" / "imap.json")
 

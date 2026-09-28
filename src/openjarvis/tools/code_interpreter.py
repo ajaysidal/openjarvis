@@ -24,9 +24,9 @@ import subprocess
 import sys
 from typing import Any
 
-from openjarvis.core.registry import ToolRegistry
-from openjarvis.core.types import ToolResult
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.core.registry import ToolRegistry
+from silas.core.types import ToolResult
+from silas.tools._stubs import BaseTool, ToolSpec
 
 # Keep the supported import surface deliberately small. A denylist is not
 # sufficient here: otherwise an apparently harmless module can re-export a
@@ -192,7 +192,7 @@ class CodeInterpreterTool(BaseTool):
                 text=True,
                 timeout=self._timeout,
                 env=safe_env,
-                cwd=os.environ.get("OPENJARVIS_CODE_CWD") or None,
+                cwd=os.environ.get("SILAS_CODE_CWD") or None,
                 preexec_fn=preexec,  # noqa: PLW1509 - intentional child hardening
             )
             output = result.stdout

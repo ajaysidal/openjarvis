@@ -12,10 +12,10 @@ from __future__ import annotations
 from datetime import datetime
 from typing import Iterator, Optional
 
-from openjarvis.connectors._stubs import Document
-from openjarvis.connectors.gmail_imap import GmailIMAPConnector
-from openjarvis.core.config import DEFAULT_CONFIG_DIR
-from openjarvis.core.registry import ConnectorRegistry
+from silas.connectors._stubs import Document
+from silas.connectors.gmail_imap import GmailIMAPConnector
+from silas.core.config import DEFAULT_CONFIG_DIR
+from silas.core.registry import ConnectorRegistry
 
 _DEFAULT_CREDENTIALS_PATH = str(DEFAULT_CONFIG_DIR / "connectors" / "outlook.json")
 

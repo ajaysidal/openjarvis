@@ -2,9 +2,9 @@
 
 from __future__ import annotations
 
-from openjarvis.core.registry import RouterPolicyRegistry
-from openjarvis.learning.routing.heuristic_policy import ensure_registered
-from openjarvis.learning.routing.router import HeuristicRouter
+from silas.core.registry import RouterPolicyRegistry
+from silas.learning.routing.heuristic_policy import ensure_registered
+from silas.learning.routing.router import HeuristicRouter
 
 
 class TestHeuristicPolicy:

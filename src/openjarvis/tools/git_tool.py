@@ -7,10 +7,10 @@ import shutil
 import subprocess
 from typing import Any
 
-from openjarvis._rust_bridge import get_rust_module
-from openjarvis.core.registry import ToolRegistry
-from openjarvis.core.types import ToolResult
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas._rust_bridge import get_rust_module
+from silas.core.registry import ToolRegistry
+from silas.core.types import ToolResult
+from silas.tools._stubs import BaseTool, ToolSpec
 
 logger = logging.getLogger(__name__)
 

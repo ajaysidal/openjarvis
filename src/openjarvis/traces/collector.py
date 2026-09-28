@@ -5,10 +5,10 @@ from __future__ import annotations
 import time
 from typing import Any, Dict, List, Optional
 
-from openjarvis.agents._stubs import AgentContext, AgentResult, BaseAgent
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.core.types import StepType, Trace, TraceStep
-from openjarvis.traces.store import TraceStore
+from silas.agents._stubs import AgentContext, AgentResult, BaseAgent
+from silas.core.events import EventBus, EventType
+from silas.core.types import StepType, Trace, TraceStep
+from silas.traces.store import TraceStore
 
 
 class TraceCollector:
@@ -274,7 +274,7 @@ def record_response_trace(
     except Exception:
         import logging
 
-        logging.getLogger("openjarvis.traces").debug(
+        logging.getLogger("silas.traces").debug(
             "record_response_trace failed", exc_info=True
         )
         return None

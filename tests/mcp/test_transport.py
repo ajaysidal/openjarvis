@@ -10,16 +10,16 @@ from unittest.mock import MagicMock, patch
 
 import pytest
 
-from openjarvis.mcp.protocol import MCPRequest
-from openjarvis.mcp.server import MCPServer
-from openjarvis.mcp.transport import (
+from silas.mcp.protocol import MCPRequest
+from silas.mcp.server import MCPServer
+from silas.mcp.transport import (
     InProcessTransport,
     SSETransport,
     StdioTransport,
     StreamableHTTPTransport,
 )
-from openjarvis.tools.calculator import CalculatorTool
-from openjarvis.tools.think import ThinkTool
+from silas.tools.calculator import CalculatorTool
+from silas.tools.think import ThinkTool
 
 
 @pytest.fixture

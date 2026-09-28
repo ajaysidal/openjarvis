@@ -17,13 +17,13 @@ from typing import Any
 
 from click.testing import CliRunner
 
-from openjarvis.cli import cli
-from openjarvis.core.config import JarvisConfig
-from openjarvis.core.types import Role
+from silas.cli import cli
+from silas.core.config import JarvisConfig
+from silas.core.types import Role
 
 # Import the module (not the Click command attribute) so we can monkeypatch
 # the names it looks up at call time.
-_ask_mod = importlib.import_module("openjarvis.cli.ask")
+_ask_mod = importlib.import_module("silas.cli.ask")
 
 # A minimal but valid 1x1 PNG so ``click.Path(exists=True)`` is satisfied and
 # the bytes are deterministic.

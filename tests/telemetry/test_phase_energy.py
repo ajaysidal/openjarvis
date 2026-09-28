@@ -8,11 +8,11 @@ from unittest.mock import MagicMock
 
 import pytest
 
-from openjarvis.core.events import EventBus, EventType
-from openjarvis.core.types import Message, Role, TelemetryRecord
-from openjarvis.telemetry.aggregator import TelemetryAggregator
-from openjarvis.telemetry.instrumented_engine import InstrumentedEngine
-from openjarvis.telemetry.store import TelemetryStore
+from silas.core.events import EventBus, EventType
+from silas.core.types import Message, Role, TelemetryRecord
+from silas.telemetry.aggregator import TelemetryAggregator
+from silas.telemetry.instrumented_engine import InstrumentedEngine
+from silas.telemetry.store import TelemetryStore
 
 # ---------------------------------------------------------------------------
 # Helpers

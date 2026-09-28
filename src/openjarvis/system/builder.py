@@ -5,12 +5,12 @@ from __future__ import annotations
 import logging
 from typing import Any, List, Optional
 
-from openjarvis.core.config import JarvisConfig, load_config
-from openjarvis.core.events import EventBus, get_event_bus
-from openjarvis.core.paths import get_config_dir
-from openjarvis.engine._stubs import InferenceEngine
-from openjarvis.system.core import JarvisSystem
-from openjarvis.tools._stubs import BaseTool, ToolExecutor
+from silas.core.config import JarvisConfig, load_config
+from silas.core.events import EventBus, get_event_bus
+from silas.core.paths import get_config_dir
+from silas.engine._stubs import InferenceEngine
+from silas.system.core import JarvisSystem
+from silas.tools._stubs import BaseTool, ToolExecutor
 
 logger = logging.getLogger(__name__)
 
@@ -158,7 +158,7 @@ class SystemBuilder:
         energy_monitor = None
         if telemetry_enabled and config.telemetry.gpu_metrics:
             try:
-                from openjarvis.telemetry.energy_monitor import (
+                from silas.telemetry.energy_monitor import (
                     create_energy_monitor,
                 )
 
@@ -172,7 +172,7 @@ class SystemBuilder:
 
             if energy_monitor is None:
                 try:
-                    from openjarvis.telemetry.gpu_monitor import GpuMonitor
+                    from silas.telemetry.gpu_monitor import GpuMonitor
 
                     if GpuMonitor.available():
                         gpu_monitor = GpuMonitor(
@@ -181,14 +181,14 @@ class SystemBuilder:
                 except ImportError:
                     pass
 
-        from openjarvis.security import setup_security
+        from silas.security import setup_security
 
         sec = setup_security(config, engine, bus)
         engine = sec.engine
         agent_name = self._agent_name or config.agent.default_agent
 
         if telemetry_enabled:
-            from openjarvis.telemetry.instrumented_engine import (
+            from silas.telemetry.instrumented_engine import (
                 InstrumentedEngine,
             )
 
@@ -233,7 +233,7 @@ class SystemBuilder:
             try:
                 from pathlib import Path
 
-                from openjarvis.skills.manager import SkillManager
+                from silas.skills.manager import SkillManager
 
                 skill_manager = SkillManager(
                     bus, capability_policy=sec.capability_policy
@@ -269,7 +269,7 @@ class SystemBuilder:
         trace_store = None
         if traces_enabled:
             try:
-                from openjarvis.traces.store import TraceStore
+                from silas.traces.store import TraceStore
 
                 trace_store = TraceStore(config.traces.db_path)
             except Exception:
@@ -281,7 +281,7 @@ class SystemBuilder:
         agent_manager = None
         if config.agent_manager.enabled:
             try:
-                from openjarvis.agents.manager import AgentManager
+                from silas.agents.manager import AgentManager
 
                 am_db = config.agent_manager.db_path or str(
                     get_config_dir() / "agents.db"
@@ -294,13 +294,13 @@ class SystemBuilder:
         agent_scheduler = None
         if agent_manager is not None:
             try:
-                from openjarvis.agents.executor import AgentExecutor
-                from openjarvis.agents.scheduler import AgentScheduler
+                from silas.agents.executor import AgentExecutor
+                from silas.agents.scheduler import AgentScheduler
 
                 _trace_store = None
                 if config.traces.enabled:
                     try:
-                        from openjarvis.traces.store import TraceStore
+                        from silas.traces.store import TraceStore
 
                         _trace_store = TraceStore(config.traces.db_path)
                     except Exception:
@@ -325,7 +325,7 @@ class SystemBuilder:
         speech_enabled = self._speech if self._speech is not None else True
         if speech_enabled:
             try:
-                from openjarvis.speech._discovery import get_speech_backend
+                from silas.speech._discovery import get_speech_backend
 
                 speech_backend = get_speech_backend(config)
             except Exception as exc:
@@ -385,7 +385,7 @@ class SystemBuilder:
                 )
             return engine, key
 
-        from openjarvis.engine._discovery import get_engine
+        from silas.engine._discovery import get_engine
 
         pref = config.intelligence.preferred_engine
         key = self._engine_key or pref or config.engine.default
@@ -423,7 +423,7 @@ class SystemBuilder:
 
     def _setup_telemetry(self, config, bus):
         try:
-            from openjarvis.telemetry.store import TelemetryStore
+            from silas.telemetry.store import TelemetryStore
 
             store = TelemetryStore(db_path=config.telemetry.db_path)
             store.subscribe_to_bus(bus)
@@ -434,8 +434,8 @@ class SystemBuilder:
 
     def _resolve_memory(self, config):
         try:
-            import openjarvis.tools.storage  # noqa: F401 -- trigger registration
-            from openjarvis.core.registry import MemoryRegistry
+            import silas.tools.storage  # noqa: F401 -- trigger registration
+            from silas.core.registry import MemoryRegistry
 
             key = config.memory.default_backend
             if MemoryRegistry.contains(key):
@@ -449,9 +449,9 @@ class SystemBuilder:
             return None
         key = config.channel.default_channel
         try:
-            import openjarvis.channels  # noqa: F401 -- trigger registration
-            from openjarvis.core.registry import ChannelRegistry
-            from openjarvis.system._channel_kwargs import build_channel_kwargs
+            import silas.channels  # noqa: F401 -- trigger registration
+            from silas.core.registry import ChannelRegistry
+            from silas.system._channel_kwargs import build_channel_kwargs
 
             if not key or not ChannelRegistry.contains(key):
                 return None
@@ -474,7 +474,7 @@ class SystemBuilder:
         rate_limiter=None,
     ):
         """Resolve tool instances via MCPServer (primary) + external MCP servers."""
-        from openjarvis.mcp.server import MCPServer
+        from silas.mcp.server import MCPServer
 
         internal_server = MCPServer(
             bus=bus,
@@ -506,7 +506,7 @@ class SystemBuilder:
 
         if config.tools.mcp.enabled and config.tools.mcp.servers:
             try:
-                from openjarvis.core.config import resolve_mcp_servers
+                from silas.core.config import resolve_mcp_servers
 
                 server_list = resolve_mcp_servers(
                     config.tools.mcp.servers,
@@ -564,7 +564,7 @@ class SystemBuilder:
         if not sandbox_enabled:
             return None
         try:
-            from openjarvis.sandbox.runner import ContainerRunner
+            from silas.sandbox.runner import ContainerRunner
 
             return ContainerRunner(
                 image=config.sandbox.image,
@@ -584,19 +584,19 @@ class SystemBuilder:
         if not scheduler_enabled:
             return None, None
         try:
-            from openjarvis.scheduler.store import SchedulerStore
+            from silas.scheduler.store import SchedulerStore
 
             db_path = config.scheduler.db_path or str(
                 config.hardware.platform  # unused, just for fallback
             )
             if not config.scheduler.db_path:
-                from openjarvis.core.config import DEFAULT_CONFIG_DIR
+                from silas.core.config import DEFAULT_CONFIG_DIR
 
                 db_path = str(DEFAULT_CONFIG_DIR / "scheduler.db")
 
             store = SchedulerStore(db_path=db_path)
 
-            from openjarvis.scheduler.scheduler import TaskScheduler
+            from silas.scheduler.scheduler import TaskScheduler
 
             sched = TaskScheduler(
                 store,
@@ -615,7 +615,7 @@ class SystemBuilder:
         if not workflow_enabled:
             return None
         try:
-            from openjarvis.workflow.engine import WorkflowEngine
+            from silas.workflow.engine import WorkflowEngine
 
             return WorkflowEngine(
                 bus=bus,
@@ -633,7 +633,7 @@ class SystemBuilder:
         if not sessions_enabled:
             return None
         try:
-            from openjarvis.sessions.session import SessionStore
+            from silas.sessions.session import SessionStore
 
             return SessionStore(
                 db_path=config.sessions.db_path,
@@ -649,12 +649,12 @@ class SystemBuilder:
         if not config.learning.training_enabled:
             return None
         try:
-            from openjarvis.core.config import DEFAULT_CONFIG_DIR
-            from openjarvis.learning.learning_orchestrator import (
+            from silas.core.config import DEFAULT_CONFIG_DIR
+            from silas.learning.learning_orchestrator import (
                 LearningOrchestrator,
             )
-            from openjarvis.learning.training.lora import LoRATrainingConfig
-            from openjarvis.traces.store import TraceStore
+            from silas.learning.training.lora import LoRATrainingConfig
+            from silas.traces.store import TraceStore
 
             trace_store = TraceStore(db_path=config.traces.db_path)
             config_dir = DEFAULT_CONFIG_DIR / "agent_configs"
@@ -685,9 +685,9 @@ class SystemBuilder:
         """
         import json
 
-        from openjarvis.mcp.client import MCPClient
-        from openjarvis.mcp.transport import StdioTransport, StreamableHTTPTransport
-        from openjarvis.tools.mcp_adapter import MCPToolProvider
+        from silas.mcp.client import MCPClient
+        from silas.mcp.transport import StdioTransport, StreamableHTTPTransport
+        from silas.tools.mcp_adapter import MCPToolProvider
 
         cfg = json.loads(server_cfg) if isinstance(server_cfg, str) else server_cfg
         name = cfg.get("name", "<unnamed>")

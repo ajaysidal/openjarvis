@@ -298,7 +298,7 @@ def _build_serve_command(backend: str, model: str, port: int) -> list[str]:
             sys.executable,
             "-m",
             "uvicorn",
-            "openjarvis.engine.apple_fm_shim:app",
+            "silas.engine.apple_fm_shim:app",
             "--host",
             "127.0.0.1",
             "--port",
@@ -397,7 +397,7 @@ def host(
     if backend != "ollama":
         console.print(f"[dim]The model server will be available at {host_url}[/dim]")
         console.print(
-            "[dim]OpenJarvis will auto-discover it. Press Ctrl+C to stop.[/dim]\n"
+            "[dim]Silas will auto-discover it. Press Ctrl+C to stop.[/dim]\n"
         )
 
     try:

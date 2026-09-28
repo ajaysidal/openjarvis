@@ -11,8 +11,8 @@ import subprocess
 from pathlib import Path
 from typing import Any, Callable, Dict, List, Optional
 
-from openjarvis.core.types import ToolResult
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.core.types import ToolResult
+from silas.tools._stubs import BaseTool, ToolSpec
 
 logger = logging.getLogger(__name__)
 

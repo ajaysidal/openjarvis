@@ -14,9 +14,9 @@ from typing import Iterator
 import click
 from rich.console import Console
 
-from openjarvis.core.config import DEFAULT_CONFIG_DIR, load_config
-from openjarvis.core.utils import process_alive, terminate_process
-from openjarvis.security.file_utils import secure_write_json, secure_write_text
+from silas.core.config import DEFAULT_CONFIG_DIR, load_config
+from silas.core.utils import process_alive, terminate_process
+from silas.security.file_utils import secure_write_json, secure_write_text
 
 _PID_FILE = DEFAULT_CONFIG_DIR / "server.pid"
 _LOG_FILE = DEFAULT_CONFIG_DIR / "server.log"
@@ -24,7 +24,7 @@ _LOG_FILE = DEFAULT_CONFIG_DIR / "server.log"
 # and `restart` fall back to the config defaults and misreport (or silently
 # move) the port whenever `start` was given an explicit --host/--port.
 _STATE_FILE = DEFAULT_CONFIG_DIR / "server.json"
-_LAUNCH_TOKEN_ENV = "OPENJARVIS_DAEMON_LAUNCH_TOKEN"
+_LAUNCH_TOKEN_ENV = "SILAS_DAEMON_LAUNCH_TOKEN"
 
 
 def _pid_alive(pid: int) -> bool:
@@ -207,7 +207,7 @@ def clear_server_state(pid: int) -> None:
 
 @click.group()
 def daemon() -> None:
-    """Manage the OpenJarvis server daemon."""
+    """Manage the Silas server daemon."""
 
 
 @daemon.command()
@@ -223,7 +223,7 @@ def start(
     model_name: str | None,
     agent_name: str | None,
 ) -> None:
-    """Start the OpenJarvis server as a background daemon."""
+    """Start the Silas server as a background daemon."""
     console = Console(stderr=True)
 
     existing = _read_pid()
@@ -237,7 +237,7 @@ def start(
     bind_port = port if port is not None else config.server.port
 
     # Build command to run jarvis serve
-    cmd = [sys.executable, "-m", "openjarvis.cli", "serve"]
+    cmd = [sys.executable, "-m", "silas.cli", "serve"]
     if host:
         cmd.extend(["--host", host])
     if port is not None:
@@ -303,7 +303,7 @@ def start(
         raise click.ClickException(str(registration_error)) from registration_error
 
     console.print(
-        f"[green]OpenJarvis server starting[/green] (launch PID {proc.pid})\n"
+        f"[green]Silas server starting[/green] (launch PID {proc.pid})\n"
         f"  Requested URL: {_server_url(bind_host, bind_port)}\n"
         f"  Log: {_LOG_FILE}"
     )
@@ -311,7 +311,7 @@ def start(
 
 @daemon.command()
 def stop() -> None:
-    """Stop the running OpenJarvis server daemon."""
+    """Stop the running Silas server daemon."""
     console = Console(stderr=True)
     pid = _read_pid()
     if pid is None:
@@ -329,7 +329,7 @@ def stop() -> None:
 @daemon.command()
 @click.pass_context
 def restart(ctx: click.Context) -> None:
-    """Restart the OpenJarvis server daemon."""
+    """Restart the Silas server daemon."""
     console = Console(stderr=True)
     pid = _read_pid()
     previous = _read_state() if pid is not None else {}
@@ -349,7 +349,7 @@ def restart(ctx: click.Context) -> None:
 
 @daemon.command()
 def status() -> None:
-    """Show status of the OpenJarvis server daemon."""
+    """Show status of the Silas server daemon."""
     console = Console(stderr=True)
     pid = _read_pid()
     if pid is None:

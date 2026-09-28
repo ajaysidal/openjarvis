@@ -6,12 +6,12 @@ from collections import Counter
 
 import pytest
 
-from openjarvis.agents import tool_resolver
-from openjarvis.connectors.store import KnowledgeStore
-from openjarvis.core.registry import ToolRegistry
-from openjarvis.core.types import ToolResult
-from openjarvis.tools import description_loader
-from openjarvis.tools._stubs import BaseTool, ToolSpec
+from silas.agents import tool_resolver
+from silas.connectors.store import KnowledgeStore
+from silas.core.registry import ToolRegistry
+from silas.core.types import ToolResult
+from silas.tools import description_loader
+from silas.tools._stubs import BaseTool, ToolSpec
 
 
 class _AlphaTool(BaseTool):

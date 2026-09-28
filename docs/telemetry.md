@@ -1,6 +1,6 @@
 # Telemetry
 
-OpenJarvis ships **anonymous usage telemetry** by default so the team can
+Silas ships **anonymous usage telemetry** by default so the team can
 see where the product breaks, what features people actually use, and
 how to make it better. This page documents exactly what is and isn't
 collected, where the data goes, and how to opt out.
@@ -10,7 +10,7 @@ collected, where the data goes, and how to opt out.
 - **On by default**, anonymous, no chat content.
 - **Anonymous** — one random UUID per install, no email, no name, no IP.
 - **No chat content, ever.** Only counts, timings, and feature names.
-- **Self-hosted backend** on the OpenJarvis team's PostHog instance —
+- **Self-hosted backend** on the Silas team's PostHog instance —
   data is not sold or shared with third parties.
 - **365-day retention**, after which events are deleted automatically.
 
@@ -45,7 +45,7 @@ collected, where the data goes, and how to opt out.
 
 The canonical, authoritative list with every property name and its
 type validator lives in
-[`src/openjarvis/analytics/events.py`](../src/openjarvis/analytics/events.py).
+[`src/silas/analytics/events.py`](../src/silas/analytics/events.py).
 That file is the only place new events can be added — PR review is
 the gate.
 
@@ -67,8 +67,8 @@ Hard guardrails, enforced by code:
 
 Two independent filters run before every event leaves the machine:
 
-1. [`src/openjarvis/analytics/redaction.py`](../src/openjarvis/analytics/redaction.py) — value-level pattern matching (20+ regexes for PII).
-2. [`src/openjarvis/analytics/events.py`](../src/openjarvis/analytics/events.py) — structural allowlist (event name + property name + type validator).
+1. [`src/silas/analytics/redaction.py`](../src/silas/analytics/redaction.py) — value-level pattern matching (20+ regexes for PII).
+2. [`src/silas/analytics/events.py`](../src/silas/analytics/events.py) — structural allowlist (event name + property name + type validator).
 
 Any failure at either layer → the event or property is silently
 dropped. Tests covering the patterns: [`tests/analytics/test_redaction.py`](../tests/analytics/test_redaction.py).
@@ -78,10 +78,10 @@ dropped. Tests covering the patterns: [`tests/analytics/test_redaction.py`](../t
 - **Today** (alpha): PostHog Cloud (US region) free tier. Disclosed
   here for transparency.
 - **Production target**: A self-hosted PostHog instance at
-  `analytics.openjarvis.ai`, Hetzner US-East. Single-tenant, operated
-  by the OpenJarvis team.
+  `analytics.silas.ai`, Hetzner US-East. Single-tenant, operated
+  by the Silas team.
 - **Never** sold, shared with advertisers, or used for anything other
-  than improving OpenJarvis.
+  than improving Silas.
 
 ## Retention
 
@@ -93,32 +93,32 @@ dropped. Tests covering the patterns: [`tests/analytics/test_redaction.py`](../t
 ## How identity works
 
 A single UUID v4 is generated on first install and stored at
-`~/.openjarvis/anon_id`. The install script, backend, and frontend all
+`~/.silas/anon_id`. The install script, backend, and frontend all
 read the same file so events across the full lifecycle tie to one
 person — without us ever knowing who that person is.
 
-Delete the file (`rm ~/.openjarvis/anon_id`) and a fresh UUID will be
+Delete the file (`rm ~/.silas/anon_id`) and a fresh UUID will be
 generated next time the app runs. The previous UUID and its events
 are then orphaned.
 
 ## For researchers and contributors
 
-- **Adding an event**: edit `src/openjarvis/analytics/events.py`,
+- **Adding an event**: edit `src/silas/analytics/events.py`,
   declare the spec, then update this page. PR review enforces both.
-- **Adding a PII pattern**: edit `src/openjarvis/analytics/redaction.py`
+- **Adding a PII pattern**: edit `src/silas/analytics/redaction.py`
   and add a test case in `tests/analytics/test_redaction.py`.
 - **Inspecting what your install sends**: run with
-  `OPENJARVIS_LOG_LEVEL=DEBUG` and grep for `Analytics`. You'll see
+  `SILAS_LOG_LEVEL=DEBUG` and grep for `Analytics`. You'll see
   every event name and (redacted) property dict before it ships.
 
 ## Related
 
 - Local telemetry (FLOPs, energy, latency stored in
-  `~/.openjarvis/telemetry.db`) is a **separate** subsystem documented
-  in [`src/openjarvis/telemetry/`](../src/openjarvis/telemetry/). It
+  `~/.silas/telemetry.db`) is a **separate** subsystem documented
+  in [`src/silas/telemetry/`](../src/silas/telemetry/). It
   never leaves the machine and is controlled by `[telemetry]` (not
   `[analytics]`) in `config.toml`.
 - The leaderboard / contest opt-in (`OptInModal.tsx`) is a separate,
   voluntary feature that publicly shares your energy and savings on
-  the OpenJarvis leaderboard. It is **not** the same as analytics and
+  the Silas leaderboard. It is **not** the same as analytics and
   requires explicit opt-in with a display name and email.

@@ -79,7 +79,7 @@ function InlineConnectForm({
     <div>
       {fields.map((f) => (
         f.type === 'select' ? (
-          <select
+          <select id="datasourcespage-select-1" name="datasourcespage-select-1"
             key={f.name}
             value={inputs[f.name] || f.defaultValue || ''}
             onChange={(e) => update(f.name, e.target.value)}
@@ -98,7 +98,7 @@ function InlineConnectForm({
             ))}
           </select>
         ) : (
-          <input
+          <input id="datasourcespage-input-2" name="datasourcespage-input-2"
             key={f.name}
             value={inputs[f.name] || ''}
             onChange={(e) => update(f.name, e.target.value)}
@@ -188,7 +188,7 @@ function GenericConnectPanel({
           <div style={{ fontSize: 12, color: 'var(--color-text-secondary)', marginBottom: 10 }}>
             Add one RSS or Atom feed URL per line.
           </div>
-          <textarea
+          <textarea id="datasourcespage-textarea-3" name="datasourcespage-textarea-3"
             value={feedUrls}
             onChange={(event) => setFeedUrls(event.target.value)}
             placeholder={'https://example.com/feed.xml\nhttps://example.org/rss'}
@@ -415,7 +415,7 @@ function UploadForm({ onDone }: { onDone?: () => void }) {
       </div>
 
       {/* Title input (shared) */}
-      <input
+      <input id="datasourcespage-input-4" name="datasourcespage-input-4"
         value={title}
         onChange={(e) => setTitle(e.target.value)}
         placeholder="Title (optional)"
@@ -424,7 +424,7 @@ function UploadForm({ onDone }: { onDone?: () => void }) {
 
       {tab === 'paste' && (
         <>
-          <textarea
+          <textarea id="datasourcespage-textarea-5" name="datasourcespage-textarea-5"
             value={content}
             onChange={(e) => setContent(e.target.value)}
             placeholder="Paste your text here..."
@@ -453,7 +453,7 @@ function UploadForm({ onDone }: { onDone?: () => void }) {
 
       {tab === 'upload' && (
         <>
-          <input
+          <input id="datasourcespage-input-6" name="datasourcespage-input-6"
             type="file"
             multiple
             accept={ACCEPTED_EXTENSIONS}
@@ -822,7 +822,7 @@ export function SyncStatusDisplay({
       </div>
       {hasSynced && connectorId === 'slack' && (
         <div style={{ fontSize: 10, color: 'var(--color-text-tertiary)', marginTop: 4 }}>
-          Tip: invite the bot to channels with /invite @OpenJarvis, then re-sync
+          Tip: invite the bot to channels with /invite @Silas, then re-sync
         </div>
       )}
       {syncError && (
@@ -1354,11 +1354,11 @@ const MESSAGING_CHANNELS: MessagingChannelConfig[] = [
     setupSteps: [
       '1. Go to api.slack.com/apps \u2192 click "Create New App" \u2192 choose "From an app manifest"',
       '2. Select your workspace. When asked for the manifest format, choose JSON. Then paste the manifest below (click "Copy" to copy it):',
-      'COPYABLE:{"display_information":{"name":"OpenJarvis"},"features":{"app_home":{"home_tab_enabled":true,"messages_tab_enabled":true,"messages_tab_read_only_enabled":false},"bot_user":{"display_name":"OpenJarvis","always_online":true}},"oauth_config":{"scopes":{"bot":["chat:write","im:write","im:read","im:history","mpim:read","mpim:history","users:read","channels:read","channels:history","channels:join","groups:read","groups:history","app_mentions:read"]}},"settings":{"event_subscriptions":{"bot_events":["message.im"]},"socket_mode_enabled":true}}',
+      'COPYABLE:{"display_information":{"name":"Silas"},"features":{"app_home":{"home_tab_enabled":true,"messages_tab_enabled":true,"messages_tab_read_only_enabled":false},"bot_user":{"display_name":"Silas","always_online":true}},"oauth_config":{"scopes":{"bot":["chat:write","im:write","im:read","im:history","mpim:read","mpim:history","users:read","channels:read","channels:history","channels:join","groups:read","groups:history","app_mentions:read"]}},"settings":{"event_subscriptions":{"bot_events":["message.im"]},"socket_mode_enabled":true}}',
       '3. Click "Next" \u2192 review the summary \u2192 click "Create". Then go to "Install App" in the left sidebar \u2192 click "Install to Workspace" \u2192 click "Allow"',
       '4. In the left sidebar, click "OAuth & Permissions". Copy the "Bot User OAuth Token" (starts with xoxb-...)',
       '5. In the left sidebar, click "Basic Information" \u2192 scroll to "App-Level Tokens" \u2192 click "Generate Token and Scopes" \u2192 name it "socket" \u2192 click "Add Scope" \u2192 select "connections:write" \u2192 click "Generate" \u2192 copy the token (starts with xapp-...)',
-      '6. (Optional) Still in "Basic Information", scroll to "Display Information" \u2192 upload the OpenJarvis icon as the app icon',
+      '6. (Optional) Still in "Basic Information", scroll to "Display Information" \u2192 upload the Silas icon as the app icon',
       '7. Paste both tokens below and click Connect',
     ],
     fields: [
@@ -1366,7 +1366,7 @@ const MESSAGING_CHANNELS: MessagingChannelConfig[] = [
       { key: 'app_token', label: 'App Token', placeholder: 'xapp-...', type: 'password', required: true },
     ],
     activeLabel: () => 'Connected to Slack',
-    howToUse: () => 'Open Slack and DM @OpenJarvis to talk to your agent.',
+    howToUse: () => 'Open Slack and DM @Silas to talk to your agent.',
   },
 ];
 
@@ -1491,9 +1491,9 @@ function SendBlueSection({
           <div style={{ fontSize: 11, color: 'var(--color-text-secondary)', marginBottom: 6 }}>
             Copy the "API Key" and "API Secret" from the credentials page and paste them below.
           </div>
-          <input value={apiKey} onChange={(e) => setApiKey(e.target.value)}
+          <input id="datasourcespage-input-7" name="datasourcespage-input-7" value={apiKey} onChange={(e) => setApiKey(e.target.value)}
             placeholder="API Key" style={{ ...inputStyle, marginTop: 4 }} />
-          <input value={apiSecret} onChange={(e) => setApiSecret(e.target.value)}
+          <input id="datasourcespage-input-8" name="datasourcespage-input-8" value={apiSecret} onChange={(e) => setApiSecret(e.target.value)}
             placeholder="API Secret" type="password" style={{ ...inputStyle, marginTop: 4 }} />
         </div>
       ),
@@ -1506,7 +1506,7 @@ function SendBlueSection({
           <div style={{ fontSize: 12, marginBottom: 8 }}>
             Which phone number should SendBlue use? This is the number people will text to reach your agent.
           </div>
-          <input value={phone} onChange={(e) => setPhone(e.target.value)}
+          <input id="datasourcespage-input-9" name="datasourcespage-input-9" value={phone} onChange={(e) => setPhone(e.target.value)}
             placeholder="+1XXXXXXXXXX" style={inputStyle} />
         </div>
       ),
@@ -1532,7 +1532,7 @@ function SendBlueSection({
             <div style={{ marginTop: 4 }}><strong>3.</strong> Paste it below and click "Register Webhook"</div>
           </div>
           <div style={{ display: 'flex', gap: 6 }}>
-            <input
+            <input id="datasourcespage-input-10" name="datasourcespage-input-10"
               value={webhookUrl}
               onChange={(e) => { setWebhookUrl(e.target.value); setWebhookStatus('idle'); }}
               placeholder="https://abc123.ngrok-free.app"
@@ -1881,7 +1881,7 @@ function MessagingSection({ agentId }: { agentId: string }) {
                     }}>
                       {field.label}{field.required ? ' *' : ''}
                     </label>
-                    <input
+                    <input id="datasourcespage-input-11" name="datasourcespage-input-11"
                       type={field.type || 'text'}
                       value={formValues[field.key] || ''}
                       onChange={(e) => setField(field.key, e.target.value)}
@@ -2098,7 +2098,7 @@ function MemorySection() {
         </div>
         <div className="flex gap-2">
           <div className="flex-1 relative">
-            <input
+            <input id="datasourcespage-input-12" name="datasourcespage-input-12"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleSearch(); }}
@@ -2189,7 +2189,7 @@ function MemorySection() {
             Scan a folder and index all supported files into memory.
           </p>
           <div className="flex gap-2 mb-2">
-            <input
+            <input id="datasourcespage-input-13" name="datasourcespage-input-13"
               value={indexPath}
               onChange={(e) => setIndexPath(e.target.value)}
               placeholder="~/Documents/notes"
@@ -2248,7 +2248,7 @@ function MemorySection() {
           <p className="text-xs mb-3" style={{ color: 'var(--color-text-tertiary)' }}>
             Paste any text to add directly to your memory store.
           </p>
-          <textarea
+          <textarea id="datasourcespage-textarea-14" name="datasourcespage-textarea-14"
             value={storeContent}
             onChange={(e) => setStoreContent(e.target.value)}
             placeholder="Paste or type content here..."

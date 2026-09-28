@@ -11,7 +11,7 @@ import logging
 from typing import TYPE_CHECKING, Any, Optional
 
 if TYPE_CHECKING:
-    from openjarvis.core.config import JarvisConfig
+    from silas.core.config import JarvisConfig
 
 logger = logging.getLogger(__name__)
 
@@ -45,8 +45,8 @@ def get_tts_backend(
     """
     # Import triggers built-in backend registration only when voice output is
     # actually requested.
-    import openjarvis.speech  # noqa: F401
-    from openjarvis.core.registry import TTSRegistry
+    import silas.speech  # noqa: F401
+    from silas.core.registry import TTSRegistry
 
     seen = attempted if attempted is not None else set()
 

@@ -20,7 +20,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(
         description=(
             "Route queries to the cheapest capable model "
-            "using OpenJarvis learning/routing."
+            "using Silas learning/routing."
         ),
     )
     parser.add_argument(
@@ -61,14 +61,14 @@ def main() -> None:
     args = parser.parse_args()
 
     try:
-        from openjarvis import Jarvis
-        from openjarvis.learning.routing.router import (
+        from silas import Jarvis
+        from silas.learning.routing.router import (
             HeuristicRouter,
             build_routing_context,
         )
     except ImportError:
         print(
-            "Error: openjarvis is not installed. "
+            "Error: silas is not installed. "
             "Install it with:  uv sync --extra dev",
             file=sys.stderr,
         )
@@ -111,7 +111,7 @@ def main() -> None:
 
     # Select the model using the chosen strategy
     if args.strategy == "bandit":
-        from openjarvis.learning.routing.learned_router import LearnedRouterPolicy
+        from silas.learning.routing.learned_router import LearnedRouterPolicy
 
         router = LearnedRouterPolicy()
         selected_model = router.select_model(context)

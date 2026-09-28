@@ -28,9 +28,9 @@ from collections import defaultdict
 from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Tuple
 
-from openjarvis.core.registry import MemoryRegistry
-from openjarvis.tools.storage._stubs import MemoryBackend, RetrievalResult
-from openjarvis.tools.storage.embeddings import Embedder, OllamaEmbedder
+from silas.core.registry import MemoryRegistry
+from silas.tools.storage._stubs import MemoryBackend, RetrievalResult
+from silas.tools.storage.embeddings import Embedder, OllamaEmbedder
 
 logger = logging.getLogger(__name__)
 

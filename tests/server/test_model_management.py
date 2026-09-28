@@ -10,7 +10,7 @@ import pytest
 fastapi = pytest.importorskip("fastapi")
 from fastapi.testclient import TestClient  # noqa: E402
 
-from openjarvis.server.app import create_app  # noqa: E402
+from silas.server.app import create_app  # noqa: E402
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -129,16 +129,16 @@ class TestModelDelete:
             instance = MockClient.return_value.__aenter__.return_value
             instance.request = AsyncMock(return_value=mock_resp)
 
-            resp = client.delete("/v1/models/qwen3:0.6b")
+            resp = client.delete("/v1/models/qwen3:8b")
 
         assert resp.status_code == 200
         data = resp.json()
         assert data["status"] == "deleted"
-        assert data["model"] == "qwen3:0.6b"
+        assert data["model"] == "qwen3:8b"
         instance.request.assert_awaited_once_with(
             "DELETE",
             "/api/delete",
-            json={"name": "qwen3:0.6b"},
+            json={"name": "qwen3:8b"},
         )
 
 
@@ -208,7 +208,7 @@ class TestStreamingResilience:
     def test_stream_without_agent_uses_direct_engine(self):
         """When no tools in request, streaming should use engine.stream directly
         even if an agent is configured (for real token-by-token output)."""
-        from openjarvis.agents._stubs import AgentResult
+        from silas.agents._stubs import AgentResult
 
         engine = _make_engine()
         agent = MagicMock()
@@ -255,7 +255,7 @@ class TestStreamingResilience:
 class TestModelsEndpointExtended:
     def test_models_list_multiple(self):
         engine = _make_engine(
-            models=["qwen3.5:4b", "qwen3.5:9b", "qwen3:0.6b"],
+            models=["qwen3.5:4b", "qwen3.5:9b", "qwen3:8b"],
         )
         app = create_app(engine, "qwen3.5:4b")
         client = TestClient(app)
@@ -264,7 +264,7 @@ class TestModelsEndpointExtended:
         ids = [m["id"] for m in resp.json()["data"]]
         assert "qwen3.5:4b" in ids
         assert "qwen3.5:9b" in ids
-        assert "qwen3:0.6b" in ids
+        assert "qwen3:8b" in ids
 
     def test_models_list_filters_embedding_only_models(self):
         engine = _make_engine(
@@ -304,7 +304,7 @@ class TestModelsEndpointExtended:
         client = TestClient(app)
 
         with patch(
-            "openjarvis.server.routes.asyncio.to_thread",
+            "silas.server.routes.asyncio.to_thread",
             new_callable=AsyncMock,
         ) as mock_to_thread:
             mock_to_thread.return_value = ["qwen3.5:4b"]

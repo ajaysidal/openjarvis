@@ -16,7 +16,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from openjarvis.core.paths import get_config_dir
+from silas.core.paths import get_config_dir
 
 LOGGER = logging.getLogger(__name__)
 
@@ -107,7 +107,7 @@ class SkillBenchmarkRunner:
         # An "empty" overlay dir for the skills_on condition.  We point at
         # a known-empty subdirectory under the output dir so SkillManager
         # finds zero overlays even if the user happens to have populated
-        # the default ~/.openjarvis/learning/skills/ tree.
+        # the default ~/.silas/learning/skills/ tree.
         self._empty_overlay_dir = (
             Path(self._config.output_dir).expanduser() / "_skills_on_empty_overlays"
         )
@@ -155,7 +155,7 @@ class SkillBenchmarkRunner:
         Separate from `_backend_kwargs_for_condition` so the kwarg logic
         can be tested without instantiating an engine.
         """
-        from openjarvis.evals.backends.jarvis_agent import JarvisAgentBackend
+        from silas.evals.backends.jarvis_agent import JarvisAgentBackend
 
         kw = self._backend_kwargs_for_condition(condition)
         return JarvisAgentBackend(
@@ -187,11 +187,11 @@ class SkillBenchmarkRunner:
         shim so tests can monkeypatch it without instantiating an
         engine or running real benchmark tasks.
         """
-        from openjarvis.evals.backends.jarvis_direct import JarvisDirectBackend
-        from openjarvis.evals.core.runner import EvalRunner
-        from openjarvis.evals.core.types import RunConfig
-        from openjarvis.evals.datasets.pinchbench import PinchBenchDataset
-        from openjarvis.evals.scorers.pinchbench import PinchBenchScorer
+        from silas.evals.backends.jarvis_direct import JarvisDirectBackend
+        from silas.evals.core.runner import EvalRunner
+        from silas.evals.core.types import RunConfig
+        from silas.evals.datasets.pinchbench import PinchBenchDataset
+        from silas.evals.scorers.pinchbench import PinchBenchScorer
 
         backend = self._build_backend_for_condition(condition)
 

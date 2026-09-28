@@ -13,13 +13,13 @@ from unittest.mock import MagicMock, patch
 
 from click.testing import CliRunner
 
-from openjarvis.cli import cli
-from openjarvis.cli.daemon_cmd import (
+from silas.cli import cli
+from silas.cli.daemon_cmd import (
     _pid_alive,
     _read_pid,
     _write_pid,
 )
-from openjarvis.core.utils import terminate_process
+from silas.core.utils import terminate_process
 
 
 class TestDaemonCommands:
@@ -34,14 +34,14 @@ class TestDaemonCommands:
 
     def test_stop_no_server(self) -> None:
         """``jarvis stop`` when no PID file shows 'not running'."""
-        with patch("openjarvis.cli.daemon_cmd._read_pid", return_value=None):
+        with patch("silas.cli.daemon_cmd._read_pid", return_value=None):
             result = CliRunner().invoke(cli, ["stop"])
         assert result.exit_code != 0
         assert "No running server" in result.output
 
     def test_status_no_server(self) -> None:
         """``jarvis status`` when no PID file shows 'not running'."""
-        with patch("openjarvis.cli.daemon_cmd._read_pid", return_value=None):
+        with patch("silas.cli.daemon_cmd._read_pid", return_value=None):
             result = CliRunner().invoke(cli, ["status"])
         assert result.exit_code == 0
         assert "not running" in result.output
@@ -49,7 +49,7 @@ class TestDaemonCommands:
     def test_read_pid_no_file(self, tmp_path: Path) -> None:
         """``_read_pid()`` returns None when no PID file exists."""
         with patch(
-            "openjarvis.cli.daemon_cmd._PID_FILE",
+            "silas.cli.daemon_cmd._PID_FILE",
             tmp_path / "nonexistent.pid",
         ):
             assert _read_pid() is None
@@ -58,9 +58,9 @@ class TestDaemonCommands:
         """Write a PID, then read it back with a successful liveness probe."""
         pid_file = tmp_path / "server.pid"
         with (
-            patch("openjarvis.cli.daemon_cmd._PID_FILE", pid_file),
-            patch("openjarvis.cli.daemon_cmd.DEFAULT_CONFIG_DIR", tmp_path),
-            patch("openjarvis.cli.daemon_cmd._pid_alive", return_value=True),
+            patch("silas.cli.daemon_cmd._PID_FILE", pid_file),
+            patch("silas.cli.daemon_cmd.DEFAULT_CONFIG_DIR", tmp_path),
+            patch("silas.cli.daemon_cmd._pid_alive", return_value=True),
         ):
             _write_pid(12345)
             assert pid_file.exists()
@@ -73,9 +73,9 @@ class TestDaemonCommands:
         mock_config.server.port = 8000
 
         with (
-            patch("openjarvis.cli.daemon_cmd._read_pid", return_value=9999),
+            patch("silas.cli.daemon_cmd._read_pid", return_value=9999),
             patch(
-                "openjarvis.cli.daemon_cmd.load_config",
+                "silas.cli.daemon_cmd.load_config",
                 return_value=mock_config,
             ),
         ):
@@ -86,7 +86,7 @@ class TestDaemonCommands:
 
     def test_start_already_running(self) -> None:
         """``jarvis start`` exits with error when a server is already running."""
-        with patch("openjarvis.cli.daemon_cmd._read_pid", return_value=42):
+        with patch("silas.cli.daemon_cmd._read_pid", return_value=42):
             result = CliRunner().invoke(cli, ["start"])
         assert result.exit_code != 0
         assert "already running" in result.output
@@ -119,7 +119,7 @@ class TestPidLiveness:
         pid_file = tmp_path / "server.pid"
         pid_file.write_text(str(proc.pid))
 
-        with patch("openjarvis.cli.daemon_cmd._PID_FILE", pid_file):
+        with patch("silas.cli.daemon_cmd._PID_FILE", pid_file):
             assert _read_pid() is None
 
         assert not pid_file.exists()
@@ -130,7 +130,7 @@ class TestPidLiveness:
             pid_file = tmp_path / "server.pid"
             pid_file.write_text(str(proc.pid))
 
-            with patch("openjarvis.cli.daemon_cmd._PID_FILE", pid_file):
+            with patch("silas.cli.daemon_cmd._PID_FILE", pid_file):
                 assert _read_pid() == proc.pid
 
             assert pid_file.exists()
@@ -157,14 +157,14 @@ class TestDaemonDetachment:
         the spawn is reached.
         """
         with (
-            patch("openjarvis.cli.daemon_cmd._read_pid", return_value=None),
-            patch("openjarvis.cli.daemon_cmd._read_pid_unlocked", return_value=None),
-            patch("openjarvis.cli.daemon_cmd._state_lock", return_value=nullcontext()),
-            patch("openjarvis.cli.daemon_cmd._write_pid_unlocked"),
-            patch("openjarvis.cli.daemon_cmd.load_config"),
-            patch("openjarvis.cli.daemon_cmd.sys.platform", platform),
-            patch("openjarvis.cli.daemon_cmd.DEFAULT_CONFIG_DIR"),
-            patch("openjarvis.cli.daemon_cmd.subprocess.Popen") as popen,
+            patch("silas.cli.daemon_cmd._read_pid", return_value=None),
+            patch("silas.cli.daemon_cmd._read_pid_unlocked", return_value=None),
+            patch("silas.cli.daemon_cmd._state_lock", return_value=nullcontext()),
+            patch("silas.cli.daemon_cmd._write_pid_unlocked"),
+            patch("silas.cli.daemon_cmd.load_config"),
+            patch("silas.cli.daemon_cmd.sys.platform", platform),
+            patch("silas.cli.daemon_cmd.DEFAULT_CONFIG_DIR"),
+            patch("silas.cli.daemon_cmd.subprocess.Popen") as popen,
             patch("builtins.open", MagicMock()),
         ):
             popen.return_value = MagicMock(pid=4321)
@@ -181,15 +181,15 @@ class TestDaemonDetachment:
     ) -> None:
         """Both direct Python and launchers can protect the startup interval."""
         with (
-            patch("openjarvis.cli.daemon_cmd._read_pid", return_value=None),
-            patch("openjarvis.cli.daemon_cmd._read_pid_unlocked", return_value=None),
-            patch("openjarvis.cli.daemon_cmd._state_lock", return_value=nullcontext()),
-            patch("openjarvis.cli.daemon_cmd.load_config"),
-            patch("openjarvis.cli.daemon_cmd.subprocess.Popen") as popen,
-            patch("openjarvis.cli.daemon_cmd.DEFAULT_CONFIG_DIR", tmp_path),
-            patch("openjarvis.cli.daemon_cmd._LOG_FILE", tmp_path / "server.log"),
-            patch("openjarvis.cli.daemon_cmd.sys.platform", "win32"),
-            patch("openjarvis.cli.daemon_cmd._write_pid_unlocked") as write_pid,
+            patch("silas.cli.daemon_cmd._read_pid", return_value=None),
+            patch("silas.cli.daemon_cmd._read_pid_unlocked", return_value=None),
+            patch("silas.cli.daemon_cmd._state_lock", return_value=nullcontext()),
+            patch("silas.cli.daemon_cmd.load_config"),
+            patch("silas.cli.daemon_cmd.subprocess.Popen") as popen,
+            patch("silas.cli.daemon_cmd.DEFAULT_CONFIG_DIR", tmp_path),
+            patch("silas.cli.daemon_cmd._LOG_FILE", tmp_path / "server.log"),
+            patch("silas.cli.daemon_cmd.sys.platform", "win32"),
+            patch("silas.cli.daemon_cmd._write_pid_unlocked") as write_pid,
             patch.object(subprocess, "DETACHED_PROCESS", 0x00000008, create=True),
             patch.object(
                 subprocess, "CREATE_NEW_PROCESS_GROUP", 0x00000200, create=True
@@ -207,18 +207,18 @@ class TestDaemonDetachment:
             token = write_pid.call_args.kwargs["launch_token"]
             assert token
             assert (
-                popen.call_args.kwargs["env"]["OPENJARVIS_DAEMON_LAUNCH_TOKEN"] == token
+                popen.call_args.kwargs["env"]["SILAS_DAEMON_LAUNCH_TOKEN"] == token
             )
 
     def test_second_start_rechecks_under_lock(self, tmp_path: Path) -> None:
         """A second start must not spawn after another caller registered."""
         with (
-            patch("openjarvis.cli.daemon_cmd._read_pid", return_value=None),
-            patch("openjarvis.cli.daemon_cmd._read_pid_unlocked", return_value=4321),
-            patch("openjarvis.cli.daemon_cmd._state_lock", return_value=nullcontext()),
-            patch("openjarvis.cli.daemon_cmd.load_config"),
-            patch("openjarvis.cli.daemon_cmd.DEFAULT_CONFIG_DIR", tmp_path),
-            patch("openjarvis.cli.daemon_cmd.subprocess.Popen") as popen,
+            patch("silas.cli.daemon_cmd._read_pid", return_value=None),
+            patch("silas.cli.daemon_cmd._read_pid_unlocked", return_value=4321),
+            patch("silas.cli.daemon_cmd._state_lock", return_value=nullcontext()),
+            patch("silas.cli.daemon_cmd.load_config"),
+            patch("silas.cli.daemon_cmd.DEFAULT_CONFIG_DIR", tmp_path),
+            patch("silas.cli.daemon_cmd.subprocess.Popen") as popen,
         ):
             result = CliRunner().invoke(cli, ["start"])
             assert result.exit_code != 0
@@ -228,22 +228,22 @@ class TestDaemonDetachment:
     def test_failed_registration_terminates_spawned_tree(self, tmp_path: Path) -> None:
         """A failed launch must clean up its launcher and any descendants."""
         with (
-            patch("openjarvis.cli.daemon_cmd._read_pid", return_value=None),
-            patch("openjarvis.cli.daemon_cmd._read_pid_unlocked", return_value=None),
-            patch("openjarvis.cli.daemon_cmd._state_lock", return_value=nullcontext()),
-            patch("openjarvis.cli.daemon_cmd.load_config"),
-            patch("openjarvis.cli.daemon_cmd.DEFAULT_CONFIG_DIR", tmp_path),
-            patch("openjarvis.cli.daemon_cmd._LOG_FILE", tmp_path / "server.log"),
+            patch("silas.cli.daemon_cmd._read_pid", return_value=None),
+            patch("silas.cli.daemon_cmd._read_pid_unlocked", return_value=None),
+            patch("silas.cli.daemon_cmd._state_lock", return_value=nullcontext()),
+            patch("silas.cli.daemon_cmd.load_config"),
+            patch("silas.cli.daemon_cmd.DEFAULT_CONFIG_DIR", tmp_path),
+            patch("silas.cli.daemon_cmd._LOG_FILE", tmp_path / "server.log"),
             patch(
-                "openjarvis.cli.daemon_cmd._write_pid_unlocked",
+                "silas.cli.daemon_cmd._write_pid_unlocked",
                 side_effect=RuntimeError("conflict"),
             ),
             patch(
-                "openjarvis.cli.daemon_cmd.subprocess.Popen",
+                "silas.cli.daemon_cmd.subprocess.Popen",
                 return_value=MagicMock(pid=4321),
             ),
-            patch("openjarvis.cli.daemon_cmd.terminate_process") as terminate,
-            patch("openjarvis.cli.daemon_cmd.clear_server_state") as clear,
+            patch("silas.cli.daemon_cmd.terminate_process") as terminate,
+            patch("silas.cli.daemon_cmd.clear_server_state") as clear,
         ):
             result = CliRunner().invoke(cli, ["start"])
             assert result.exit_code != 0
@@ -296,7 +296,7 @@ class TestDaemonDetachment:
 
 def test_subprocess_registers_actual_python_pid(tmp_path: Path, monkeypatch) -> None:
     """A real child registers its PID whether Python is direct or uses a launcher."""
-    from openjarvis.cli import daemon_cmd
+    from silas.cli import daemon_cmd
 
     pid_file = tmp_path / "server.pid"
     state_file = tmp_path / "server.json"
@@ -311,7 +311,7 @@ def test_subprocess_registers_actual_python_pid(tmp_path: Path, monkeypatch) -> 
 import os
 import time
 from pathlib import Path
-from openjarvis.cli import daemon_cmd
+from silas.cli import daemon_cmd
 
 daemon_cmd._PID_FILE = Path(os.environ["OJ_TEST_PID_FILE"])
 daemon_cmd._STATE_FILE = Path(os.environ["OJ_TEST_STATE_FILE"])

@@ -16,11 +16,11 @@ from __future__ import annotations
 from fastapi import APIRouter
 from pydantic import BaseModel
 
-from openjarvis.analytics.identity import (
+from silas.analytics.identity import (
     get_or_create_anon_id,
     is_analytics_enabled,
 )
-from openjarvis.core.config import load_config
+from silas.core.config import load_config
 
 
 class AnalyticsIdentity(BaseModel):

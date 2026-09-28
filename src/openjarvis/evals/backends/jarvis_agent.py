@@ -6,8 +6,8 @@ import time
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-from openjarvis.evals.backends._commit_util import openjarvis_commit
-from openjarvis.evals.core.backend import InferenceBackend
+from silas.evals.backends._commit_util import silas_commit
+from silas.evals.core.backend import InferenceBackend
 
 
 class JarvisAgentBackend(InferenceBackend):
@@ -18,7 +18,7 @@ class JarvisAgentBackend(InferenceBackend):
     """
 
     backend_id = "jarvis-agent"
-    framework_name = "openjarvis"
+    framework_name = "silas"
 
     def __init__(
         self,
@@ -34,7 +34,7 @@ class JarvisAgentBackend(InferenceBackend):
         base_url: Optional[str] = None,
         api_key: Optional[str] = None,
     ) -> None:
-        from openjarvis.system import SystemBuilder
+        from silas.system import SystemBuilder
 
         self._agent_name = agent_name
         self._tools = tools or []
@@ -46,7 +46,7 @@ class JarvisAgentBackend(InferenceBackend):
             # Explicit endpoint targeting (--base-url): pin the eval to
             # exactly this OpenAI-compatible endpoint. Fails fast if it is
             # unreachable; never falls back to a discovered engine.
-            from openjarvis.evals.backends._endpoint_util import (
+            from silas.evals.backends._endpoint_util import (
                 build_endpoint_engine,
             )
 
@@ -78,10 +78,10 @@ class JarvisAgentBackend(InferenceBackend):
 
     @property
     def framework_commit_value(self) -> str:
-        """OpenJarvis repo HEAD commit (for telemetry tagging)."""
-        from openjarvis.evals.backends._commit_util import openjarvis_commit
+        """Silas repo HEAD commit (for telemetry tagging)."""
+        from silas.evals.backends._commit_util import silas_commit
 
-        return openjarvis_commit()
+        return silas_commit()
 
     def generate(
         self,
@@ -205,8 +205,8 @@ class JarvisAgentBackend(InferenceBackend):
             "trace_data": trace_data,
             "tool_calls": tool_calls_count,
             "turn_count": turn_count,
-            "framework": "openjarvis",
-            "framework_commit": openjarvis_commit(),
+            "framework": "silas",
+            "framework_commit": silas_commit(),
             "error": None,
         }
 
