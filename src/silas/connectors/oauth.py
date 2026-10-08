@@ -101,7 +101,13 @@ OAUTH_PROVIDERS: Dict[str, OAuthProvider] = {
         token_endpoint="https://github.com/login/oauth/access_token",
         scopes=["repo", "workflow", "user", "codespace", "admin:repo_hook"],
         setup_url="https://github.com/settings/developers",
-        setup_hint="Create an OAuth App at GitHub Settings, add redirect URI: http://127.0.0.1:8789/callback",
+        setup_hint=(
+            "Create an OAuth App at GitHub Settings, "
+            "add redirect URI: https://silas.buildwithai.digital/api/auth/callback/github"
+        ),
+        callback_host="silas.buildwithai.digital",
+        callback_port=443,
+        callback_path="/api/auth/callback/github",
         connector_ids=("github",),
         credential_files=("github.json",),
     ),
@@ -691,7 +697,12 @@ def _exchange_token(
         "redirect_uri": redirect_uri,
         "grant_type": "authorization_code",
     }
-    headers: Dict[str, str] = {}
+
+    # Required headers for GitHub OAuth to return JSON instead of form-encoded text
+    headers: Dict[str, str] = {
+        "Accept": "application/json",
+        "Content-Type": "application/x-www-form-urlencoded",
+    }
 
     if provider.token_auth == "basic":
         creds = base64.b64encode(f"{client_id}:{client_secret}".encode()).decode()
@@ -700,11 +711,17 @@ def _exchange_token(
         data["client_id"] = client_id
         data["client_secret"] = client_secret
 
-    resp = httpx.post(provider.token_endpoint, data=data, headers=headers, timeout=30.0)
+    resp = httpx.post(
+        provider.token_endpoint,
+        data=data,
+        headers=headers,
+        timeout=30.0,
+    )
     resp.raise_for_status()
     tokens = resp.json()
     require_access_token(tokens)
     return tokens
+
 
 
 def run_connector_oauth(

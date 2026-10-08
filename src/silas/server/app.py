@@ -21,6 +21,7 @@ from silas.server.digest_routes import create_digest_router
 from silas.server.research_router import router as research_router
 from silas.server.routes import router
 from silas.server.upload_router import router as upload_router
+from silas.server.oauth_routes.github_oauth import router as github_oauth_router
 
 logger = logging.getLogger(__name__)
 _MANAGED_SHUTDOWN_GRACE_SECONDS = 0.25
@@ -245,6 +246,7 @@ def create_app(
         description="OpenAI-compatible API server for Silas",
         version="0.1.0",
     )
+    app.include_router(github_oauth_router)
 
     from fastapi.middleware.cors import CORSMiddleware
 

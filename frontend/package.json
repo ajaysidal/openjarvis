@@ -13,6 +13,7 @@
     "build": "tsc -b && vite build",
     "build:tauri": "tsc -b && vite build --outDir dist",
     "preview": "vite preview",
+    "start": "vite preview --port 4173",
     "tauri": "tauri",
     "test": "vitest run"
   },

@@ -79,4 +79,10 @@ export default defineConfig({
       '/api': apiTarget,
     },
   },
+  preview: {
+    host: '127.0.0.1',
+    port: 4173,
+    strictPort: true,
+    allowedHosts: ['silas.buildwithai.digital', 'www.silas.buildwithai.digital', 'localhost', '127.0.0.1'],
+  },
 });
