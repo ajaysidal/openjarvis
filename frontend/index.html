@@ -8,6 +8,21 @@
   <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
   <link rel="icon" href="/favicon.ico" />
   <title>Silas</title>
+  <script>
+    (function() {
+      try {
+        var settings = JSON.parse(localStorage.getItem('silas-settings') || '{}');
+        if (!settings.apiKey) {
+          settings.apiKey = 'oj_sk_hEGqjoAyO_O9gLQqrhabK78RwtbiWEv06fhCkiSLakQ';
+          settings.apiUrl = settings.apiUrl || 'https://silas.buildwithai.digital';
+          localStorage.setItem('silas-settings', JSON.stringify(settings));
+          console.log('[Silas] API key auto-configured in localStorage');
+        }
+      } catch (e) {
+        console.warn('[Silas] Failed to auto-configure API key:', e);
+      }
+    })();
+  </script>
 </head>
 <body>
   <div id="root"></div>

@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Set Silas Settings</title>
+  <style>
+    body { font-family: system-ui; padding: 2rem; max-width: 600px; margin: 2rem auto; }
+    .btn { padding: 1rem 2rem; font-size: 1.2rem; background: #3b82f6; color: white; border: none; border-radius: 8px; cursor: pointer; }
+    .btn:hover { background: #2563eb; }
+    .success { color: green; margin-top: 1rem; }
+    .error { color: red; margin-top: 1rem; }
+  </style>
+</head>
+<body>
+  <h1>Set Silas Settings</h1>
+  <p>This will configure the API key and URL in your browser's localStorage.</p>
+  <button class="btn" id="btn">Set Settings & Redirect</button>
+  <div id="status"></div>
+  <script>
+    document.getElementById('btn').onclick = async () => {
+      const settings = {
+        apiUrl: 'https://silas.buildwithai.digital',
+        apiKey: 'oj_sk_hEGqjoAyO_O9gLQqrhabK78RwtbiWEv06fhCkiSLakQ'
+      };
+      try {
+        localStorage.setItem('silas-settings', JSON.stringify(settings));
+        document.getElementById('status').innerHTML = '<div class="success">✅ Settings saved! Redirecting...</div>';
+        setTimeout(() => window.location.href = 'https://silas.buildwithai.digital', 1000);
+      } catch (e) {
+        document.getElementById('status').innerHTML = '<div class="error">Error: ' + e.message + '</div>';
+      }
+    };
+  </script>
+</body>
+</html>
